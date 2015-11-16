@@ -4,17 +4,26 @@
   <title><%= full_title(yield(:title)) %></title>
   <%= stylesheet_link_tag    "application", media: "all", "data-turbolinks-track" => true %>
   <%= javascript_include_tag "application", "data-turbolinks-track" => true %>
+
+  <%= stylesheet_link_tag	"bootstrap2/css/bootstrap.css", media: 'all' %>
+  <%= javascript_include_tag "bootstrap2/js/bootstrap.js" %>
+  
   <%= csrf_meta_tags %>
 </head>
 <body>
-
-<nav>
-	<%= link_to 'Главная страница', home_path %>
-	<%= link_to 'О проекте', about_path %>
-	<%= link_to 'Помощь', help_path %>
-</nav>
-
-<%= yield %>
-
+	<div class="container">
+		<div class="row">
+			<ul class="nav nav-tabs">
+				<li><%= link_to 'Главная страница', home_path %></li>
+				<li><%= link_to 'О проекте', about_path %></li>
+				<li><%= link_to 'Помощь', help_path %></li>
+			</ul>
+		</div>
+		<div class="row">
+			<div class="span12 hero-unit">
+				<%= yield %>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
