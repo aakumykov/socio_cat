@@ -1,12 +1,19 @@
 require 'spec_helper'
 
-describe "Начальные страницы," do
-
+describe 'Статические welcome-страницы,' do
 	subject { page }
 	
-	describe "Домашняя страница," do
-		before { visit home_path }
+	describe 'Главная страница,' do
+		before { visit root_path }
+	
+		it 'Приветствие,' do
+			should have_selector('h1', text:'Добро пожаловать')
+		end
 
-		it "123"
+		describe 'Ссылки на разделы,' do
+			it { should have_link('Главная страница', href: home_path) }
+			it { should have_link('О проекте', href: about_path) }
+			it { should have_link('Помощь', href: help_path) }
+		end
 	end
 end
