@@ -6,9 +6,7 @@ describe 'Статические welcome-страницы,' do
 	describe 'Главная страница,' do
 		before { visit root_path }
 	
-		it 'Приветствие,' do
-			should have_selector('h1', text:'Добро пожаловать')
-		end
+		it { should have_selector('h1', text:'Добро пожаловать') }
 
 		describe 'Ссылки на разделы,' do
 			it { should have_link('Главная страница', href: home_path) }
