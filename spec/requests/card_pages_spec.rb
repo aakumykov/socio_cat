@@ -4,7 +4,7 @@ describe 'Стриницы карточек' do
 	subject { page }
 
 	describe 'список карточек,' do
-		before { visit cards_path }
+		before(:each) { visit cards_path }
 
 		it { should have_title('Список карточек') }
 		it { should have_selector('h1','Список карточек') }
@@ -13,8 +13,9 @@ describe 'Стриницы карточек' do
 			let(:card_title) { '1st card title' }
 			let(:card_content) { 'This is content of 1st card.' }
 			
-			before {
+			before(:each) {
 				FactoryGirl.create(:card, title: card_title, content: card_content)
+				visit cards_path
 			}
 			
 			it { should have_selector('fieldset.card') }
