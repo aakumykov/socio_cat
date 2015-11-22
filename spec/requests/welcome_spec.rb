@@ -12,6 +12,7 @@ describe 'Статические welcome-страницы,' do
 			it { should have_link('Главная страница', href: home_path) }
 			it { should have_link('О проекте', href: about_path) }
 			it { should have_link('Помощь', href: help_path) }
+			it { should have_link('Карточки', href: cards_path) }
 		end
 	end
 end
