@@ -1,7 +1,9 @@
 <% title = 'Список карточек' %>
 <% provide(:title,title) %>
 
-<h1><%= title %></h1>
-<% @all_cards.each do |card| %>
-<%= render card %>
-<% end %>
+<h1 class='page_title'><%= title %></h1>
+<div class='span8 offset2'>
+	<% @all_cards.each do |card| %>
+	<%= render card %>
+	<% end %>
+</div>
