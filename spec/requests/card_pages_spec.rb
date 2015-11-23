@@ -8,6 +8,7 @@ describe 'Стриницы карточек' do
 
 		it { should have_title('Список карточек') }
 		it { should have_selector('h1','Список карточек') }
+		it { should have_link('Новая', href: new_card_path) }
 		
 		describe 'одна карточка,' do
 			let(:card_title) { '1st card title' }
