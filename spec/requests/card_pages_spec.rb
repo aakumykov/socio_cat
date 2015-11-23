@@ -24,4 +24,19 @@ describe 'Стриницы карточек' do
 		end
 	end
 
+	describe 'создание карточки,' do
+		before(:each) { visit new_card_path }
+
+		it { should have_title(full_title('Новая карточка')) }
+		it { should have_selector('h1', text:'Новая карточка') }
+
+		it { should have_selector('label', text:'Название') }
+		it { should have_selector(:xpath,'//input[@name="card[title]"]') }
+
+		it { should have_selector('label', text:'Содержимое') }
+		it { should have_selector(:xpath,'//textarea[@name="card[content]"]') }
+
+		it { should have_selector(:xpath,'//input[@value="Создать" and @name="commit"]') }
+	end
+
 end
