@@ -11,3 +11,9 @@
  *= require_self
  *= require_tree .
  */
+.card_edit_title, .card_edit_content {
+	width:100%;
+}
+.card_edit_content {
+	height:200px;
+}

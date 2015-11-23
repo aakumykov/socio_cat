@@ -1,0 +1,9 @@
+<% provide(:title,'Новая карточка') %>
+
+<h1>Новая карточка</h1>
+
+<div class='card_edit span8 offset2'>
+    <%= form_for(@card) do |f| %>
+    	<%= render 'card_fields', f:f %>
+    <% end %>
+</div>
