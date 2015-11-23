@@ -47,4 +47,7 @@ describe 'Карточка,' do
 		before { card.content = ' ' }
 		it { should_not be_valid }
 	end
+
+	it 'когда заголовок слишком длинный'
+	it 'когда длина содержимого с лишком'
 end
