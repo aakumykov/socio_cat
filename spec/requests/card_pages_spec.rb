@@ -1,9 +1,9 @@
 require 'spec_helper'
 
-describe 'Стриницы карточек' do
+describe 'Стриницы карточек,' do
 	subject { page }
 
-	describe 'список карточек,' do
+	describe 'список,' do
 		before(:each) { visit cards_path }
 
 		it { should have_title('Список карточек') }
@@ -25,14 +25,15 @@ describe 'Стриницы карточек' do
 		end
 	end
 
-	describe 'создание карточки,' do
+	describe 'создание,' do
 
 		before(:each) { visit new_card_path }
 
-		
-		describe 'статические элементы,' do
+		shared_examples_for 'форма редактирования карточки' do
 			it { should have_title(full_title('Новая карточка')) }
 			it { should have_selector('h1', text:'Новая карточка') }
+
+			it { should have_selector('form#new_card') }
 
 			it { should have_selector('label', text:'Название') }
 			it { should have_selector(:xpath,'//input[@name="card[title]"]') }
@@ -43,13 +44,25 @@ describe 'Стриницы карточек' do
 			it { should have_selector(:xpath,'//input[@value="Создать" and @name="commit"]') }
 		end
 
+		describe 'статика,' do
+			it_should_behave_like 'форма редактирования карточки'
+		end
 
-		describe 'действия,' do
+		describe 'динамика,' do
 			
 			describe 'с неверными данными,' do
-				it 'карточка не должна создаваться'
-				it 'должно выводиться сообщение об ошибке'
-				it 'должна появляться форма редактирования'
+				it 'карточка не должна создаваться' do
+					expect { click_button 'Создать' }.not_to change(Card,:count)
+				end
+				
+				describe 'сообщение об ошибке' do
+					before { click_button 'Создать' }
+					it { should have_selector('div.alert.alert-error', text:'Ошибка') }
+				end
+				
+				describe 'отображение формы редактирования карточки,' do
+					it_should_behave_like 'форма редактирования карточки'
+				end
 			end
 
 			describe 'с верными данными,' do
@@ -62,11 +75,11 @@ describe 'Стриницы карточек' do
 					expect { click_button 'Создать'}.to change(Card, :count).by(1)
 				end
 
-				# expect 'должна создаваться карточка,' do
-				# 	click_button 'Создать'
-				# end.to change(Card, :count).by(1)
+				describe 'сообщение об успехе,' do
+					before { click_button 'Создать' }
+					it { should have_selector('div.alert.alert-success', text:'Карточка создана') }
+				end
 
-				it 'должно выводиться сообщение об успехе'
 				it 'должна отображаться вновь созданная карточка'
 			end
 
