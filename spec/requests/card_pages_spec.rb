@@ -86,8 +86,7 @@ describe 'Стриницы карточек,' do
 
 				describe 'должна отображаться вновь созданная карточка,' do
 					before { click_button 'Создать' }
-					it { should have_selector('h1',text:'Просмотр карточки') }
-					it_should_behave_like 'карточка'
+					specify { expect(responce).ro redirect_to(card_path) }
 				end
 			end
 
