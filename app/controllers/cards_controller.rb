@@ -16,7 +16,7 @@ class CardsController < ApplicationController
 			#redirect_to card_path(@card)
 			redirect_to cards_path
 		else
-			redirect_to(edit_card_path(@card))
+			render 'new'
 		end
 	end
 
