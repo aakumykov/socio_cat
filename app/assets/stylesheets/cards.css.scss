@@ -1,13 +1,31 @@
 // Place all the styles related to the cards controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+$card_title: #ececec;
+
 .page_title {
 	text-align: center;
 }
+
 .card {
-	margin-bottom:18px;
+	margin-bottom: 30px;
+	border: 1px outset gray;
+	border-radius: 9px;
+	padding: 6px;
 	
 	LEGEND {
-		margin-bottom:5px;
+		margin-bottom: 5px;
+		margin-left: 5px;
+		
+		border-radius: 4px;
+		border: 1px solid $card_title;
+		
+		width: auto;
+		
+		line-height: 1em;
+		padding: 4px 10px;
+
+		background-color: $card_title;
 	}
 }
