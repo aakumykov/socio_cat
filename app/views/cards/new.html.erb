@@ -1,6 +1,6 @@
 <% provide(:title,'Новая карточка') %>
 
-<h1>Новая карточка</h1>
+<h1 class='page_title'><%= yield(:title) %></h1>
 
 <div class='card_edit span8 offset2'>
     <%= form_for(@card) do |f| %>
