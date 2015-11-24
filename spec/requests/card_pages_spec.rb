@@ -3,8 +3,8 @@ require 'spec_helper'
 describe 'Стриницы карточек,' do
 	subject { page }
 
-	let(:card_title) { '1st card title' }
-	let(:card_content) { 'This is content of 1st card.' }
+	let(:card_title) { 'Проверочный заголовок' }
+	let(:card_content) { 'Проверочное наполнение (соционической функции).' }
 
 	shared_examples_for 'карточка' do
 		it { should have_selector('fieldset.card') }
@@ -71,8 +71,8 @@ describe 'Стриницы карточек,' do
 
 			describe 'с верными данными,' do
 				before(:each) do
-					fill_in 'Название', with: 'Проверочный заголовок'
-					fill_in 'Содержимое', with: 'Проверочное наполнение (соционической функции).'
+					fill_in 'Название', with: card_title
+					fill_in 'Содержимое', with: card_content
 				end
 
 				it 'должна создаваться карточка,' do
@@ -85,8 +85,12 @@ describe 'Стриницы карточек,' do
 				end
 
 				describe 'должна отображаться вновь созданная карточка,' do
+					let(:title) { 'O_o' }
 					before { click_button 'Создать' }
-					specify { expect(responce).ro redirect_to(card_path) }
+					
+					it { should have_title(title) }
+					it { should have_selector('h1',text:title) }
+					it_should_behave_like 'карточка'
 				end
 			end
 
