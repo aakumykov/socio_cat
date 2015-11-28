@@ -36,11 +36,13 @@ describe 'Стриницы карточек,' do
 		
 		describe 'одна карточка,' do
 			before(:each) {
-				FactoryGirl.create(:card, title: card_title, content: card_content)
+				@card = FactoryGirl.create(:card, title: card_title, content: card_content)
 				visit cards_path
 			}
 			
 			it_should_behave_like 'карточка'
+
+			it { should have_selector(:xpath, "//fieldset[@id='card#{@card.id}']/legend//a[@href='#{card_path(@card.id)}']")}
 		end
 	end
 
@@ -90,6 +92,7 @@ describe 'Стриницы карточек,' do
 					
 					it { should have_title(title) }
 					it { should have_selector('h1',text:title) }
+
 					it_should_behave_like 'карточка'
 				end
 			end

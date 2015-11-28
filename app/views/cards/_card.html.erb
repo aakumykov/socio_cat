@@ -1,4 +1,8 @@
-<fieldset class='card'>
-	<legend class='card_title'><%= card.title %></legend>
+<fieldset class='card' id='card<%= card.id %>'>
+	<legend class='card_title'>
+		<a href='<%= card_path(card.id) %>'>
+			<%= card.title %>
+		</a>
+	</legend>
 	<div class='card_content'><%= card.content %></div>
 </fieldset>
