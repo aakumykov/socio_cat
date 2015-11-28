@@ -2,4 +2,4 @@
 
 <h1 class='page_title'><%= yield(:title) %></h1>
 
-<%= render @card, editable: true %>
+<%= render 'card_display', card: @card, editable: true %>
