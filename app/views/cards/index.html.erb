@@ -6,6 +6,6 @@
 </div>
 <div class='span8 offset2'>
 	<% @all_cards.each do |card| %>
-	<%= render card %>
+	<%= render card, editable: false %>
 	<% end %>
 </div>
