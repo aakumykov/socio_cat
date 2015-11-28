@@ -38,6 +38,16 @@ class CardsController < ApplicationController
 		end
 	end
 
+	def update
+		@card = Card.find_by(id: params[:id])
+		if @card.update_attributes(user_params) then
+			flash[:success] = 'Карточка изменена'
+		else
+			flash[:error] = 'Ошибка изменения карточки'
+		end
+		redirect_to card_path(@card)
+	end
+
 	private	
 
 	def user_params
