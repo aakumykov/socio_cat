@@ -6,6 +6,11 @@ describe 'Стриницы карточек,' do
 	let(:card_title) { 'Проверочный заголовок' }
 	let(:card_content) { 'Проверочное наполнение (соционической функции).' }
 
+	before(:each) {
+		@card = FactoryGirl.create(:card, title: card_title, content: card_content)
+		visit cards_path
+	}
+
 	shared_examples_for 'карточка' do
 		it { should have_selector('fieldset.card') }
 		it { should have_selector('legend.card_title',text: card_title) }
@@ -23,8 +28,6 @@ describe 'Стриницы карточек,' do
 
 		it { should have_selector('label', text:'Содержимое') }
 		it { should have_selector(:xpath,'//textarea[@name="card[content]"]') }
-
-		it { should have_selector(:xpath,'//input[@value="Создать" and @name="commit"]') }
 	end
 
 	describe 'список,' do
@@ -35,11 +38,6 @@ describe 'Стриницы карточек,' do
 		it { should have_link('Новая', href: new_card_path) }
 		
 		describe 'одна карточка,' do
-			before(:each) {
-				@card = FactoryGirl.create(:card, title: card_title, content: card_content)
-				visit cards_path
-			}
-			
 			it_should_behave_like 'карточка'
 
 			it { should have_selector(:xpath, "//fieldset[@id='card#{@card.id}']/legend//a[@href='#{card_path(@card.id)}']")}
@@ -52,6 +50,7 @@ describe 'Стриницы карточек,' do
 
 		describe 'статика,' do
 			it_should_behave_like 'форма редактирования карточки'
+			it { should have_selector(:xpath,"//input[@value='Создать' and @name='commit']") }
 		end
 
 		describe 'динамика,' do
@@ -107,7 +106,55 @@ describe 'Стриницы карточек,' do
 		}
 
 		it_should_behave_like 'карточка'
-		it { should have_link('изменить', edit_card_path(@card.id)) }
+		it { should have_link('изменить', edit_card_path(@card)) }
 	end
 
+	describe 'редактирование,' do
+		before(:each) { visit edit_card_path(@card) }
+		
+		describe 'устройство,' do
+			it_should_behave_like 'форма редактирования карточки'
+			it { should have_selector(:xpath,"//input[@value='Сохранить' and @name='commit']") }
+			it { should have_link('Отмена', href:card_path(@card)) }
+		end
+
+		describe 'поведение,' do
+			let(:new_title) {@card.title + ' ИЗМЕНЕНО'}
+			let(:new_content) {@card.content + ' ИЗМЕНЕНО'}
+			
+			describe 'сохранение изменений,' do
+				before {
+					fill_in 'Название', with: new_title
+					fill_in 'Содержимое', with: new_content
+				}
+				
+				it 'переход на страницу просмотра после сохранения,' do
+					expect { click_button 'Сохранить' }.to redirect_to card_path(@card)
+				end
+				
+				it_should_behave_like 'карточка'
+				
+				it { should have_content(new_title) }
+				it { should have_content(new_content) }
+
+				pending 'некорректный id'
+			end
+
+			describe 'отказ от изменений,' do
+				it 'возврат к просмотру по отказу от редактирования,' do
+					expect { click_button 'Отмена' }.to redirect_to card_path(@card)
+				end
+				
+				it_should_behave_like 'карточка'
+
+				it 'сохранение прежнего заголовка,' do
+					should have_content(new_title)
+				end
+				
+				it 'сохранение прежнего содержимого,' do
+					should have_content(new_content)
+				end
+			end
+		end
+	end
 end
