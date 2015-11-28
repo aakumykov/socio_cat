@@ -100,4 +100,10 @@ describe 'Стриницы карточек,' do
 		end
 	end
 
+	describe 'просмотр одной,' do
+		before {
+			#visit card_path(Card.all.first.id)
+		}
+	end
+
 end
