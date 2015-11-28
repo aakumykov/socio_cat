@@ -106,7 +106,7 @@ describe 'Стриницы карточек,' do
 		}
 
 		it_should_behave_like 'карточка'
-		it { should have_link('изменить', edit_card_path(@card)) }
+		it { should have_link('Изменить', edit_card_path(@card)) }
 	end
 
 	describe 'редактирование,' do
