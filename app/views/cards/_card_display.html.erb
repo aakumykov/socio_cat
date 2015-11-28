@@ -5,7 +5,7 @@
 		</a>
 	</legend>
 	<% if true==editable %>
-	<%= link_to 'изменить', edit_card_path(card.id), class:'btn btn-info btn-small pull-right' %>
+	<%= link_to 'Изменить', edit_card_path(card.id), class:'btn btn-info btn-small pull-right' %>
 	<% end %>
 	<div class='card_content'><%= card.content %></div>
 </fieldset>

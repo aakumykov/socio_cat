@@ -4,4 +4,6 @@
 <%= f.label :content, 'Содержимое' %>
 <%= f.text_area :content, class: 'card_edit_content' %>
 
-<%= f.submit 'Создать', class: "btn btn-primary" %>
+<% cancel_path = ('edit'==mode) ? card_path(@card) : cards_path %>
+<%= link_to 'Отмена', cancel_path, class: 'btn' %>
+<%= f.submit button_text, class: 'btn btn-primary' %>

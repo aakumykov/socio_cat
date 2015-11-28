@@ -30,6 +30,14 @@ class CardsController < ApplicationController
 		end
 	end
 
+	def edit
+		@card = Card.find_by(id: params[:id])
+		if nil==@card
+			flash[:error] = 'Нет такой карточки'
+			redirect_to cards_path
+		end
+	end
+
 	private	
 
 	def user_params

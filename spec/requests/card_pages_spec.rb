@@ -18,10 +18,8 @@ describe 'Стриницы карточек,' do
 	end
 
 	shared_examples_for 'форма редактирования карточки' do
-		it { should have_title(full_title('Новая карточка')) }
-		it { should have_selector('h1', text:'Новая карточка') }
-
-		it { should have_selector('form#new_card') }
+		#it { should have_title(full_title('Новая карточка')) }
+		#it { should have_selector('h1', text:'Новая карточка') }
 
 		it { should have_selector('label', text:'Название') }
 		it { should have_selector(:xpath,'//input[@name="card[title]"]') }

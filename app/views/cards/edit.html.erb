@@ -1,0 +1,9 @@
+<% provide(:title,'Изменение карточки') %>
+
+<h1 class='page_title'><%= yield(:title) %></h1>
+
+<div class='card_edit span8 offset2'>
+    <%= form_for(@card) do |f| %>
+    	<%= render 'card_edit', f:f, mode: 'edit', button_text: 'Сохранить' %>
+    <% end %>
+</div>
