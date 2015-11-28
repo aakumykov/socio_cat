@@ -4,5 +4,6 @@
 			<%= card.title %>
 		</a>
 	</legend>
+	<%= link_to 'изменить', edit_card_path(card.id), class:'btn btn-info btn-small pull-right' %>
 	<div class='card_content'><%= card.content %></div>
 </fieldset>

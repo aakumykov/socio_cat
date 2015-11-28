@@ -102,8 +102,12 @@ describe 'Стриницы карточек,' do
 
 	describe 'просмотр одной,' do
 		before {
-			#visit card_path(Card.all.first.id)
+			@card = Card.all.first
+			visit card_path(@card.id)
 		}
+
+		it_should_behave_like 'карточка'
+		it { should have_link('изменить', edit_card_path(@card.id)) }
 	end
 
 end
