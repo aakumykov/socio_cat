@@ -111,7 +111,9 @@ describe 'Стриницы карточек,' do
 		let(:new_title) {@card.title + ' ИЗМЕНЕНО'}
 		let(:new_content) {@card.content + ' ИЗМЕНЕНО'}
 
-		before(:each) { visit edit_card_path(@card) }
+		before(:each) { 
+			visit edit_card_path(@card)
+		}
 		
 		describe 'форма,' do
 			it_should_behave_like 'форма редактирования карточки'
@@ -131,23 +133,20 @@ describe 'Стриницы карточек,' do
 			it { should have_content(new_content) }
 		end
 
-		# describe 'отказ от изменений,' do
-		# 	it 'возврат к просмотру по отказу от редактирования,' do
-		# 		expect { click_button 'Отмена' }.to redirect_to card_path(@card)
-		# 	end
+		describe 'отказ от изменений,' do
+			before {
+		 		click_link 'Отмена'
+		 	}
 			
-		# 	describe 'qwerty,' do
-		# 		before { visit card_path(@card) }
-		# 		it_should_behave_like 'карточка'
-		# 	end
+			it_should_behave_like 'карточка'
 
-		# 	it 'сохранение прежнего заголовка,' do
-		# 		should have_content(@card.title)
-		# 	end
+			it 'сохранение прежнего заголовка,' do
+				should have_content(@card.title)
+			end
 			
-		# 	it 'сохранение прежнего содержимого,' do
-		# 		should have_content(@card.content)
-		# 	end
-		# end
+			it 'сохранение прежнего содержимого,' do
+				should have_content(@card.content)
+			end
+		 end
 	end
 end
