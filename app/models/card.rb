@@ -2,7 +2,7 @@ class Card < ActiveRecord::Base
 
 	validates :title, {
 		presence: true,
-		length: { maximum: 50 }
+		length: { maximum: 80 }
 	}
 	
 	validates :content, {
