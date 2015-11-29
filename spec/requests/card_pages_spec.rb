@@ -153,11 +153,22 @@ describe 'Стриницы карточек,' do
 	describe 'удаление,' do
 		before { visit card_path(@card) }
 
-		it 'кнопка удалить,' do
+		# штатная ситуаиця
+		it 'кнопка удалить существует,' do
 			page.should have_link('Удалить', href: card_path(@card))
 		end
 
-		
+		it 'кнопка удалить работает,' do
+			expect{ click_link 'Удалить'}.to change(Card,:count).by(-1)
+		end
+
+		describe 'перенаправление после удаления,' do
+			before { click_link 'Удалить' }
+			it { should have_selector('h1',text: 'Список карточек') }
+		end
+
+		# нештатная ситуаиця
+		#pending 'удаление несуществующей карточки'
 	end
 
 end

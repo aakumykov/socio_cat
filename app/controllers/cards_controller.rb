@@ -48,6 +48,17 @@ class CardsController < ApplicationController
 		redirect_to card_path(@card)
 	end
 
+	def destroy
+		@card = Card.find_by(id: params[:id])
+		if @card.destroy
+			flash[:success] = "Карточка «#{@card.title}» удалена"
+			redirect_to cards_path
+		else
+			flash[:error] = "Ошибка удаления карточки «#{@card.title}»"
+			redirect_to card_path(@card)
+		end
+	end
+
 	private	
 
 	def user_params
