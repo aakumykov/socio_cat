@@ -13,7 +13,7 @@ class CardsController < ApplicationController
 	def create
 		@card = Card.new(user_params)
 		if @card.save
-			flash[:success] = 'Карточка создана'
+			flash[:success] = "Карточка «#{@card.title}» создана"
 			redirect_to card_path(@card)
 			#redirect_to cards_path
 		else
