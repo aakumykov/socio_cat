@@ -149,4 +149,15 @@ describe 'Стриницы карточек,' do
 			end
 		 end
 	end
+
+	describe 'удаление,' do
+		before { visit card_path(@card) }
+
+		it 'кнопка удалить,' do
+			page.should have_link('Удалить', href: card_path(@card))
+		end
+
+		
+	end
+
 end
