@@ -17,7 +17,7 @@ class CardsController < ApplicationController
 			redirect_to card_path(@card)
 			#redirect_to cards_path
 		else
-			flash[:error] = 'Карточка не создана'
+			flash.now[:error] = 'Карточка не создана'
 			render 'new'
 		end
 	end
