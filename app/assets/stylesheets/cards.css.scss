@@ -36,3 +36,10 @@ $card_title: #ececec;
 		A { margin-bottom: 3px; }
 	}
 }
+
+/* форма с ошибками */
+.field_with_errors {
+	INPUT, TEXTAREA {
+		background-color: rgb(255, 226, 232) !important;
+	}
+}

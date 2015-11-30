@@ -17,7 +17,7 @@ class CardsController < ApplicationController
 			redirect_to card_path(@card)
 			#redirect_to cards_path
 		else
-			flash[:error] = 'Ошибка создания карточки'
+			flash[:error] = 'Карточка не создана'
 			render 'new'
 		end
 	end
@@ -51,7 +51,7 @@ class CardsController < ApplicationController
 	def destroy
 		@card = Card.find_by(id: params[:id])
 		if @card.destroy
-			flash[:success] = "Карточка «#{@card.title}» удалена"
+			flash[:warning] = "Карточка «#{@card.title}» удалена"
 			redirect_to cards_path
 		else
 			flash[:error] = "Ошибка удаления карточки «#{@card.title}»"
