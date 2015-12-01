@@ -50,6 +50,13 @@ describe 'Карточка,' do
 		it { should_not be_valid }
 	end
 
-	it 'когда заголовок слишком длинный'
-	it 'когда длина содержимого с лишком'
+	describe 'когда заголовок слишком длинный' do
+		before { card.title = 'a'*1000 }
+		it { should_not be_valid }
+	end
+
+	describe 'когда длина содержимого с лишком' do
+		before { card.content = 'a'*10000 }
+		it { should_not be_valid }
+	end
 end
