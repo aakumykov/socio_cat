@@ -30,14 +30,16 @@ describe 'Карточка,' do
 	subject { card }
 
 
-	# свойства
+	### свойства
+	## наличие
 	it { should respond_to(:title) }
 	it { should respond_to(:content) }
 
-
-	# валидации
+	## правильность
+	# общая
 	it { should be_valid }
 
+	# частная
 	describe 'когда отсутствует заголовок,' do
 		before { card.title = ' ' }
 		it { should_not be_valid }

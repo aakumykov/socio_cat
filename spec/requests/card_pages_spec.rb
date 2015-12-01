@@ -28,6 +28,7 @@ describe 'Стриницы карточек,' do
 		it { should have_selector(:xpath,'//textarea[@name="card[content]"]') }
 	end
 
+	# index
 	describe 'список,' do
 		before(:each) { visit cards_path }
 
@@ -42,6 +43,7 @@ describe 'Стриницы карточек,' do
 		end
 	end
 
+	# new
 	describe 'создание,' do
 
 		before(:each) { visit new_card_path }
@@ -97,6 +99,7 @@ describe 'Стриницы карточек,' do
 		end
 	end
 
+	# show
 	describe 'просмотр одной,' do
 		before {
 			@card = Card.all.first
@@ -107,6 +110,7 @@ describe 'Стриницы карточек,' do
 		it { should have_link('Изменить', edit_card_path(@card)) }
 	end
 
+	# edit
 	describe 'редактирование,' do
 		let(:new_title) {@card.title + ' ИЗМЕНЕНО'}
 		let(:new_content) {@card.content + ' ИЗМЕНЕНО'}
@@ -150,6 +154,7 @@ describe 'Стриницы карточек,' do
 		 end
 	end
 
+	#destroy
 	describe 'удаление,' do
 		before { visit card_path(@card) }
 
