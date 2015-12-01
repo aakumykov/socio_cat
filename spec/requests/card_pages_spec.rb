@@ -28,7 +28,12 @@ describe 'Стриницы карточек,' do
 		it { should have_selector(:xpath,'//textarea[@name="card[content]"]') }
 	end
 
+	shared_examples_for 'кнопка добавления карточки' do
+		it { should have_link('Новая', href: new_card_path) }
+	end
+
 	# index
+	# СДЕЛАТЬ: проверку того, что это именно список
 	describe 'список,' do
 		before(:each) { visit cards_path }
 
@@ -39,7 +44,9 @@ describe 'Стриницы карточек,' do
 		describe 'одна карточка,' do
 			it_should_behave_like 'карточка'
 
-			it { should have_selector(:xpath, "//fieldset[@id='card#{@card.id}']/legend//a[@href='#{card_path(@card.id)}']")}
+			#should have_selector(:xpath, "//fieldset[@id='card#{@card.id}']/legend//a[@href='#{card_path(@card.id)}']")}
+			it_should_behave_like 'карточка'
+			it_should_behave_like 'кнопка добавления карточки'
 		end
 	end
 
@@ -62,7 +69,7 @@ describe 'Стриницы карточек,' do
 				
 				describe 'сообщение об ошибке' do
 					before { click_button 'Создать' }
-					it { should have_selector('div.alert.alert-error', text:'Ошибка') }
+					it { should have_selector('div.alert.alert-error', text:'ОШИБКА, карточка не создана') }
 				end
 				
 				describe 'отображение формы редактирования карточки,' do
@@ -82,7 +89,7 @@ describe 'Стриницы карточек,' do
 
 				describe 'сообщение об успехе,' do
 					before { click_button 'Создать' }
-					it { should have_selector('div.alert.alert-success', text:'Карточка создана') }
+					it { should have_selector('div.alert.alert-success', text:"Карточка «#{@card.title}» создана") }
 				end
 
 				describe 'должна отображаться вновь созданная карточка,' do
@@ -108,6 +115,7 @@ describe 'Стриницы карточек,' do
 
 		it_should_behave_like 'карточка'
 		it { should have_link('Изменить', edit_card_path(@card)) }
+		it_should_behave_like 'кнопка добавления карточки'
 	end
 
 	# edit
