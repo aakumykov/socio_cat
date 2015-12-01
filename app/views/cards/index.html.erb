@@ -1,10 +1,11 @@
 <% provide(:title,'Список карточек') %>
 
 <h1 class='page_title'><%= yield(:title) %></h1>
+
+
 <div class='span8 offset2'>
-	<%= link_to 'Новая', new_card_path, class: 'btn btn-primary pull-right', title: 'Создать новую карточку' %>
-</div>
-<div class='span8 offset2'>
+	<%= render 'card_button_new' %>
+
 	<% @all_cards.each do |card| %>
 	<%= render 'card_display', card: card, editable: false %>
 	<% end %>
