@@ -1,4 +1,5 @@
 SocioCat::Application.routes.draw do
+  get "users/new"
   # get "welcome/home"
   # get "welcome/about"
   # get "welcome/help"
