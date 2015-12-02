@@ -1,16 +1,9 @@
 <% provide(:title,'Регистрация пользователя') %>
 
-<h1><%= yield(:title) %></h1>
+<h1 class='page_title'><%= yield(:title) %></h1>
 
-<%= 
-	form_for(@user) do |f|
-
-		f.label :name, 'Имя'
-		f.text_field :name, class: 'qwerty'
-
-		f.label :email, 'Электронная почта'
-		f.text_field :email
-
-		f.submit 'Создать'
-	end 
-%>
+<div class='card_edit span4 offset4'>
+	<%= form_for(@user) do |f| %>
+		<%= render 'edit', f:f, mode:'create' %>
+	<% end %>
+</div>

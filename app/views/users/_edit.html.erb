@@ -1,0 +1,19 @@
+<%= f.label :name, 'Имя' %>
+<%= f.text_field :name, class: 'card_edit_title' %>
+
+<%= f.label :email, 'Электронная почта' %>
+<%= f.text_field :email, class: 'card_edit_content' %>
+
+<%
+	if 'edit'==mode
+		cancel_path = user_path(@user)
+		button_text = 'Изменить'
+	else
+		cancel_path = users_path
+		button_text = 'Создать'
+	end
+%>
+
+<%= link_to('Отмена', cancel_path, class: 'btn pull-left') if 'edit'==mode %>
+<div class='vspacer20'></div>
+<%= f.submit button_text, class: 'btn btn-primary pull-right' %>

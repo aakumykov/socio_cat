@@ -40,3 +40,8 @@
 .alert {
 	text-align: center;
 }
+
+/* промежутки */
+.vspacer20 {
+	height: 20px;
+}
