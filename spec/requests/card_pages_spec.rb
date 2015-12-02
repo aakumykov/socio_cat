@@ -32,6 +32,10 @@ describe 'Стриницы карточек,' do
 		it { should have_link('Новая', href: new_card_path) }
 	end
 
+	shared_examples_for 'кнопка списка карточек' do
+		it { should have_link('Список', href: new_card_path) }
+	end
+
 	# index
 	# СДЕЛАТЬ: проверку того, что это именно список
 	describe 'список,' do
@@ -116,6 +120,7 @@ describe 'Стриницы карточек,' do
 		it_should_behave_like 'карточка'
 		it { should have_link('Изменить', edit_card_path(@card)) }
 		it_should_behave_like 'кнопка добавления карточки'
+		#it_should_behave_like 'кнопка списка карточек'
 	end
 
 	# edit
