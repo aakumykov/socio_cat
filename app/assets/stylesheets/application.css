@@ -11,6 +11,17 @@
  *= require_self
  *= require_tree .
  */
+
+/* отладка вида */
+/*.container {
+	background-color: lightblue;
+}
+
+.row {
+	border: 1px dotted tomato;
+}*/
+
+
  .main_content {
  	margin-bottom: 30px;
  }
