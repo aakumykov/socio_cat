@@ -1,5 +1,5 @@
 SocioCat::Application.routes.draw do
-  get "users/new"
+  # get "users/new"
   # get "welcome/home"
   # get "welcome/about"
   # get "welcome/help"
@@ -21,6 +21,7 @@ SocioCat::Application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   resources :cards
+  resources :users
 
   # Example resource route with options:
   #   resources :products do
