@@ -1,2 +1,16 @@
-<h1>Users#new</h1>
-<p>Find me in app/views/users/new.html.erb</p>
+<% provide(:title,'Регистрация пользователя') %>
+
+<h1><%= yield(:title) %></h1>
+
+<%= 
+	form_for(@user) do |f|
+
+		f.label :name, 'Имя'
+		f.text_field :name, class: 'qwerty'
+
+		f.label :email, 'Электронная почта'
+		f.text_field :email
+
+		f.submit 'Создать'
+	end 
+%>
