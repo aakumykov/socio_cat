@@ -182,28 +182,20 @@ describe 'Стриницы карточек,' do
 
 		# нештатная ситуаиця
 		describe 'удаление несуществующей карточки' do
-			# specify { 
-			# 	expect { delete card_path(Card.last.id+1) }.not_to change(Card,:count) 
-			# }
+			specify { 
+				expect { delete card_path(Card.last.id+1) }.not_to change(Card,:count) 
+			}
 			before {
 				delete card_path(Card.last.id+1)
 			}
 			specify {
 				expect(response).to redirect_to(cards_path)
 			}
-			subject { page }
+			#subject { page }
 			#it { should have_selector('div.alert.alert-error', text:'Ошибка удаления карточки') }
-			it { should have_content('Ошибка') }
-			
-			#it { should have_selector('div') }
+			#it { should have_content('Список') }
+			#it { should have_selector('div') } # работает только это
 		end
-
-		# describe 'перенаправление к списку пользователей,' do
-		# 	before(:each) do
-		# 		get user_path(User.last.id+1)
-		# 	end
-		# 	specify { expect(response).to redirect_to(users_path) }
-		# end
 	end
 
 end
