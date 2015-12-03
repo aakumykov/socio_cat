@@ -6,6 +6,7 @@ describe 'Страницы пользователя,' do
 
 	subject { page }
 
+
 	shared_examples_for 'страница регистрации' do
 		it { should have_title(full_title('Регистрация пользователя')) }
 		it { should have_selector('h1',text:'Регистрация пользователя') }
@@ -22,7 +23,14 @@ describe 'Страницы пользователя,' do
 	shared_examples_for 'страница пользователя' do
 		it { should have_title(full_title('Страница пользователя')) }
 		it { should have_selector('h1',text:'Страница пользователя') }
+		pending 'отображение данных пользователя, элементы управления'
 	end
+
+	shared_examples_for 'ошибка регистрации' do
+		it { should have_selector('.alert.alert-error', text:'ОШИБКА: пользователь не создан') }
+		it { should have_selector('div.field_with_errors') }
+	end
+
 
 	describe 'создание,' do
 		before { visit new_user_path }
@@ -57,12 +65,32 @@ describe 'Страницы пользователя,' do
 				end
 			end
 			
-			# describe 'с неверными данными,' do
-			# 	it 'отклонение нового пользователя,' do
-			# 		expect{ click_button('Создать') }.not_to change(User,:count)
-			# 	end
-			# 	it { should have_selector('.alert.alert-error', text:'ОШИБКА: пользователь не создан') }
-			# end
+			describe 'с неверными данными,' do
+				it 'отклонение нового пользователя,' do
+					expect{ click_button(create_button) }.not_to change(User,:count)
+				end
+				describe 'сообщение об ошибке,' do
+					before { click_button(create_button) }
+					it_should_behave_like 'ошибка регистрации'
+				end
+			end
+
+			describe 'с частично верными данными,' do
+				describe 'имя,' do
+					before {
+						fill_in 'Имя', with: 'Человече'
+						click_button(create_button)
+					}
+					it_should_behave_like 'ошибка регистрации'
+				end
+				describe 'электронная почта,' do
+					before {
+						fill_in 'Электронная почта', with: 'user@example.we'
+						click_button(create_button)
+					}
+					it_should_behave_like 'ошибка регистрации'
+				end
+			end
 		end
 	end
 
