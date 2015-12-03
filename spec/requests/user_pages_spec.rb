@@ -6,20 +6,29 @@ describe 'Страницы пользователя,' do
 
 	subject { page }
 
+	shared_examples_for 'страница регистрации' do
+		it { should have_title(full_title('Регистрация пользователя')) }
+		it { should have_selector('h1',text:'Регистрация пользователя') }
+
+		it { should have_selector('label',text:'Имя') }
+		it { should have_selector(:xpath, "//input[@name='user[name]']") }
+
+		it { should have_selector('label', text:'Электронная почта') }
+		it { should have_selector(:xpath, "//input[@name='user[email]']") }
+
+		it { should have_selector(:xpath, "//input[@value='Создать']") }
+	end
+
+	shared_examples_for 'страница пользователя' do
+		it { should have_title(full_title('Страница пользователя')) }
+		it { should have_selector('h1',text:'Страница пользователя') }
+	end
+
 	describe 'создание,' do
 		before { visit new_user_path }
 
 		describe 'отображение формы,' do
-			it { should have_title(full_title('Регистрация пользователя')) }
-			it { should have_selector('h1',text:'Регистрация пользователя') }
-
-			it { should have_selector('label',text:'Имя') }
-			it { should have_selector(:xpath, "//input[@name='user[name]']") }
-
-			it { should have_selector('label', text:'Электронная почта') }
-			it { should have_selector(:xpath, "//input[@name='user[email]']") }
-
-			it { should have_selector(:xpath, "//input[@value='Создать']") }
+			it_should_behave_like 'страница регистрации'
 		end
 
 		describe 'работа формы,' do
@@ -44,8 +53,7 @@ describe 'Страницы пользователя,' do
 				
 				describe 'перенаправление на страницу пользователя,' do
 					before { click_button(create_button) }
-					it { should have_title(full_title('Страница пользователя')) }
-					it { should have_selector('h1',text:'Страница пользователя') }
+					it_should_behave_like 'страница пользователя'
 				end
 			end
 			
