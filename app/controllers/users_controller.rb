@@ -7,13 +7,13 @@ class UsersController < ApplicationController
 	end
 
 	def create
-		@user = User.create(user_params)
-		if nil==@user
-			flash.now[:error] = 'ОШИБКА: пользователь не создан'
-			render 'new'
-		else
+		@user = User.new(user_params)
+		if @user.save
 			flash[:success] = "Создан пользователь «#{@user.name}»"
 			redirect_to user_path(@user)
+		else
+			flash.now[:error] = 'ОШИБКА: пользователь не создан'
+			render 'new'
 		end
 	end
 
