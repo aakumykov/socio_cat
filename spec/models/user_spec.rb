@@ -2,11 +2,10 @@ require 'spec_helper'
 
 describe 'User,' do
 	before(:each) { 
-		# @user = User.new(
-		# 	name: 'Человече Разумный',
-		# 	email: 'homo@sapiens.it',
-		# )
-		@user = FactoryGirl.create(:user)
+		@user = User.new(
+			name: 'Человече Разумный',
+			email: 'homo@sapiens.it',
+		)
 	}
 	subject { @user }
 	
@@ -54,22 +53,22 @@ describe 'User,' do
 
 	describe 'повторяющиеся данные,' do
 		describe 'имя,' do
-			#let(:user1) { FactoryGirl.create(:user) }
-			#let(:user2) { FactoryGirl.create(:user) }
-			#subject {user2}
-			#it { should_not be_valid }
 			before {
-				#@second_user = FactoryGirl.create(:user)
-				second_user = @user.dup
-				second_user.save
+				user2 = @user.dup
+				user2.email = SecureRandom.uuid.gsub('-','') + '@example.org'
+				user2.name = @user.name.upcase
+				user2.save!
 			}
 			it { should_not be_valid }
-			#it 'qwerty,' do
-				#expect(@second_user).not_to be_valid
-			#end
 		end
-		#describe 'электронка,' do
-
-		#end
+		describe 'электронка,' do
+			before {
+				user2 = @user.dup
+				user2.name = @user.name + '123'
+				user2.email = @user.email.upcase
+				user2.save!
+			}
+			it { should_not be_valid }
+		end
 	end
 end
