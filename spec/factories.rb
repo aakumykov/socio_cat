@@ -5,7 +5,7 @@ FactoryGirl.define do
 	end
 
 	factory :user do
-		name 'Пользователь'
+		name Faker::Name
 		email Faker::Internet.email
 	end
 end
