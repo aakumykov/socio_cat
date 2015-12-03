@@ -5,7 +5,9 @@ FactoryGirl.define do
 	end
 
 	factory :user do
-		name Faker::Name
-		email Faker::Internet.email
+		#name Faker::Name
+		#email Faker::Internet.email
+		name 'Пользователь'
+		email 'user@example.com'
 	end
 end
