@@ -23,6 +23,7 @@ describe 'Страницы пользователя,' do
 	shared_examples_for 'страница пользователя' do
 		it { should have_title(full_title('Страница пользователя')) }
 		it { should have_selector('h1',text:'Страница пользователя') }
+		pending 'отображение данных пользователя, элементы управления'
 	end
 
 	shared_examples_for 'ошибка регистрации' do
