@@ -43,14 +43,6 @@ describe 'User,' do
 		end
 	end
 
-	# describe 'коррекция регистра электронной почты,' do
-	# 	addresses = %w[
-	# 		QWERTY@EXAMPLE.COM
-	# 		QWErty@exaMPLE.CoM
-	# 		qwerty@EXAMPLE.ORG
-	# 	]
-	# end
-
 	describe 'повторяющиеся данные,' do
 		describe 'имя,' do
 			before {
@@ -71,4 +63,18 @@ describe 'User,' do
 			it { should_not be_valid }
 		end
 	end
+
+	describe 'перевод почты в нижний регистр,' do
+		let(:email) { 'address@exampe.com' }
+		before {
+			@test_user = User.new(
+				name:'Пользователь',
+				email:email.upcase,
+			)
+			@test_user.save!
+		}
+		specify { expect(@test_user.reload.email).to eq email }
+	end
+
+
 end
