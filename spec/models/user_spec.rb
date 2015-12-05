@@ -5,6 +5,8 @@ describe 'User,' do
 		@user = User.new(
 			name: 'Человече Разумный',
 			email: 'homo@sapiens.it',
+			password: '0чень_сЛо#нЫй-пар0ль',
+			password_confirmation: '0чень_сЛо#нЫй-пар0ль',
 		)
 	}
 	subject { @user }
@@ -12,6 +14,8 @@ describe 'User,' do
 	it { should respond_to(:name) }
 	it { should respond_to(:email) }
 	it { should respond_to(:password_digest) }
+	it { should respond_to(:password) }
+	it { should respond_to(:password_confirmation) }
 
 	it { should be_valid }
 
@@ -42,6 +46,41 @@ describe 'User,' do
 				it { should_not be_valid }
 			end
 		end
+		describe 'отсутствует пароль,' do
+			before { @user.password = ' ' }
+			it { should_not be_valid }
+			#specify { expect(@user).not_to be_valid }
+		end
+		describe 'разные пароль и его подтверждение,' do
+			before { 
+				@user.password = '1'*10
+				@user.password_confirmation = '2'*10
+			}
+			it { should_not be_valid }
+		end
+		describe 'пароль короткий с лишком,' do
+			before { @user.password = '1' }
+			it { should_not be_valid }
+		end
+		describe 'пароль с лишком длинный,' do
+			before { @user.password = 'k'*1000 }
+			it { should_not be_valid }
+		end
+		describe 'пароль недостаточно сложный,' do
+			specify {
+				list = %w[
+					qwertyqwerty
+					qwerty123
+					123456789
+					1234%^&*9
+					Qwerty123
+				]
+				list.each do |simple_pass|
+					@user.password = simple_pass
+					expect(@user).not_to be_valid
+				end
+			}
+		end
 	end
 
 	describe 'повторяющиеся данные,' do
@@ -68,14 +107,18 @@ describe 'User,' do
 	describe 'перевод почты в нижний регистр,' do
 		let(:email) { 'address@exampe.com' }
 		before {
-			@test_user = User.new(
-				name:'Пользователь',
-				email:email.upcase,
-			)
-			@test_user.save!
+			@user.email = email.upcase
+			@user.save!
 		}
-		specify { expect(@test_user.reload.email).to eq email }
+		specify { expect(@user.reload.email).to eq email }
 	end
 
+	describe 'метод  User.authenticate(),' do
+		pending 'в верным паролем,' do
 
+		end
+		pending 'с неверным паролем,' do
+
+		end
+	end
 end
