@@ -4,6 +4,12 @@
 <%= f.label :email, 'Электронная почта' %>
 <%= f.text_field :email, class: 'card_edit_content' %>
 
+<%= f.label :password, 'Пароль' %>
+<%= f.password_field :password, class: 'card_edit_content' %>
+
+<%= f.label :password_confirmation, 'Подтверждение пароля' %>
+<%= f.password_field :password_confirmation, class: 'card_edit_content' %>
+
 <%
 	if 'edit'==mode
 		cancel_path = user_path(@user)

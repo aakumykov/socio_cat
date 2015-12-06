@@ -4,6 +4,7 @@
 
 <div class='card_edit span8 offset2'>
     <%= form_for(@card) do |f| %>
+    	<%= render 'shared/error_messages.html.erb', object:f.object %>
     	<%= render 'card_edit', f:f, mode: 'new', button_text: 'Создать' %>
     <% end %>
 </div>
