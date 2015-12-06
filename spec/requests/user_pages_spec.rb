@@ -27,9 +27,9 @@ describe 'Страницы пользователя,' do
 	end
 
 	shared_examples_for 'страница пользователя' do
-		it { should have_title(full_title('Страница пользователя')) }
-		it { should have_selector('h1',text:'Страница пользователя') }
-		pending 'информация о пользователе,'
+		let(:title) { "Страница пользователя" }
+		it { should have_title(full_title(title)) }
+		it { should have_selector('h1',text:title) }
 	end
 
 	shared_examples_for 'ошибка регистрации' do |mode|
@@ -75,10 +75,6 @@ describe 'Страницы пользователя,' do
 						@user = User.last
 					}
 					it { should have_selector('.alert.alert-success', text:"Создан пользователь «#{@user.name}»") }
-				end
-				
-				describe 'перенаправление на страницу пользователя,' do
-					before { click_button(create_button) }
 					it_should_behave_like 'страница пользователя'
 				end
 			end
@@ -118,10 +114,18 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'список,' do
-		before { visit users_path }
+		before {
+			@user1 = FactoryGirl.create(:user)
+			@user2 = FactoryGirl.create(:user)
+			visit users_path
+		}
 		it { should have_title('Пользователи') }
 		it { should have_selector('h1', text: 'Пользователи') }
+		it { should have_link(@user1.name, href:user_path(@user1)) }
+		it { should have_link(@user2.name, href:user_path(@user2)) }
+	end
 
-		pending 'элементы списка'
+	describe 'просмотр,' do
+
 	end
 end
