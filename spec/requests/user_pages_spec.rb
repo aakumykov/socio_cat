@@ -126,6 +126,6 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'просмотр,' do
-
+		it_should_behave_like 'страница пользователя'
 	end
 end
