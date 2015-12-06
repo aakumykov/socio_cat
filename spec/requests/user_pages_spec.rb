@@ -32,9 +32,16 @@ describe 'Страницы пользователя,' do
 		pending 'информация о пользователе,'
 	end
 
-	shared_examples_for 'ошибка регистрации' do
-		it { should have_selector('.alert.alert-error', text:'ОШИБКА: пользователь не создан') }
-		it { should have_selector('div.field_with_errors') }
+	shared_examples_for 'ошибка регистрации' do |mode|
+		let(:error_msg) {'ОШИБКА: пользователь не создан'}
+		
+		if :inverted==mode or :negative==mode
+			it { should_not have_selector('.alert.alert-error', text:error_msg) }
+			it { should_not have_selector('div.field_with_errors') }
+		else
+			it { should have_selector('.alert.alert-error', text:error_msg) }
+			it { should have_selector('div.field_with_errors') }
+		end
 	end
 
 
@@ -83,6 +90,11 @@ describe 'Страницы пользователя,' do
 				describe 'сообщение об ошибке,' do
 					before { click_button(create_button) }
 					it_should_behave_like 'ошибка регистрации'
+				end
+				pending 'сообщение об ошибке не показывается на другой странице,' do
+					# почему-то не работает
+				 	before { visit root_url }
+				 	it_should_behave_like 'ошибка регистрации', :inverted
 				end
 			end
 

@@ -72,8 +72,16 @@ describe 'Стриницы карточек,' do
 				end
 				
 				describe 'сообщение об ошибке' do
+					let(:error_message) { 'ОШИБКА, карточка не создана' }
+
 					before { click_button 'Создать' }
-					it { should have_selector('div.alert.alert-error', text:'ОШИБКА, карточка не создана') }
+					
+					it { should have_selector('div.alert.alert-error', text:error_message) }
+
+					describe 'сообщение об ошибке должно исчезать при переходе на другую страницу,' do
+						before { visit root_url }
+						it { should_not have_selector('div.alert.alert-error', text:error_message) }
+					end
 				end
 				
 				describe 'отображение формы редактирования карточки,' do
