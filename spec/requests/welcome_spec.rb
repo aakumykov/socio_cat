@@ -5,9 +5,12 @@ describe 'Статические welcome-страницы,' do
 	
 	shared_examples_for 'all_welcome_pages' do
 		it { should have_link('Главная страница', href: home_path) }
+		it { should have_link('Карточки', href: cards_path) }
+		it { should have_link('Пользователи', href: users_path) }
 		it { should have_link('О проекте', href: about_path) }
 		it { should have_link('Помощь', href: help_path) }
-		it { should have_link('Карточки', href: cards_path) }
+		it { should have_link('Вход', href: root_path) }
+		it { should have_link('Регистрация', href: new_user_path) }
 	end
 
 	describe 'Главная страница,' do
