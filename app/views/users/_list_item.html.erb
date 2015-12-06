@@ -1,10 +1,7 @@
 <div class='row'>
-	<fieldet class='span4 offset4'>
-		<legend>
-			<%= link_to u.name, user_path(u) %>
-		</legend>
+	<div class='span6 offset3 users_list'>
 		<ul>
-			<li>email: <%= u.email %></li>
+			<li><%= link_to u.name, user_path(u) %></li>
 		</ul>
-	</fieldset>
+	</div>
 </div>

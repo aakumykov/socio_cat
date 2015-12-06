@@ -45,3 +45,9 @@
 .vspacer20 {
 	height: 20px;
 }
+
+/* список пользователей */
+.users_list UL LI {
+	list-style-type: none;
+	border-bottom: 1px solid lightgrey;
+}
