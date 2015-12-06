@@ -59,28 +59,29 @@ describe 'User,' do
 			}
 			it { should_not be_valid }
 		end
-		describe 'пароль короткий с лишком,' do
-			before { @user.password = '1' }
+		describe 'пароль короткий, с лишком,' do
+			before { @user.password = @user.password_confirmation = '1' }
 			it { should_not be_valid }
 		end
 		describe 'пароль с лишком длинный,' do
-			before { @user.password = 'k'*1000 }
+			before { @user.password = @user.password_confirmation = 'k'*1000 }
 			it { should_not be_valid }
 		end
 		describe 'пароль недостаточно сложный,' do
-			specify {
-				list = %w[
+			specify 'модель должна быть некорректной' do
+				passwd_list = %w[
 					qwertyqwerty
 					qwerty123
 					123456789
 					1234%^&*9
 					Qwerty123
+					Qwerty!@#
 				]
-				list.each do |simple_pass|
-					@user.password = simple_pass
+				passwd_list.each do |simple_pass|
+					@user.password = @user.password_confirmation = simple_pass
 					expect(@user).not_to be_valid
 				end
-			}
+			end
 		end
 	end
 
@@ -114,12 +115,19 @@ describe 'User,' do
 		specify { expect(@user.reload.email).to eq email }
 	end
 
-	describe 'метод  User.authenticate(),' do
-		pending 'в верным паролем,' do
+	describe 'значение, возвращаемое методом authenticate(),' do
+		before { @user.save! }
+		let(:user_by_email) { User.find_by(email:@user.email) }
+		let(:right_user) { user_by_email.authenticate(@user.password) }
+		let(:wrong_user) { user_by_email.authenticate(SecureRandom.uuid) }
 
+		describe 'с верным паролем,' do
+			specify { expect(right_user).to eq @user }
 		end
-		pending 'с неверным паролем,' do
 
+		describe 'с неверным паролем,' do
+		 	specify { expect(wrong_user).not_to eq @user }
+		 	specify { expect(wrong_user).to be_false }
 		end
 	end
 end
