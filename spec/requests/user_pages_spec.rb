@@ -29,6 +29,7 @@ describe 'Страницы пользователя,' do
 	shared_examples_for 'страница пользователя' do
 		it { should have_title(full_title('Страница пользователя')) }
 		it { should have_selector('h1',text:'Страница пользователя') }
+		pending 'информация о пользователе,'
 	end
 
 	shared_examples_for 'ошибка регистрации' do
@@ -104,4 +105,11 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
+	describe 'список,' do
+		before { visit users_path }
+		it { should have_title('Пользователи') }
+		it { should have_selector('h1', text: 'Пользователи') }
+
+		pending 'элементы списка'
+	end
 end

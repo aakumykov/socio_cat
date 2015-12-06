@@ -1,0 +1,7 @@
+<% provide(:title,'Пользователи') %>
+
+<h1 class='page_title'><%= yield(:title) %></h1>
+
+<% @all_users.each do |user| %>
+	<%= render 'list_item', u:user %>
+<% end %>
