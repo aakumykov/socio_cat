@@ -17,6 +17,12 @@ describe 'Страницы пользователя,' do
 		it { should have_selector('label', text:'Электронная почта') }
 		it { should have_selector(:xpath, "//input[@name='user[email]']") }
 
+		it { should have_selector('label', text:'Пароль') }
+		it { should have_selector(:xpath, "//input[@name='user[password]']") }
+
+		it { should have_selector('label', text:'Подтверждение пароля') }
+		it { should have_selector(:xpath, "//input[@name='user[password_confirmation]']") }
+
 		it { should have_selector(:xpath, "//input[@value='Создать']") }
 	end
 
@@ -41,9 +47,14 @@ describe 'Страницы пользователя,' do
 		describe 'работа формы,' do
 			
 			describe 'с верными данными,' do
+				#let(:test_password) { 'ОченьСложныйПароль123$%^' }
+				let(:test_password) { 'Qwerty123!@#' }
+				
 				before {
 					fill_in 'Имя', with: 'Человек'
 					fill_in 'Электронная почта', with: 'homo@sapiens.me'
+					fill_in 'Пароль', with: test_password
+					fill_in 'Подтверждение пароля', with: test_password
 				}
 				
 				it 'появление пользователя,' do
