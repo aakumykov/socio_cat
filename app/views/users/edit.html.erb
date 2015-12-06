@@ -1,0 +1,10 @@
+<% provide(:title,'Редактирование пользователя') %>
+
+<h1 class='page_title'><%= yield(:title) %></h1>
+
+<div class='card_edit span4 offset4'>
+	<%= form_for(@user) do |f| %>
+		<%= render 'shared/error_messages.html.erb', object:f.object %>
+		<%= render 'edit', f:f, mode:'edit' %>
+	<% end %>
+</div>

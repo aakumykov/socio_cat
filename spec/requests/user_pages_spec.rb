@@ -7,10 +7,7 @@ describe 'Страницы пользователя,' do
 	subject { page }
 
 
-	shared_examples_for 'страница регистрации' do
-		it { should have_title(full_title('Регистрация пользователя')) }
-		it { should have_selector('h1',text:'Регистрация пользователя') }
-
+	shared_examples_for 'форма регистрации' do
 		it { should have_selector('label',text:'Имя') }
 		it { should have_selector(:xpath, "//input[@name='user[name]']") }
 
@@ -22,8 +19,6 @@ describe 'Страницы пользователя,' do
 
 		it { should have_selector('label', text:'Подтверждение пароля') }
 		it { should have_selector(:xpath, "//input[@name='user[password_confirmation]']") }
-
-		it { should have_selector(:xpath, "//input[@value='Создать']") }
 	end
 
 	shared_examples_for 'страница пользователя' do
@@ -49,7 +44,11 @@ describe 'Страницы пользователя,' do
 		before { visit new_user_path }
 
 		describe 'отображение формы,' do
-			it_should_behave_like 'страница регистрации'
+			let(:title) { 'Регистрация пользователя' }
+			it { should have_title(full_title(title)) }
+			it { should have_selector('h1',text:title) }
+			it { should have_selector(:xpath, "//input[@value='Создать']") }
+			it_should_behave_like 'форма регистрации'
 		end
 
 		describe 'работа формы,' do
@@ -127,5 +126,21 @@ describe 'Страницы пользователя,' do
 
 	describe 'просмотр,' do
 		it_should_behave_like 'страница пользователя'
+	end
+
+	describe 'редактирование,' do
+		before {
+			@user = FactoryGirl.create(:user)
+			visit user_path(@user) 
+		}
+		describe 'отображение,' do
+			let(:title) { 'Редактирование пользователя' }
+			it { should have_title(full_title(title)) }
+			it { should have_selector('h1',text:title) }
+			it_should_behave_like 'форма регистрации'
+		end
+		pending 'работа,' do
+
+		end
 	end
 end
