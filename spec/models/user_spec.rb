@@ -5,10 +5,8 @@ describe 'User,' do
 		@user = User.new(
 			name: 'Человече Разумный',
 			email: 'homo@sapiens.it',
-			#password: '0чень_сЛо#нЫй-пар0ль',
-			#password_confirmation: '0чень_сЛо#нЫй-пар0ль',
-			password: 'Qwerty123$%^',
-			password_confirmation: 'Qwerty123$%^',
+			password: '0чень_сЛо#нЫй-пар0ль',
+			password_confirmation: '0чень_сЛо#нЫй-пар0ль',
 		)
 	}
 	subject { @user }
