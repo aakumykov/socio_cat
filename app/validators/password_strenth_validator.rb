@@ -6,9 +6,13 @@ class PasswordStrenthValidator < ActiveModel::EachValidator
 			/[[:digit:]]/,
 			/[!@#$%^&*()_+=\-`~'"|\/\\;:.,№? ]/
 		]
+		
 		format_is_bad = false
-		patterns.each do |regex|
-			value.match(regex) or format_is_bad = true
+		
+		if not value.nil?
+			patterns.each do |regex|
+				value.match(regex) or format_is_bad = true
+			end
 		end
 
 		if format_is_bad
