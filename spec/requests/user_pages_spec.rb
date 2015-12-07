@@ -125,13 +125,17 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'просмотр,' do
+		before {
+			@user = FactoryGirl.create(:user)
+			visit user_path(@user) 
+		}
 		it_should_behave_like 'страница пользователя'
 	end
 
 	describe 'редактирование,' do
 		before {
 			@user = FactoryGirl.create(:user)
-			visit user_path(@user) 
+			visit edit_user_path(@user) 
 		}
 		describe 'отображение,' do
 			let(:title) { 'Редактирование пользователя' }
