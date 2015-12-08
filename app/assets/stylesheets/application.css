@@ -21,24 +21,26 @@
 	border: 1px dotted tomato;
 }*/
 
+.main_menu {
+	margin-bottom: 20px;
+}
 
- .main_content {
- 	margin-bottom: 30px;
- }
- 
+.main_content {
+	margin-top: 30px;
+	margin-bottom: 30px;
+}
+
 .card_edit_title, .card_edit_content {
-	width:100%;
+width:100%;
 }
 .card_edit_content {
-	height:200px;
+height:200px;
 }
-
 .debug_dump {
-	background-color: #FBEFD8;
+background-color: #FBEFD8;
 }
-
 .alert {
-	text-align: center;
+text-align: center;
 }
 
 /* промежутки */
