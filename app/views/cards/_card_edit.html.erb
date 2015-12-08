@@ -1,9 +1,12 @@
-<%= f.label :title, 'Название' %>
-<%= f.text_field :title, class: 'card_edit_title' %>
+<div class='row'>
+	<%= f.label :title, 'Название' %>
+	<%= f.text_field :title, class: 'card_edit_title' %>
 
-<%= f.label :content, 'Содержимое' %>
-<%= f.text_area :content, class: 'card_edit_content' %>
-
-<% cancel_path = ('edit'==mode) ? card_path(@card) : cards_path %>
-<%= link_to 'Отмена', cancel_path, class: 'btn' %>
-<%= f.submit button_text, class: 'btn btn-primary' %>
+	<%= f.label :content, 'Содержимое' %>
+	<%= f.text_area :content, class: 'card_edit_content' %>
+</div>
+<div class='row'>
+	<% cancel_path = ('edit'==mode) ? card_path(@card) : cards_path %>
+	<%= link_to 'Отмена', cancel_path, class: 'btn' %>
+	<%= f.submit button_text, class: 'btn btn-primary pull-right' %>
+</div>
