@@ -11,15 +11,19 @@
 <%= f.password_field :password_confirmation, class: 'card_edit_content' %>
 
 <%
-	if 'edit'==mode
+	case mode
+	when 'edit'
 		cancel_path = user_path(@user)
 		button_text = 'Изменить'
-	else
+	when 'create'
 		cancel_path = users_path
 		button_text = 'Создать'
+	else
+		cancel_path = root_path
+		button_text = 'Отправить'
 	end
 %>
 
 <div class='vspacer20'></div>
-<%= link_to('Отмена', cancel_path, class: 'btn pull-left') if 'edit'==mode %>
+<%= link_to('Отмена', cancel_path, class: 'btn pull-left') %>
 <%= f.submit button_text, class: 'btn btn-primary pull-right' %>

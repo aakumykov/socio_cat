@@ -2,12 +2,18 @@ require 'spec_helper'
 
 describe 'Страницы пользователя,' do
 
-	let(:create_button) { 'Создать' }
+	let(:submit_button_create) { 'Создать' }
+	let(:submit_button_edit) { 'Изменить' }
 
 	subject { page }
 
+	shared_examples_for 'страница пользователя' do
+		let(:title) { "Страница пользователя" }
+		it { should have_title(full_title(title)) }
+		it { should have_selector('h1',text:title) }
+	end
 
-	shared_examples_for 'форма регистрации' do
+	shared_examples_for 'форма редактирования' do
 		it { should have_selector('label',text:'Имя') }
 		it { should have_selector(:xpath, "//input[@name='user[name]']") }
 
@@ -19,24 +25,18 @@ describe 'Страницы пользователя,' do
 
 		it { should have_selector('label', text:'Подтверждение пароля') }
 		it { should have_selector(:xpath, "//input[@name='user[password_confirmation]']") }
+
+		it { should have_link('Отмена') }
 	end
 
-	shared_examples_for 'страница пользователя' do
-		let(:title) { "Страница пользователя" }
-		it { should have_title(full_title(title)) }
-		it { should have_selector('h1',text:title) }
-	end
-
-	shared_examples_for 'ошибка регистрации' do |mode|
-		let(:error_msg) {'ОШИБКА: пользователь не создан'}
+	shared_examples_for 'появление flash-сообщения' do |mode|
 		
-		if :inverted==mode or :negative==mode
-			it { should_not have_selector('.alert.alert-error', text:error_msg) }
-			it { should_not have_selector('div.field_with_errors') }
-		else
-			it { should have_selector('.alert.alert-error', text:error_msg) }
-			it { should have_selector('div.field_with_errors') }
-		end
+		it { should have_selector("div.alert.alert-#{mode}") }
+	end
+
+	shared_examples_for 'исчезновение flash-сообщения' do |mode|
+		before { visit root_path }
+		it { should_not have_selector("div.alert.alert-#{mode}") }
 	end
 
 
@@ -48,7 +48,7 @@ describe 'Страницы пользователя,' do
 			it { should have_title(full_title(title)) }
 			it { should have_selector('h1',text:title) }
 			it { should have_selector(:xpath, "//input[@value='Создать']") }
-			it_should_behave_like 'форма регистрации'
+			it_should_behave_like 'форма редактирования'
 		end
 
 		describe 'работа формы,' do
@@ -65,12 +65,12 @@ describe 'Страницы пользователя,' do
 				}
 				
 				it 'появление пользователя,' do
-					expect{ click_button(create_button) }.to change(User, :count).by(1)
+					expect{ click_button(submit_button_create) }.to change(User, :count).by(1)
 				end
 				
 				describe 'сообщение об успехе,' do
 					before { 
-						click_button(create_button) 
+						click_button(submit_button_create) 
 						@user = User.last
 					}
 					it { should have_selector('.alert.alert-success', text:"Создан пользователь «#{@user.name}»") }
@@ -80,33 +80,29 @@ describe 'Страницы пользователя,' do
 			
 			describe 'с неверными данными,' do
 				it 'отклонение нового пользователя,' do
-					expect{ click_button(create_button) }.not_to change(User,:count)
+					expect{ click_button(submit_button_create) }.not_to change(User,:count)
 				end
 				describe 'сообщение об ошибке,' do
-					before { click_button(create_button) }
-					it_should_behave_like 'ошибка регистрации'
+					before { click_button(submit_button_create) }
+					it_should_behave_like 'появление flash-сообщения', 'error'
 				end
-				pending 'сообщение об ошибке не показывается на другой странице,' do
-					# почему-то не работает
-				 	before { visit root_url }
-				 	it_should_behave_like 'ошибка регистрации', :inverted
-				end
+				it_should_behave_like 'исчезновение flash-сообщения', 'error'
 			end
 
 			describe 'с частично верными данными,' do
 				describe 'имя,' do
 					before {
 						fill_in 'Имя', with: 'Человече'
-						click_button(create_button)
+						click_button(submit_button_create)
 					}
-					it_should_behave_like 'ошибка регистрации'
+					it_should_behave_like 'появление flash-сообщения', 'error'
 				end
 				describe 'электронная почта,' do
 					before {
 						fill_in 'Электронная почта', with: 'user@example.we'
-						click_button(create_button)
+						click_button(submit_button_create)
 					}
-					it_should_behave_like 'ошибка регистрации'
+					it_should_behave_like 'появление flash-сообщения', 'error'
 				end
 			end
 		end
@@ -135,15 +131,60 @@ describe 'Страницы пользователя,' do
 	describe 'редактирование,' do
 		before {
 			@user = FactoryGirl.create(:user)
-			visit edit_user_path(@user) 
+			visit edit_user_path(@user)
 		}
+		
 		describe 'отображение,' do
 			let(:title) { 'Редактирование пользователя' }
 			it { should have_title(full_title(title)) }
 			it { should have_selector('h1',text:title) }
-			it_should_behave_like 'форма регистрации'
+			it_should_behave_like 'форма редактирования'
 		end
-		pending 'работа,' do
+
+		describe 'работа,' do
+			let(:title) { 'Редактирование пользователя' }
+
+			describe 'с неверными данными,' do
+				let(:title) { 'Редактирование пользователя' }
+				before {
+					fill_in 'Имя', with:' '
+					fill_in 'Электронная почта', with:' '
+					fill_in 'Пароль', with:' '
+					fill_in 'Подтверждение пароля', with:' '
+					click_button submit_button_edit
+				}
+				it { should have_selector('.alert.alert-error') }
+				it { should have_title(title) }
+				it { should have_selector('h1',text:title) }
+				specify { expect(@user.reload.name).to eq @user.name }
+				specify { expect(@user.reload.email).to eq @user.email }
+				it_should_behave_like 'исчезновение flash-сообщения', 'error'
+			end
+
+			describe 'с верными данными,' do
+				before {
+					@user2 = User.new(
+						name: 'Пользователь 2',
+						email: 'user2@example.com',
+						password: 'Qwerty123!@#',
+						password_confirmation: 'Qwerty123!@#',
+					)
+					
+					fill_in 'Имя', with:@user2.name
+					fill_in 'Электронная почта', with:@user2.email
+					fill_in 'Пароль', with:@user2.password
+					fill_in 'Подтверждение пароля', with:@user2.password_confirmation
+					
+					click_button submit_button_edit
+				}
+				
+				it_should_behave_like 'страница пользователя'
+				
+				specify { expect(@user.reload.name).to eq @user2.name }
+				specify { expect(@user.reload.email).to eq @user2.email }
+
+				it_should_behave_like 'исчезновение flash-сообщения', 'success'
+			end
 
 		end
 	end
