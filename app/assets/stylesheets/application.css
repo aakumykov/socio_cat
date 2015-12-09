@@ -12,15 +12,7 @@
  *= require_tree .
  */
 
-/* отладка вида */
-/*.container {
-	background-color: lightblue;
-}
-
-.row {
-	border: 1px dotted tomato;
-}*/
-
+/* каркас */
 .main_menu {
 	margin-bottom: 20px;
 }
@@ -30,23 +22,41 @@
 	margin-bottom: 30px;
 }
 
+.page_title {
+	text-align: center;
+	margin-bottom: 20px;
+}
+
+
+/* разные оповещатели */
+.alert {
+text-align: center;
+}
+.debug_dump {
+background-color: #FBEFD8;
+}
+.field_with_errors {
+	INPUT, TEXTAREA {
+		border: 2px dotted red !important;
+	}
+}
+
+
+/* вспомогательные */
+.centrer { text-align: center; }
+.bottom_buttons_holder {
+	margin-top: 15px;
+}
+
+
+/* карточка */
 .card_edit_title, .card_edit_content {
 width:100%;
 }
 .card_edit_content {
 height:200px;
 }
-.debug_dump {
-background-color: #FBEFD8;
-}
-.alert {
-text-align: center;
-}
 
-/* промежутки */
-.vspacer20 {
-	height: 20px;
-}
 
 /* список пользователей */
 .users_list UL LI {

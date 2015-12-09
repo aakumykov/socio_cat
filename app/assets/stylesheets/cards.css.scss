@@ -4,10 +4,6 @@
 
 $card_title: #ececec;
 
-.page_title {
-	text-align: center;
-}
-
 .card {
 	margin-bottom: 30px;
 	border: 1px outset gray;
@@ -34,13 +30,5 @@ $card_title: #ececec;
 	.buttons_container {
 		margin-left: 9px;
 		A { margin-bottom: 3px; }
-	}
-}
-
-/* форма с ошибками */
-.field_with_errors {
-	INPUT, TEXTAREA {
-		/*background-color: rgb(255, 226, 232) !important;*/
-		border: 2px dotted red !important;
 	}
 }
