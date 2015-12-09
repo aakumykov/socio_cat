@@ -40,7 +40,7 @@ describe 'Сессии,' do
 				end
 			end
 
-			pending 'успешный вход,' do
+			describe 'успешный вход,' do
 				let(:user) { FactoryGirl.create(:user) }
 				before {
 					visit login_path

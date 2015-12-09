@@ -7,6 +7,7 @@ describe 'User,' do
 			email: 'homo@sapiens.it',
 			password: '0чень_сЛо#нЫй-пар0ль',
 			password_confirmation: '0чень_сЛо#нЫй-пар0ль',
+			#remember_token: User.encrypt( User.new_remember_token )
 		)
 	}
 	subject { @user }
@@ -129,5 +130,10 @@ describe 'User,' do
 		 	specify { expect(wrong_user).not_to eq @user }
 		 	specify { expect(wrong_user).to be_false }
 		end
+	end
+
+	describe 'непустой remember_token,' do
+		before { @user.save }
+		its(:remember_token) { should_not be_blank }
 	end
 end

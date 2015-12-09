@@ -1,4 +1,5 @@
 class SessionsController < ApplicationController
+
 	def new
 	end
 
@@ -12,13 +13,5 @@ class SessionsController < ApplicationController
 			render 'new'
 		end
 	end
+	
 end
-
-private
-
-	def user_params
-		params.require(:session).permit(
-			:email,
-			:password,
-		)
-	end
