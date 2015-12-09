@@ -11,7 +11,7 @@ describe 'Стриницы карточек,' do
 		visit cards_path
 	}
 
-	shared_examples_for 'карточка' do
+	shared_examples_for 'карточка в списке' do
 		it { should have_selector('fieldset.card') }
 		it { should have_selector('legend.card_title',text: card_title) }
 		it { should have_selector('div.card_content', text: card_content) }
@@ -28,7 +28,8 @@ describe 'Стриницы карточек,' do
 		it { should have_selector(:xpath,'//textarea[@name="card[content]"]') }
 	end
 
-	shared_examples_for 'кнопка добавления карточки' do
+	shared_examples_for 'кнопки удобства' do
+		it { should have_link('Все карточки', href: cards_path) }
 		it { should have_link('Новая', href: new_card_path) }
 	end
 
@@ -39,18 +40,22 @@ describe 'Стриницы карточек,' do
 	# index
 	# СДЕЛАТЬ: проверку того, что это именно список
 	describe 'список,' do
-		before(:each) { visit cards_path }
+		before(:each) { 
+			@card1 = FactoryGirl.create(:card)
+			@card2 = FactoryGirl.create(:card)
+			visit cards_path 
+		}
 
 		it { should have_title('Список карточек') }
 		it { should have_selector('h1','Список карточек') }
-		it { should have_link('Новая', href: new_card_path) }
+		it_should_behave_like 'кнопки удобства'
 		
-		describe 'одна карточка,' do
-			it_should_behave_like 'карточка'
-
-			#should have_selector(:xpath, "//fieldset[@id='card#{@card.id}']/legend//a[@href='#{card_path(@card.id)}']")}
-			it_should_behave_like 'карточка'
-			it_should_behave_like 'кнопка добавления карточки'
+		it 'присутствует несколько карточек,' do
+			Card.all.each do |c|
+			 	have_link(c.title,card_path(c))
+			 	have_content(c.content)
+			 	have_selector(:xpath,"//fieldset[@id='#{card_id(c.id)}']")
+			end
 		end
 	end
 
@@ -111,7 +116,7 @@ describe 'Стриницы карточек,' do
 					it { should have_title(title) }
 					it { should have_selector('h1',text:title) }
 
-					it_should_behave_like 'карточка'
+					it_should_behave_like 'карточка в списке'
 				end
 			end
 
@@ -125,9 +130,9 @@ describe 'Стриницы карточек,' do
 			visit card_path(@card.id)
 		}
 
-		it_should_behave_like 'карточка'
+		it_should_behave_like 'карточка в списке'
 		it { should have_link('Изменить', edit_card_path(@card)) }
-		it_should_behave_like 'кнопка добавления карточки'
+		it_should_behave_like 'кнопки удобства'
 		#it_should_behave_like 'кнопка списка карточек'
 	end
 
@@ -153,7 +158,7 @@ describe 'Стриницы карточек,' do
 				click_button 'Сохранить'
 			}
 			
-			it_should_behave_like 'карточка'
+			it_should_behave_like 'карточка в списке'
 			it { should have_content(new_title) }
 			it { should have_content(new_content) }
 		end
@@ -163,7 +168,7 @@ describe 'Стриницы карточек,' do
 		 		click_link 'Отмена'
 		 	}
 			
-			it_should_behave_like 'карточка'
+			it_should_behave_like 'карточка в списке'
 
 			it 'сохранение прежнего заголовка,' do
 				should have_content(@card.title)
