@@ -14,4 +14,11 @@ describe ApplicationHelper do
 			expect( full_title(title) ).to match(": #{title}$")
 		end
 	end
+
+	describe 'card_id' do
+		let(:id) { 1 }
+		it 'превращение цифры в сложный id' do
+			expect(card_id(id)).to match(/\Acard#{id}\z/)
+		end
+	end
 end

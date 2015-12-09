@@ -4,5 +4,7 @@ module ApplicationHelper
 		base_title = 'SocioCat'
 		base_title + ': ' + title
 	end
-
+	def card_id(id)
+		"card#{id}"
+	end
 end
