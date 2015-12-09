@@ -1,0 +1,17 @@
+<% provide(:title,'Вход на сайт') %>
+
+<h1 class='page_title'><%= yield(:title) %></h1>
+
+<div class='card_edit span4 offset4'>
+	<%= form_for(:session, url: sessions_path) do |f| %>
+		<%= f.label :email, 'Электронная почта' %>
+		<%= f.text_field :email, class: 'card_edit_content' %>
+
+		<%= f.label :password, 'Пароль' %>
+		<%= f.text_field :password, class: 'card_edit_content' %>
+
+		<div class='bottom_buttons_holder centrer'>
+			<%= f.submit 'Войти', class: 'btn btn-primary' %>
+		</div>
+	<% end %>
+</div>

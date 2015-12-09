@@ -9,7 +9,7 @@ describe 'Статические welcome-страницы,' do
 		it { should have_link('Пользователи', href: users_path) }
 		it { should have_link('О проекте', href: about_path) }
 		it { should have_link('Помощь', href: help_path) }
-		it { should have_link('Вход', href: root_path) }
+		it { should have_link('Вход', href: login_path) }
 		it { should have_link('Регистрация', href: new_user_path) }
 	end
 
