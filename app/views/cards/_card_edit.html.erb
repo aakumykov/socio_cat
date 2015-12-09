@@ -5,7 +5,7 @@
 	<%= f.label :content, 'Содержимое' %>
 	<%= f.text_area :content, class: 'card_edit_content' %>
 </div>
-<div class='row'>
+<div class='bottom_buttons_holder'>
 	<% cancel_path = ('edit'==mode) ? card_path(@card) : cards_path %>
 	<%= link_to 'Отмена', cancel_path, class: 'btn' %>
 	<%= f.submit button_text, class: 'btn btn-primary pull-right' %>
