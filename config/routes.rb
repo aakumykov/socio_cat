@@ -22,7 +22,7 @@ SocioCat::Application.routes.draw do
   get 'register' => 'users#new', as: :register
   
   get 'login' => 'sessions#new', as: :login
-  get 'logout' => 'sessions#destroy', as: :logout
+  delete 'logout' => 'sessions#destroy', as: :logout
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   resources :cards
