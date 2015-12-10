@@ -13,11 +13,16 @@
  */
 
 /* каркас */
+.container {
+	/*background-color: lightskyblue;*/
+}
+
 .main_menu {
 	margin-bottom: 20px;
 }
 
 .main_content {
+	/*background-color: lightgreen;*/
 	margin-top: 30px;
 	margin-bottom: 30px;
 }
@@ -62,4 +67,9 @@ height:200px;
 .users_list UL LI {
 	list-style-type: none;
 	border-bottom: 1px solid lightgrey;
+}
+
+/* профиль пользователя */
+.profile_edit_button {
+	text-align: center;
 }

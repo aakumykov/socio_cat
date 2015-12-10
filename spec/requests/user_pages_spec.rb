@@ -129,11 +129,23 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'просмотр,' do
-		before {
-			@user = FactoryGirl.create(:user)
-			visit user_path(@user) 
-		}
+		# before {
+		# 	@user = FactoryGirl.create(:user)
+		# 	#visit user_path(@user) 
+		# 	visit @user
+		# }
+		let(:user) { FactoryGirl.create(:user) }
+		
+		before { visit user_path(user) }
+
 		it_should_behave_like 'страница пользователя'
+		
+		it { should have_content('Имя:') }
+		it { should have_content('Электронная почта:') }
+		it { should have_content(user.name) }
+		it { should have_content(user.email) }
+
+		it { should have_link('Редактировать',hrep:edit_user_path(user)) }
 	end
 
 	describe 'редактирование,' do
