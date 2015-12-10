@@ -56,10 +56,28 @@ describe 'Сессии,' do
 				it { should have_selector('h1',text:title) }
 				
 				it { should have_link('Мой профиль',href: user_path(user)) }
+				it { should have_link('Пользователи',href: users_path) }
 				it { should have_link('Выход',href: logout_path) }
 
 				it { should_not have_link('Вход', href:login_path)}
+
+				describe 'и выход,' do
+					before { click_link 'Выход' }
+					
+					it { should have_selector('.alert.alert-success', text: 'Вы вышли с сайта') }
+					
+					it { should_not have_link('Мой профиль',href: user_path(user)) }
+					it { should_not have_link('Пользователи',href: users_path) }
+					it { should_not have_link('Выход',href: logout_path) }
+				end
 			end
+
+			# describe 'выход,' do
+			# 	let(:user) { FactoryGirl.create(:user) }
+			# 	before { 
+			# 		sign_in user
+			# 		click_link 'Выход'
+			# 	}
 		end
 	end
 
