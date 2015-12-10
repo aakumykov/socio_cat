@@ -9,7 +9,8 @@ class UsersController < ApplicationController
 	def create
 		@user = User.new(user_params)
 		if @user.save
-			flash[:success] = "Создан пользователь «#{@user.name}»"
+			flash[:success] = "Добро пожаловать на сайт!"
+			sign_in @user
 			redirect_to user_path(@user)
 		else
 			flash.now[:error] = 'ОШИБКА: пользователь не создан'

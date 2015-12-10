@@ -30,7 +30,7 @@ describe 'Страницы пользователя,' do
 	end
 
 	shared_examples_for 'появление flash-сообщения' do |mode|
-		
+
 		it { should have_selector("div.alert.alert-#{mode}") }
 	end
 
@@ -56,10 +56,11 @@ describe 'Страницы пользователя,' do
 			describe 'с верными данными,' do
 				#let(:test_password) { 'ОченьСложныйПароль123$%^' }
 				let(:test_password) { 'Qwerty123!@#' }
+				let(:test_email) { 'homo@sapiens.me' }
 				
 				before {
 					fill_in 'Имя', with: 'Человек'
-					fill_in 'Электронная почта', with: 'homo@sapiens.me'
+					fill_in 'Электронная почта', with: test_email
 					fill_in 'Пароль', with: test_password
 					fill_in 'Подтверждение пароля', with: test_password
 				}
@@ -69,12 +70,19 @@ describe 'Страницы пользователя,' do
 				end
 				
 				describe 'сообщение об успехе,' do
-					before { 
-						click_button(submit_button_create) 
-						@user = User.last
-					}
-					it { should have_selector('.alert.alert-success', text:"Создан пользователь «#{@user.name}»") }
+					before { click_button(submit_button_create) }
 					it_should_behave_like 'страница пользователя'
+				end
+
+				describe 'автоматический вход пользователя на сайт,' do
+					before { click_button submit_button_create }
+					
+					let(:user) { User.find_by(email: test_email) }
+					
+					it { should have_selector('.alert.alert-success', text:'Добро пожаловать на сайт!') }
+					it { should have_link('Мой профиль', user_path(user)) }
+					it { should have_link('Пользователи', users_path) }
+					it { should have_link('Выход', logout_path) }
 				end
 			end
 			
