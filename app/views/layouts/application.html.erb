@@ -13,18 +13,9 @@
 <body>
 	<div class="container">
 		<div class="row main_menu">
-			<%= link_to 'Главная страница', home_path, class: 'btn btn-primary' %>
-			<%= link_to 'Карточки', cards_path, class: 'btn btn-warning' %>
-			<%= link_to 'Пользователи', users_path, class: 'btn btn-danger' %>
-			<%= link_to 'О проекте', about_path, class: 'btn btn-info' %>
-			<%= link_to 'Помощь', help_path, class: 'btn' %>
-			
-			<%= link_to 'Вход', login_path, class: 'btn pull-right btn-success' %>
-			<%= link_to 'Регистрация', new_user_path, class: 'btn pull-right' %>
+			<%= render 'shared/header' %>
 		</div>
-
-		<%= render 'shared/flash.html.erb' %>
-		
+		<%= render 'shared/flash.html.erb' %>		
 		<div class="row main_content">
 			<%= yield %>
 		</div>

@@ -50,10 +50,12 @@ describe 'Сессии,' do
 				}
 				let(:title) { "Страница пользователя" }
 				
+				it { should have_selector('.alert.alert-success') }
+
 				it { should have_title(full_title(title)) }
 				it { should have_selector('h1',text:title) }
 				
-				it { should have_link('Профиль',href: user_path(user)) }
+				it { should have_link('Мой профиль',href: user_path(user)) }
 				it { should have_link('Выход',href: logout_path) }
 
 				it { should_not have_link('Вход', href:login_path)}
