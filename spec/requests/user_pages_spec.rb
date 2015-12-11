@@ -118,14 +118,14 @@ describe 'Страницы пользователя,' do
 
 	describe 'список,' do
 		before {
-			@user1 = FactoryGirl.create(:user)
-			@user2 = FactoryGirl.create(:user)
+			@user = FactoryGirl.create(:user)
+			@new_user = FactoryGirl.create(:user)
 			visit users_path
 		}
 		it { should have_title('Пользователи') }
 		it { should have_selector('h1', text: 'Пользователи') }
-		it { should have_link(@user1.name, href:user_path(@user1)) }
-		it { should have_link(@user2.name, href:user_path(@user2)) }
+		it { should have_link(@user.name, href:user_path(@user)) }
+		it { should have_link(@new_user.name, href:user_path(@new_user)) }
 	end
 
 	describe 'просмотр,' do
@@ -183,24 +183,41 @@ describe 'Страницы пользователя,' do
 			end
 
 			describe 'с верными данными,' do
-				let(:user1) { FactoryGirl.create(:user) }
-				let(:user2) { FactoryGirl.create(:user) }
+				let(:user) { FactoryGirl.create(:user) }
+				let(:new_user) { FactoryGirl.create(:user) }
 				
 				before {
-					visit edit_user_path(user1)
-					  fill_in 'Имя', with: user2.name
-					  fill_in 'Электронная почта', with: user2.email
-					  fill_in 'Пароль', with: user2.password
-					  fill_in 'Подтверждение пароля', with: user2.password
-					user2.destroy
-					click_button 'Изменить'
+					visit edit_user_path(user)
+					  fill_in 'Имя', with: new_user.name
+					  fill_in 'Электронная почта', with: new_user.email
+					  fill_in 'Пароль', with: new_user.password
+					  fill_in 'Подтверждение пароля', with: new_user.password
 				}
+
+				describe 'c уникальными данными,' do
+					before {
+						new_user.destroy
+						click_button 'Изменить'
+					}
 				
-				specify { expect(user1.reload.name).to eq user2.name }
-				specify { expect(user1.reload.email).to eq user2.email }
+					specify { expect(user.reload.name).to eq new_user.name }
+					specify { expect(user.reload.email).to eq new_user.email }
+					
+					it_should_behave_like 'страница пользователя'
+					it_should_behave_like 'появление flash-сообщения', 'success'
+					it_should_behave_like 'исчезновение flash-сообщения', 'success'
+				end
+
+				describe 'с занятыми данными,' do
+					before { click_button 'Изменить' }
 				
-				it_should_behave_like 'страница пользователя'
-				it_should_behave_like 'исчезновение flash-сообщения', 'success'
+					specify { expect(user.reload.name).not_to eq new_user.name }
+					specify { expect(user.reload.email).not_to eq new_user.email }
+					
+					it_should_behave_like 'форма редактирования'
+					it_should_behave_like 'появление flash-сообщения', 'error'
+					it_should_behave_like 'исчезновение flash-сообщения', 'error'
+				end
 			end
 		end
 	end
