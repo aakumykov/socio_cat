@@ -10,8 +10,9 @@
 		<%= f.label :password, 'Пароль' %>
 		<%= f.password_field :password, class: 'card_edit_content' %>
 
-		<div class='bottom_buttons_holder centrer'>
-			<%= f.submit 'Войти', class: 'btn btn-primary' %>
+		<div class='bottom_buttons_holder'>
+			<%= link_to 'Отмена', root_path, class: 'btn pull-left' %>
+			<%= f.submit 'Войти', class: 'btn btn-primary pull-right' %>
 		</div>
 	<% end %>
 </div>
