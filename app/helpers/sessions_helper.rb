@@ -33,7 +33,8 @@ module SessionsHelper
 
 
 	def save_referer
-		cookies[:referer] = request.referer
+		referer = request.referer.blank? ? root_url : request.referer
+		cookies[:referer] = referer
 	end
 
 	def redirect_back

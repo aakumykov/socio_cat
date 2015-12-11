@@ -21,7 +21,7 @@ class SessionsController < ApplicationController
 		save_referer
 
 		sign_out
-		flash[:notice] = 'Вы вышли с сайта'
+		flash[:success] = 'Вы вышли с сайта'
 		
 		redirect_back
 	end
