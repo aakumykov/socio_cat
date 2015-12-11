@@ -72,12 +72,8 @@ describe 'Сессии,' do
 				end
 			end
 
-			# describe 'выход,' do
-			# 	let(:user) { FactoryGirl.create(:user) }
-			# 	before { 
-			# 		sign_in user
-			# 		click_link 'Выход'
-			# 	}
+			pending 'перенаправление,' do
+			end
 		end
 	end
 

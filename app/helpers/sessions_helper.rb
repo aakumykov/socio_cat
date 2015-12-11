@@ -2,6 +2,8 @@ module SessionsHelper
 	
 	def sign_in(user)
 		remember_token = User.new_remember_token
+		
+		#save_referer
 		cookies.permanent[:remember_token] = remember_token
 		user.update_attribute(:remember_token, User.encrypt(remember_token))
 		
@@ -10,6 +12,7 @@ module SessionsHelper
 
 	def sign_out
 		current_user.update_attribute(:remember_token, User.encrypt(User.new_remember_token))
+		#save_referer
 		cookies.delete(:remember_token)
 		self.current_user = nil
 	end
@@ -18,15 +21,23 @@ module SessionsHelper
 		!current_user.nil?
 	end
 
+
 	def current_user
 		remember_token = User.encrypt(cookies[:remember_token])
 		@current_user ||= User.find_by(remember_token: remember_token)
-
-		#self.current_user ||= User.find_by(remember_token)
-		#@debug_info = self.class
 	end
 
 	def current_user=(user)
 		@current_user = user		
+	end
+
+
+	def save_referer
+		cookies[:referer] = request.referer
+	end
+
+	def redirect_back
+		redirect_to cookies[:referer]
+		cookies.delete :referer
 	end
 end

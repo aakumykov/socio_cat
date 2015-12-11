@@ -17,7 +17,11 @@
 		</div>
 		
 		<div class='row span10 offset1'>
-			<%= debug(params) if Rails.env.development? %>
+			<% if Rails.env.development? %>
+				<%= debug(params) %>
+				Cookies:<br>
+				<%= debug(cookies[:referer]) %>
+			<% end %>
 		</div>
 	</div>
 </body>
