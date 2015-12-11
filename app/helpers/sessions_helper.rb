@@ -37,7 +37,13 @@ module SessionsHelper
 	end
 
 	def redirect_back
-		redirect_to cookies[:referer]
+		uri = URI(cookies[:referer])
+		if uri.host != request.host
+			referer = "#{request.host}:#{request.port}"
+		else
+			referer = uri.to_s
+		end
+		redirect_to referer
 		cookies.delete :referer
 	end
 end
