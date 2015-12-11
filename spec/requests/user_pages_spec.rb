@@ -2,6 +2,7 @@ require 'spec_helper'
 
 describe 'Страницы пользователя,' do
 
+	let(:login_title) { 'Вход на сайт' }
 	let(:submit_button_create) { 'Создать' }
 	let(:submit_button_edit) { 'Изменить' }
 
@@ -114,18 +115,28 @@ describe 'Страницы пользователя,' do
 				end
 			end
 		end
+	
+		pending 'для незарегистрированных пользователей'
 	end
 
 	describe 'список,' do
-		before {
-			@user = FactoryGirl.create(:user)
-			@new_user = FactoryGirl.create(:user)
-			visit users_path
-		}
-		it { should have_title('Пользователи') }
-		it { should have_selector('h1', text: 'Пользователи') }
-		it { should have_link(@user.name, href:user_path(@user)) }
-		it { should have_link(@new_user.name, href:user_path(@new_user)) }
+		describe 'для незарегистрированных пользователей,' do
+			before { visit users_path }
+			it { should have_title(login_title) }
+		end
+		
+		describe 'для зарегистрированных пользователей,' do
+			let(:user1) { FactoryGirl.create(:user) }
+			let(:user2) { FactoryGirl.create(:user) }
+			before {
+				sign_in user1
+				visit users_path
+			}
+			it { should have_title(full_title('Пользователи')) }
+			it { should have_selector('h1', text: 'Пользователи') }
+			it { should have_link(user1.name, href:user_path(user1)) }
+			it { should have_link(user2.name, href:user_path(user2)) }
+		end
 	end
 
 	describe 'просмотр,' do
@@ -144,6 +155,9 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'редактирование,' do
+		
+		pending 'для зарегистрированных'
+		pending 'для себя самого'
 		
 		describe 'отображение,' do
 			let(:title) { 'Редактирование пользователя' }

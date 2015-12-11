@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-	public
+	#before_action :signed_in_user, only: [:index, :show]
 
 	def new
 		@user = User.new
@@ -51,6 +51,13 @@ class UsersController < ApplicationController
 				:password,
 				:password_confirmation,
 			)
+		end
+
+		def signed_in_user
+			if not signed_in?
+				#save_referer
+				redirect_to login_path, notice: 'Сначала войдите на сайт'
+			end
 		end
 
 end

@@ -1,9 +1,7 @@
 include ApplicationHelper
 
-def sign_in(:no_capybara=false)
-	let(:user) { FactoryGirl.create(:user) }
-	
-	if true==:no_capybara
+def sign_in(user, no_capybara=false)
+	if true==no_capybara
 		remember_token = User.new_remember_token
 		user.update_attribute(:remember_token, User.encrypt(remember_token))
 		cookie.permanent[:remember_token] = remember_token
