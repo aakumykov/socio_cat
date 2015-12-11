@@ -1,7 +1,6 @@
 // Place all the styles related to the cards controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-
 $card_title: #ececec;
 
 .card {
@@ -31,4 +30,11 @@ $card_title: #ececec;
 		margin-left: 9px;
 		A { margin-bottom: 3px; }
 	}
+}
+
+.card_edit_title, .card_edit_content {
+width:100%;
+}
+.card_edit_content {
+height:200px;
 }

@@ -1,3 +1,15 @@
 // Place all the styles related to the Users controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+/* список пользователей */
+.users_list UL LI {
+	list-style-type: none;
+	border-bottom: 1px solid lightgrey;
+}
+
+/* профиль пользователя */
+.profile_edit_button {
+	text-align: center;
+}
+

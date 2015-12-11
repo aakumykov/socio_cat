@@ -27,5 +27,6 @@ module SocioCat
 
     # путь с пользовательскими валидаторами
     config.autoload_paths += %W["#{config.root}/app/validators/"]
+    config.assets.precompile += %w(*.png *.jpg *.jpeg *.gif)
   end
 end

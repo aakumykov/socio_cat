@@ -11,6 +11,8 @@
  *= require_self
  *= require_tree .
  */
+@import 'bootstrap';
+
 
 /* каркас */
 .container {
@@ -33,7 +35,7 @@
 }
 
 
-/* разные оповещатели */
+/* оповещатели */
 .alert {
 text-align: center;
 }
@@ -54,22 +56,3 @@ background-color: #FBEFD8;
 }
 
 
-/* карточка */
-.card_edit_title, .card_edit_content {
-width:100%;
-}
-.card_edit_content {
-height:200px;
-}
-
-
-/* список пользователей */
-.users_list UL LI {
-	list-style-type: none;
-	border-bottom: 1px solid lightgrey;
-}
-
-/* профиль пользователя */
-.profile_edit_button {
-	text-align: center;
-}
