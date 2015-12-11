@@ -1,12 +1,7 @@
 // Place all the styles related to the cards controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
-
 $card_title: #ececec;
-
-.page_title {
-	text-align: center;
-}
 
 .card {
 	margin-bottom: 30px;
@@ -37,10 +32,9 @@ $card_title: #ececec;
 	}
 }
 
-/* форма с ошибками */
-.field_with_errors {
-	INPUT, TEXTAREA {
-		/*background-color: rgb(255, 226, 232) !important;*/
-		border: 2px dotted red !important;
-	}
+.card_edit_title, .card_edit_content {
+width:100%;
+}
+.card_edit_content {
+height:200px;
 }

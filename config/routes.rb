@@ -19,9 +19,15 @@ SocioCat::Application.routes.draw do
   get 'help' => 'welcome#help', as: :help
   get 'about' => 'welcome#about', as: :about
 
+  get 'register' => 'users#new', as: :register
+  
+  get 'login' => 'sessions#new', as: :login
+  delete 'logout' => 'sessions#destroy', as: :logout
+
   # Example resource route (maps HTTP verbs to controller actions automatically):
   resources :cards
   resources :users
+  resources :sessions, only: [:new, :create, :destroy]
 
   # Example resource route with options:
   #   resources :products do
