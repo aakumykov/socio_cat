@@ -129,11 +129,6 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'просмотр,' do
-		# before {
-		# 	@user = FactoryGirl.create(:user)
-		# 	#visit user_path(@user) 
-		# 	visit @user
-		# }
 		let(:user) { FactoryGirl.create(:user) }
 		
 		before { visit user_path(user) }
@@ -145,17 +140,17 @@ describe 'Страницы пользователя,' do
 		it { should have_content(user.name) }
 		it { should have_content(user.email) }
 
-		it { should have_link('Редактировать',hrep:edit_user_path(user)) }
+		it { should have_link('Редактировать',href:edit_user_path(user)) }
 	end
 
 	describe 'редактирование,' do
-		before {
-			@user = FactoryGirl.create(:user)
-			visit edit_user_path(@user)
-		}
 		
 		describe 'отображение,' do
 			let(:title) { 'Редактирование пользователя' }
+			let(:user) { FactoryGirl.create(:user) }
+			
+			before { visit edit_user_path(user) }
+
 			it { should have_title(full_title(title)) }
 			it { should have_selector('h1',text:title) }
 			it_should_behave_like 'форма редактирования'
@@ -166,46 +161,47 @@ describe 'Страницы пользователя,' do
 
 			describe 'с неверными данными,' do
 				let(:title) { 'Редактирование пользователя' }
+				let(:user) { FactoryGirl.create(:user) }
+				
 				before {
-					fill_in 'Имя', with:' '
-					fill_in 'Электронная почта', with:' '
-					fill_in 'Пароль', with:' '
-					fill_in 'Подтверждение пароля', with:' '
+					visit edit_user_path(user)
+					  fill_in 'Имя', with:' '
+					  fill_in 'Электронная почта', with:' '
+					  fill_in 'Пароль', with:' '
+					  fill_in 'Подтверждение пароля', with:' '
 					click_button submit_button_edit
 				}
+				
 				it { should have_selector('.alert.alert-error') }
 				it { should have_title(title) }
 				it { should have_selector('h1',text:title) }
-				specify { expect(@user.reload.name).to eq @user.name }
-				specify { expect(@user.reload.email).to eq @user.email }
+				
+				specify { expect(user.reload.name).to eq user.name }
+				specify { expect(user.reload.email).to eq user.email }
+				
 				it_should_behave_like 'исчезновение flash-сообщения', 'error'
 			end
 
 			describe 'с верными данными,' do
+				let(:user1) { FactoryGirl.create(:user) }
+				let(:user2) { FactoryGirl.create(:user) }
+				
 				before {
-					@user2 = User.new(
-						name: 'Пользователь 2',
-						email: 'user2@example.com',
-						password: 'Qwerty123!@#',
-						password_confirmation: 'Qwerty123!@#',
-					)
-					
-					fill_in 'Имя', with:@user2.name
-					fill_in 'Электронная почта', with:@user2.email
-					fill_in 'Пароль', with:@user2.password
-					fill_in 'Подтверждение пароля', with:@user2.password_confirmation
-					
-					click_button submit_button_edit
+					visit edit_user_path(user1)
+					  fill_in 'Имя', with: user2.name
+					  fill_in 'Электронная почта', with: user2.email
+					  fill_in 'Пароль', with: user2.password
+					  fill_in 'Подтверждение пароля', with: user2.password
+					user2.destroy
+					click_button 'Изменить'
 				}
 				
-				it_should_behave_like 'страница пользователя'
+				specify { expect(user1.reload.name).to eq user2.name }
+				specify { expect(user1.reload.email).to eq user2.email }
 				
-				specify { expect(@user.reload.name).to eq @user2.name }
-				specify { expect(@user.reload.email).to eq @user2.email }
-
+				it_should_behave_like 'страница пользователя'
 				it_should_behave_like 'исчезновение flash-сообщения', 'success'
 			end
-
 		end
 	end
 end
