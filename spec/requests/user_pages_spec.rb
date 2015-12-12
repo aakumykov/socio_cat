@@ -122,20 +122,25 @@ describe 'Страницы пользователя,' do
 	describe 'список,' do
 		describe 'для незарегистрированных пользователей,' do
 			before { visit users_path }
-			it { should have_title(login_title) }
+			it { should have_title( full_title(login_title) ) }
+			it { should have_selector('h1',text:login_title) }
+			it { should have_selector(:xpath,"//input[@type='submit']")}
+			it { should have_selector(:xpath,"//input[@value='Войти']")}
 		end
 		
 		describe 'для зарегистрированных пользователей,' do
-			let(:user1) { FactoryGirl.create(:user) }
-			let(:user2) { FactoryGirl.create(:user) }
 			before {
-				sign_in user1
+				@user1 = FactoryGirl.create(:user)
+				@user2 = FactoryGirl.create(:user)
+				
+				sign_in @user1
 				visit users_path
 			}
 			it { should have_title(full_title('Пользователи')) }
 			it { should have_selector('h1', text: 'Пользователи') }
-			it { should have_link(user1.name, href:user_path(user1)) }
-			it { should have_link(user2.name, href:user_path(user2)) }
+			
+			it { should have_link(@user1.name, href: user_path(@user1)) }
+			it { should have_link(@user2.name, href: user_path(@user2)) }
 		end
 	end
 

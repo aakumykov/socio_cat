@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-	#before_action :signed_in_user, only: [:index, :show]
+	before_action :signed_in_user, only: [:index, :show]
 
 	def new
 		@user = User.new
