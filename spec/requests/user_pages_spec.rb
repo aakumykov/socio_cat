@@ -157,18 +157,28 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'просмотр,' do
-		let(:user) { FactoryGirl.create(:user) }
+		before { @user = FactoryGirl.create(:user) }
 		
-		before { visit user_path(user) }
+		describe 'НЕзарегистрированныМ,' do
+			before { visit user_path(@user) }
+			it_should_behave_like 'требование входа'
+		end
 
-		it_should_behave_like 'страница пользователя'
-		
-		it { should have_content('Имя:') }
-		it { should have_content('Электронная почта:') }
-		it { should have_content(user.name) }
-		it { should have_content(user.email) }
+		describe 'зарегистрированным,' do
+			before { 
+				sign_in @user
+				visit user_path(@user)
+			}
 
-		it { should have_link('Редактировать',href:edit_user_path(user)) }
+			it_should_behave_like 'страница пользователя'
+			
+			it { should have_content('Имя:') }
+			it { should have_content('Электронная почта:') }
+			it { should have_content(@user.name) }
+			it { should have_content(@user.email) }
+
+			it { should have_link('Редактировать',href:edit_user_path(@user)) }
+		end
 	end
 
 	describe 'редактирование,' do
