@@ -55,6 +55,13 @@ describe 'Страницы пользователя,' do
 		it_should_behave_like 'появление flash-сообщения', 'notice', 'Сначала войдите на сайт'
 	end
 
+	shared_examples_for 'страница с названием' do |data|
+		title = data[:title]
+		heading = data[:heading] || title
+		it { should have_title( full_title(title) ) }
+		it { should have_selector('h1',text:heading) }
+	end
+
 
 	describe 'создание,' do
 		before { visit new_user_path }
@@ -179,7 +186,13 @@ describe 'Страницы пользователя,' do
 
 			it { should have_link('Редактировать',href:edit_user_path(@user)) }
 
-			pending 'несуществующего пользователя'
+			describe 'несуществующего пользователя' do
+				before { 
+					bad_id = User.maximum(:id)+1 
+					visit user_path(bad_id)
+				}
+				it_should_behave_like 'страница с названием', title:'Пользователи'
+			end
 		end
 	end
 
