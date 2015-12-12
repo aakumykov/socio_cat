@@ -178,6 +178,8 @@ describe 'Страницы пользователя,' do
 			it { should have_content(@user.email) }
 
 			it { should have_link('Редактировать',href:edit_user_path(@user)) }
+
+			pending 'несуществующего пользователя'
 		end
 	end
 
