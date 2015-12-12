@@ -7,4 +7,5 @@ describe 'TODO,' do
 	pending 'Ошибка "Почта уже используется" при редактировании пользователя.'
 	pending 'Как насчёт валидации для remember_token?'
 	pending 'Ситуация, когда текущий пользователь не найден по кукам.'
+	pending 'ситуация current_user = nil'
 end
