@@ -68,12 +68,31 @@ describe 'Страницы пользователя,' do
 		describe 'зарегистрированным пользователем,' do
 			before {
 				@user = FactoryGirl.create(:user)
-				sign_in @user
-				visit new_user_path
-				#visit register_path
+				@new_user = FactoryGirl.create(:user)
 			}
-			it_should_behave_like 'появление flash-сообщения', 'notice', 'Вы уже зарегистрированы'
-			it_should_behave_like 'страница с названием', title: 'Страница пользователя'
+			
+			describe 'через web-интерфейс,' do
+				before{
+					sign_in @user
+					visit new_user_path
+				}
+				it_should_behave_like 'появление flash-сообщения', 'notice', 'Вы уже зарегистрированы'
+				it_should_behave_like 'страница с названием', title: 'Страница пользователя'
+			end
+			
+			describe 'через POST-запрос,' do
+				let(:user_params) {
+					{
+						user:{
+							name: @new_user.name,
+							email: @new_user.email,
+							password: @new_user.password,
+							password_confirmation: @new_user.password,
+						}
+					}
+				}
+				specify { expect{ post users_path, user_params }.not_to change(User,:count) }
+			end
 		end
 
 		describe 'незарегистрированным пользователем,' do
@@ -287,6 +306,13 @@ describe 'Страницы пользователя,' do
 					it_should_behave_like 'исчезновение flash-сообщения', 'error'
 				end
 			end
+		end
+	end
+
+	describe 'прямой доступ к контроллеру Users,' do
+		describe 'список,' do
+			before { get users_path }
+			specify{ expect(response).to redirect_to(root_path) }
 		end
 	end
 end
