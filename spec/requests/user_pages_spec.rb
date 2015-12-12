@@ -30,14 +30,29 @@ describe 'Страницы пользователя,' do
 		it { should have_link('Отмена') }
 	end
 
-	shared_examples_for 'появление flash-сообщения' do |mode|
-
-		it { should have_selector("div.alert.alert-#{mode}") }
+	shared_examples_for 'появление flash-сообщения' do |mode,text=''|
+		if text.blank?
+			it { should have_selector("div.alert.alert-#{mode}") }
+		else
+			it { should have_selector("div.alert.alert-#{mode}", text:text) }
+		end
 	end
 
 	shared_examples_for 'исчезновение flash-сообщения' do |mode|
 		before { visit root_path }
 		it { should_not have_selector("div.alert.alert-#{mode}") }
+	end
+
+	shared_examples_for 'страница входа' do
+		it { should have_title( full_title(login_title) ) }
+		it { should have_selector('h1',text:login_title) }
+		it { should have_selector(:xpath,"//input[@type='submit']")}
+		it { should have_selector(:xpath,"//input[@value='Войти']")}
+	end
+
+	shared_examples_for 'требование входа' do
+		it_should_behave_like 'страница входа'
+		it_should_behave_like 'появление flash-сообщения', 'notice', 'Сначала войдите на сайт'
 	end
 
 
@@ -122,10 +137,7 @@ describe 'Страницы пользователя,' do
 	describe 'список,' do
 		describe 'для незарегистрированных пользователей,' do
 			before { visit users_path }
-			it { should have_title( full_title(login_title) ) }
-			it { should have_selector('h1',text:login_title) }
-			it { should have_selector(:xpath,"//input[@type='submit']")}
-			it { should have_selector(:xpath,"//input[@value='Войти']")}
+			it_should_behave_like 'требование входа'
 		end
 		
 		describe 'для зарегистрированных пользователей,' do
