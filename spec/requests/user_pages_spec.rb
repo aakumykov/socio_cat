@@ -64,81 +64,93 @@ describe 'Страницы пользователя,' do
 
 
 	describe 'создание,' do
-		before { visit new_user_path }
 
-		describe 'отображение формы,' do
-			let(:title) { 'Регистрация пользователя' }
-			it { should have_title(full_title(title)) }
-			it { should have_selector('h1',text:title) }
-			it { should have_selector(:xpath, "//input[@value='Создать']") }
-			it_should_behave_like 'форма редактирования'
+		describe 'зарегистрированным пользователем,' do
+			before {
+				@user = FactoryGirl.create(:user)
+				sign_in @user
+				visit new_user_path
+				#visit register_path
+			}
+			it_should_behave_like 'появление flash-сообщения', 'notice', 'Вы уже зарегистрированы'
+			it_should_behave_like 'страница с названием', title: 'Страница пользователя'
 		end
 
-		describe 'работа формы,' do
-			
-			describe 'с верными данными,' do
-				#let(:test_password) { 'ОченьСложныйПароль123$%^' }
-				let(:test_password) { 'Qwerty123!@#' }
-				let(:test_email) { 'homo@sapiens.me' }
-				
-				before {
-					fill_in 'Имя', with: 'Человек'
-					fill_in 'Электронная почта', with: test_email
-					fill_in 'Пароль', with: test_password
-					fill_in 'Подтверждение пароля', with: test_password
-				}
-				
-				it 'появление пользователя,' do
-					expect{ click_button(submit_button_create) }.to change(User, :count).by(1)
-				end
-				
-				describe 'сообщение об успехе,' do
-					before { click_button(submit_button_create) }
-					it_should_behave_like 'страница пользователя'
-				end
+		describe 'незарегистрированным пользователем,' do
+			before { visit new_user_path }
 
-				describe 'автоматический вход пользователя на сайт,' do
-					before { click_button submit_button_create }
-					
-					let(:user) { User.find_by(email: test_email) }
-					
-					it { should have_selector('.alert.alert-success', text:'Добро пожаловать на сайт!') }
-					it { should have_link('Мой профиль', user_path(user)) }
-					it { should have_link('Пользователи', users_path) }
-					it { should have_link('Выход', logout_path) }
-				end
-			end
-			
-			describe 'с неверными данными,' do
-				it 'отклонение нового пользователя,' do
-					expect{ click_button(submit_button_create) }.not_to change(User,:count)
-				end
-				describe 'сообщение об ошибке,' do
-					before { click_button(submit_button_create) }
-					it_should_behave_like 'появление flash-сообщения', 'error'
-				end
-				it_should_behave_like 'исчезновение flash-сообщения', 'error'
+			describe 'отображение формы,' do
+				let(:title) { 'Регистрация пользователя' }
+				it { should have_title(full_title(title)) }
+				it { should have_selector('h1',text:title) }
+				it { should have_selector(:xpath, "//input[@value='Создать']") }
+				it_should_behave_like 'форма редактирования'
 			end
 
-			describe 'с частично верными данными,' do
-				describe 'имя,' do
+			describe 'работа формы,' do
+				
+				describe 'с верными данными,' do
+					#let(:test_password) { 'ОченьСложныйПароль123$%^' }
+					let(:test_password) { 'Qwerty123!@#' }
+					let(:test_email) { 'homo@sapiens.me' }
+					
 					before {
-						fill_in 'Имя', with: 'Человече'
-						click_button(submit_button_create)
+						fill_in 'Имя', with: 'Человек'
+						fill_in 'Электронная почта', with: test_email
+						fill_in 'Пароль', with: test_password
+						fill_in 'Подтверждение пароля', with: test_password
 					}
-					it_should_behave_like 'появление flash-сообщения', 'error'
+					
+					it 'появление пользователя,' do
+						expect{ click_button(submit_button_create) }.to change(User, :count).by(1)
+					end
+					
+					describe 'сообщение об успехе,' do
+						before { click_button(submit_button_create) }
+						it_should_behave_like 'страница пользователя'
+					end
+
+					describe 'автоматический вход пользователя на сайт,' do
+						before { click_button submit_button_create }
+						
+						let(:user) { User.find_by(email: test_email) }
+						
+						it { should have_selector('.alert.alert-success', text:'Добро пожаловать на сайт!') }
+						it { should have_link('Мой профиль', user_path(user)) }
+						it { should have_link('Пользователи', users_path) }
+						it { should have_link('Выход', logout_path) }
+					end
 				end
-				describe 'электронная почта,' do
-					before {
-						fill_in 'Электронная почта', with: 'user@example.we'
-						click_button(submit_button_create)
-					}
-					it_should_behave_like 'появление flash-сообщения', 'error'
+				
+				describe 'с неверными данными,' do
+					it 'отклонение нового пользователя,' do
+						expect{ click_button(submit_button_create) }.not_to change(User,:count)
+					end
+					describe 'сообщение об ошибке,' do
+						before { click_button(submit_button_create) }
+						it_should_behave_like 'появление flash-сообщения', 'error'
+					end
+					it_should_behave_like 'исчезновение flash-сообщения', 'error'
+				end
+
+				describe 'с частично верными данными,' do
+					describe 'имя,' do
+						before {
+							fill_in 'Имя', with: 'Человече'
+							click_button(submit_button_create)
+						}
+						it_should_behave_like 'появление flash-сообщения', 'error'
+					end
+					describe 'электронная почта,' do
+						before {
+							fill_in 'Электронная почта', with: 'user@example.we'
+							click_button(submit_button_create)
+						}
+						it_should_behave_like 'появление flash-сообщения', 'error'
+					end
 				end
 			end
 		end
-	
-		pending 'для незарегистрированных пользователей'
 	end
 
 	describe 'список,' do

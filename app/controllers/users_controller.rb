@@ -65,7 +65,10 @@ class UsersController < ApplicationController
 		end
 
 		def not_signed_in_user
-			true
+			if signed_in?
+				#save_referer
+				redirect_to user_path(current_user), notice:'Вы уже зарегистрированы'
+			end
 		end
 
 		def correct_user
