@@ -6,6 +6,10 @@ describe 'Страницы пользователя,' do
 	let(:submit_button_create) { 'Создать' }
 	let(:submit_button_edit) { 'Изменить' }
 
+	#let(:test_name) { 'Проверяльщик Иван' }
+	#let(:test_email) { 'test-user@example.com' }
+	let(:test_password) { 'Qwerty123!@#' }
+
 	subject { page }
 
 	shared_examples_for 'страница пользователя' do
@@ -65,34 +69,14 @@ describe 'Страницы пользователя,' do
 
 	describe 'создание,' do
 
-		describe 'зарегистрированным пользователем,' do
+		describe 'посещение страницы регистрации зарегистрированным пользователем,' do
 			before {
 				@user = FactoryGirl.create(:user)
-				@new_user = FactoryGirl.create(:user)
+				sign_in @user
+				visit new_user_path
 			}
-			
-			describe 'через web-интерфейс,' do
-				before{
-					sign_in @user
-					visit new_user_path
-				}
-				it_should_behave_like 'появление flash-сообщения', 'notice', 'Вы уже зарегистрированы'
-				it_should_behave_like 'страница с названием', title: 'Страница пользователя'
-			end
-			
-			describe 'через POST-запрос,' do
-				let(:user_params) {
-					{
-						user:{
-							name: @new_user.name,
-							email: @new_user.email,
-							password: @new_user.password,
-							password_confirmation: @new_user.password,
-						}
-					}
-				}
-				specify { expect{ post users_path, user_params }.not_to change(User,:count) }
-			end
+			it_should_behave_like 'появление flash-сообщения', 'notice', 'Вы уже зарегистрированы'
+			it_should_behave_like 'страница с названием', title: 'Страница пользователя'
 		end
 
 		describe 'незарегистрированным пользователем,' do
@@ -310,9 +294,56 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'прямой доступ к контроллеру Users,' do
-		describe 'список,' do
-			before { get users_path }
-			specify{ expect(response).to redirect_to(root_path) }
+
+		let(:user) { FactoryGirl.create(:user) }
+		
+		let(:other_user) { FactoryGirl.create(:user) }
+		
+		let(:user_params) {
+			{ user: {
+				name: user.name,
+				email: user.email,
+				password: user.password,
+				password_confirmation: user.password,
+			}}
+		}
+
+		describe 'POST to #create,' do
+			describe 'зарегистрированным пользователем,' do
+				before { sign_in user, no_capybara: true }
+				specify { expect{ post users_path, user_params }.not_to change(User,:count) }
+			end
 		end
+
+		describe 'PATCH to #update,' do
+
+			describe 'НЕзарегистрированным пользователем,' do
+				before { patch user_path(other_user), user_params }
+				specify { expect(other_user.reload.name).not_to eq user_params[:user][:name] }
+				#specify { expect(response).to redirect_to(root_url) }
+			end
+			
+			describe 'зарегистрированным пользователем,' do
+				before{ sign_in user, no_capybara: true }
+				describe 'чужой записи' do
+					before { patch user_path(other_user), user_params }
+					specify { expect(other_user.reload.name).not_to eq user_params[:user][:name] }
+					#specify { expect(response).to redirect_to(root_url) }
+				end
+			end
+		end
+
+		pending 'DELETE to #destroy,' do
+			describe 'НЕзарегистрированным пользователем,' do
+				specify { expect{ delete user_path(user)}.not_to change(User,:count) }
+				specify { expect{ delete user_path(other_user)}.not_to change(User,:count) }
+			end
+			describe 'зарегистрированным пользователем,' do
+				before{ sign_in user, no_capybara: true }
+				specify { expect{ delete user_path(user)}.not_to change(User,:count) }
+				specify { expect{ delete user_path(other_user)}.not_to change(User,:count) }
+			end
+		end
+
 	end
 end
