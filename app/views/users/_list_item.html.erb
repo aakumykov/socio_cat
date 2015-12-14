@@ -1,7 +1,12 @@
 <div class='row'>
 	<div class='span6 offset3 users_list'>
 		<ul>
-			<li><%= link_to u.name, user_path(u) %></li>
+			<li>
+				<% bold_start_tag, bold_end_tag = '<b>','</b>' if current_user?(u) %>
+				<%= bold_start_tag.to_s.html_safe %>
+				<%= link_to u.name, user_path(u) %>
+				<%= bold_end_tag.to_s.html_safe %>
+			</li>
 		</ul>
 	</div>
 </div>
