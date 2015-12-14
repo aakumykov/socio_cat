@@ -238,7 +238,7 @@ describe 'Страницы пользователя,' do
 
 			describe 'чужой,' do
 				before { visit edit_user_path(other_user) }
-				it_should_behave_like 'появление flash-сообщения', 'error', 'Нельзя редактировать другого пользователя'
+				it_should_behave_like 'появление flash-сообщения', 'error', 'Доступ запрещён'
 				it_should_behave_like 'страница пользователя'
 			end
 

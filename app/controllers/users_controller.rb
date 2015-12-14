@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-	before_action :signed_in_user, only: [:index, :show] #да
+	before_action :signed_in_user, only: [:index, :show, :edit, :update] #да
 	before_action :not_signed_in_user, only: [:new, :create] #да
 	before_action :correct_user, only: [:edit, :update] # ещё нет
 	before_action :admin_user, only: [:destroy] # ещё нет
@@ -72,7 +72,12 @@ class UsersController < ApplicationController
 		end
 
 		def correct_user
-			true
+			user = User.find_by(id: params[:id])
+			if user != current_user
+				#save_referer
+				flash[:error] = 'Доступ запрещён'
+				redirect_to user_path(user)
+			end
 		end
 
 		def admin_user
