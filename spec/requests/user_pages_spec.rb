@@ -17,10 +17,14 @@ describe 'Страницы пользователя,' do
 
 	subject { page }
 
-	shared_examples_for 'страница пользователя' do
-		let(:title) { "Страница пользователя" }
+	shared_examples_for 'страница пользователя' do |mode='чужая'|
+		let(:title) { 'Страница пользователя' }
 		it { should have_title(full_title(title)) }
 		it { should have_selector('h1',text:title) }
+		if 'своя'==mode
+			it { should have_selector(:xpath, "//input[@type='submit']") }
+			it { should have_selector(:xpath, "//input[@value='Редактировать']") }
+		end
 	end
 
 	shared_examples_for 'форма редактирования' do
@@ -115,7 +119,7 @@ describe 'Страницы пользователя,' do
 					
 					describe 'сообщение об успехе,' do
 						before { click_button(submit_button_create) }
-						it_should_behave_like 'страница пользователя'
+						it_should_behave_like 'страница пользователя', 'своя'
 					end
 
 					describe 'автоматический вход пользователя на сайт,' do
@@ -184,7 +188,10 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'просмотр,' do
-		before { @user = FactoryGirl.create(:user) }
+		before { 
+			let(:user) { FactoryGirl.create(:user) }
+			let(:other_user) { FactoryGirl.create(:user) }
+		}
 		
 		describe 'НЕзарегистрированныМ,' do
 			before { visit user_path(@user) }
@@ -192,25 +199,24 @@ describe 'Страницы пользователя,' do
 		end
 
 		describe 'зарегистрированным,' do
-			before { 
-				sign_in @user
-				visit user_path(@user)
-			}
+			before { sign_in @user }
 
-			it_should_behave_like 'страница пользователя'
+			describe 'своей страницы,' do
+				before { visit user_path(@user) }
+				it_should_behave_like 'страница пользователя', 'своя'
+			end
 			
-			it { should have_content('Имя:') }
-			it { should have_content('Электронная почта:') }
-			it { should have_content(@user.name) }
-			it { should have_content(@user.email) }
+			pending 'чужой страницы,' do
+				before { visit user_path(@other_user) }
+				it_should_behave_like 'страница пользователя', 'чужая'
+			end
 
-			it { should have_link('Редактировать',href:edit_user_path(@user)) }
-
-			describe 'несуществующего пользователя' do
+			describe 'несуществующей страницы' do
 				before { 
 					bad_id = User.maximum(:id)+1 
 					visit user_path(bad_id)
 				}
+				it_should_behave_like 'появление flash-сообщения', 'notice', 'Такой страницы не существует'
 				it_should_behave_like 'страница с названием', title:'Пользователи'
 			end
 		end
@@ -263,7 +269,7 @@ describe 'Страницы пользователя,' do
 							click_button submit_button_edit
 						}
 						it_should_behave_like 'появление flash-сообщения', 'success', 'Изменения приняты'
-						it_should_behave_like 'страница пользователя'
+						it_should_behave_like 'страница пользователя', 'своя'
 						specify { expect(user.reload.name).to eq new_name }
 						specify { expect(user.reload.email).to eq new_email }
 					end
