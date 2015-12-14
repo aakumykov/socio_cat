@@ -2,7 +2,7 @@ class UsersController < ApplicationController
 
 	before_action :signed_in_user, only: [:index, :show] #да
 	before_action :not_signed_in_user, only: [:new, :create] #да
-	before_action :correct_user, only: [:update] # ещё нет
+	before_action :correct_user, only: [:edit, :update] # ещё нет
 	before_action :admin_user, only: [:destroy] # ещё нет
 
 	def new
