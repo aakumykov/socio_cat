@@ -6,6 +6,11 @@ describe 'Страницы пользователя,' do
 	let(:submit_button_create) { 'Создать' }
 	let(:submit_button_edit) { 'Изменить' }
 
+	let(:name_label) { 'Имя' }
+	let(:email_label) { 'Электронная почта' }
+	let(:password_label) { 'Пароль' }
+	let(:password2_label) { 'Подтверждение пароля' }
+
 	#let(:test_name) { 'Проверяльщик Иван' }
 	#let(:test_email) { 'test-user@example.com' }
 	let(:test_password) { 'Qwerty123!@#' }
@@ -212,86 +217,150 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'редактирование,' do
-		
-		pending 'для зарегистрированных'
-		pending 'для себя самого'
-		
-		describe 'отображение,' do
-			let(:title) { 'Редактирование пользователя' }
-			let(:user) { FactoryGirl.create(:user) }
-			
+		let(:user) { FactoryGirl.create(:user) }
+		let(:other_user) { FactoryGirl.create(:user) }
+		let(:user_params) {
+			{ user: {
+				name: user.name,
+				email: user.email,
+				password: user.password,
+				password_confirmation: user.password,
+			}}
+		}
+
+		describe 'НЕзарегистрированным,' do
 			before { visit edit_user_path(user) }
-
-			it { should have_title(full_title(title)) }
-			it { should have_selector('h1',text:title) }
-			it_should_behave_like 'форма редактирования'
+			it_should_behave_like 'требование входа'
 		end
+		
+		describe 'зарегистрированным,' do
+			before { sign_in user }
 
-		describe 'работа,' do
-			let(:title) { 'Редактирование пользователя' }
-
-			describe 'с неверными данными,' do
-				let(:title) { 'Редактирование пользователя' }
-				let(:user) { FactoryGirl.create(:user) }
-				
-				before {
-					visit edit_user_path(user)
-					  fill_in 'Имя', with:' '
-					  fill_in 'Электронная почта', with:' '
-					  fill_in 'Пароль', with:' '
-					  fill_in 'Подтверждение пароля', with:' '
-					click_button submit_button_edit
-				}
-				
-				it { should have_selector('.alert.alert-error') }
-				it { should have_title(title) }
-				it { should have_selector('h1',text:title) }
-				
-				specify { expect(user.reload.name).to eq user.name }
-				specify { expect(user.reload.email).to eq user.email }
-				
-				it_should_behave_like 'исчезновение flash-сообщения', 'error'
+			describe 'чужой,' do
+				before { visit edit_user_path(other_user) }
+				it_should_behave_like 'появление flash-сообщения', 'error', 'Нельзя редактировать другого пользователя'
+				it_should_behave_like 'страница пользователя'
 			end
 
-			describe 'с верными данными,' do
-				let(:user) { FactoryGirl.create(:user) }
-				let(:new_user) { FactoryGirl.create(:user) }
-				
-				before {
-					visit edit_user_path(user)
-					  fill_in 'Имя', with: new_user.name
-					  fill_in 'Электронная почта', with: new_user.email
-					  fill_in 'Пароль', with: new_user.password
-					  fill_in 'Подтверждение пароля', with: new_user.password
-				}
-
-				describe 'c уникальными данными,' do
-					before {
-						new_user.destroy
-						click_button 'Изменить'
-					}
-				
-					specify { expect(user.reload.name).to eq new_user.name }
-					specify { expect(user.reload.email).to eq new_user.email }
-					
-					it_should_behave_like 'страница пользователя'
-					it_should_behave_like 'появление flash-сообщения', 'success'
-					it_should_behave_like 'исчезновение flash-сообщения', 'success'
+			describe 'своей,' do
+				describe 'посещение,' do
+					before { visit edit_user_path(user) }
+					it_should_behave_like 'форма редактирования'
+					describe 'форма редактирования -> страница редактирования'
 				end
 
-				describe 'с занятыми данными,' do
-					before { click_button 'Изменить' }
-				
-					specify { expect(user.reload.name).not_to eq new_user.name }
-					specify { expect(user.reload.email).not_to eq new_user.email }
-					
-					it_should_behave_like 'форма редактирования'
-					it_should_behave_like 'появление flash-сообщения', 'error'
-					it_should_behave_like 'исчезновение flash-сообщения', 'error'
+				describe 'работа,' do
+					before { visit edit_user_path(user) }
+
+					describe 'с верными данными,' do
+						let(:new_name) { Faker::Name.first_name }
+						let(:email) { Faker::Internet.email }
+						before {
+							fill_in name_label, with: new_name
+							fill_in email_label, with: email
+							fill_in password_label, with: user.password
+							fill_in password2_label, with: user.password
+							click_button submit_button_edit
+						}
+						it_should_behave_like 'появление flash-сообщения', 'success', 'Изменения приняты'
+						it_should_behave_like 'страница пользователя'
+						specify { expect(user.reload.name).to eq new_name }
+						specify { expect(user.reload.email).to eq new_email }
+					end
+
+					describe 'c неверными данными,' do
+						before { click_button submit_button_edit }
+						it_should_behave_like 'появление flash-сообщения', 'error'
+						it_should_behave_like 'исчезновение flash-сообщения'
+						specify { expect(user.reload.name).to eq user.name }
+						specify { expect(user.reload.email).to eq user.email }
+					end
 				end
 			end
 		end
 	end
+
+	# describe 'редактирование,' do
+		
+	# 	pending 'для зарегистрированных'
+	# 	pending 'для себя самого'
+		
+	# 	describe 'отображение,' do
+	# 		let(:title) { 'Редактирование пользователя' }
+	# 		let(:user) { FactoryGirl.create(:user) }
+			
+	# 		before { visit edit_user_path(user) }
+
+	# 		it { should have_title(full_title(title)) }
+	# 		it { should have_selector('h1',text:title) }
+	# 		it_should_behave_like 'форма редактирования'
+	# 	end
+
+	# 	describe 'работа,' do
+	# 		let(:title) { 'Редактирование пользователя' }
+
+	# 		describe 'с неверными данными,' do
+	# 			let(:title) { 'Редактирование пользователя' }
+	# 			let(:user) { FactoryGirl.create(:user) }
+				
+	# 			before {
+	# 				visit edit_user_path(user)
+	# 				  fill_in 'Имя', with:' '
+	# 				  fill_in 'Электронная почта', with:' '
+	# 				  fill_in 'Пароль', with:' '
+	# 				  fill_in 'Подтверждение пароля', with:' '
+	# 				click_button submit_button_edit
+	# 			}
+				
+	# 			it { should have_selector('.alert.alert-error') }
+	# 			it { should have_title(title) }
+	# 			it { should have_selector('h1',text:title) }
+				
+	# 			specify { expect(user.reload.name).to eq user.name }
+	# 			specify { expect(user.reload.email).to eq user.email }
+				
+	# 			it_should_behave_like 'исчезновение flash-сообщения', 'error'
+	# 		end
+
+	# 		describe 'с верными данными,' do
+	# 			let(:user) { FactoryGirl.create(:user) }
+	# 			let(:new_user) { FactoryGirl.create(:user) }
+				
+	# 			before {
+	# 				visit edit_user_path(user)
+	# 				  fill_in 'Имя', with: new_user.name
+	# 				  fill_in 'Электронная почта', with: new_user.email
+	# 				  fill_in 'Пароль', with: new_user.password
+	# 				  fill_in 'Подтверждение пароля', with: new_user.password
+	# 			}
+
+	# 			describe 'c уникальными данными,' do
+	# 				before {
+	# 					new_user.destroy
+	# 					click_button 'Изменить'
+	# 				}
+				
+	# 				specify { expect(user.reload.name).to eq new_user.name }
+	# 				specify { expect(user.reload.email).to eq new_user.email }
+					
+	# 				it_should_behave_like 'страница пользователя'
+	# 				it_should_behave_like 'появление flash-сообщения', 'success'
+	# 				it_should_behave_like 'исчезновение flash-сообщения', 'success'
+	# 			end
+
+	# 			describe 'с занятыми данными,' do
+	# 				before { click_button 'Изменить' }
+				
+	# 				specify { expect(user.reload.name).not_to eq new_user.name }
+	# 				specify { expect(user.reload.email).not_to eq new_user.email }
+					
+	# 				it_should_behave_like 'форма редактирования'
+	# 				it_should_behave_like 'появление flash-сообщения', 'error'
+	# 				it_should_behave_like 'исчезновение flash-сообщения', 'error'
+	# 			end
+	# 		end
+	# 	end
+	# end
 
 	describe 'прямой доступ к контроллеру Users,' do
 
