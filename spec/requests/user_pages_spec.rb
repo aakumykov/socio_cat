@@ -22,8 +22,9 @@ describe 'Страницы пользователя,' do
 		it { should have_title(full_title(title)) }
 		it { should have_selector('h1',text:title) }
 		if 'своя'==mode
-			it { should have_selector(:xpath, "//input[@type='submit']") }
-			it { should have_selector(:xpath, "//input[@value='Редактировать']") }
+			it { should have_link('Редактировать') }
+		elsif
+			it { should_not have_link('Редактировать') }
 		end
 	end
 
@@ -188,26 +189,24 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'просмотр,' do
-		before { 
-			let(:user) { FactoryGirl.create(:user) }
-			let(:other_user) { FactoryGirl.create(:user) }
-		}
+		let(:user) { FactoryGirl.create(:user) }
+		let(:other_user) { FactoryGirl.create(:user) }
 		
-		describe 'НЕзарегистрированныМ,' do
-			before { visit user_path(@user) }
+		describe 'НЕзарегистрированным,' do
+			before { visit user_path(user) }
 			it_should_behave_like 'требование входа'
 		end
 
 		describe 'зарегистрированным,' do
-			before { sign_in @user }
+			before { sign_in user }
 
 			describe 'своей страницы,' do
-				before { visit user_path(@user) }
+				before { visit user_path(user) }
 				it_should_behave_like 'страница пользователя', 'своя'
 			end
 			
-			pending 'чужой страницы,' do
-				before { visit user_path(@other_user) }
+			describe 'чужой страницы,' do
+				before { visit user_path(other_user) }
 				it_should_behave_like 'страница пользователя', 'чужая'
 			end
 
@@ -216,7 +215,7 @@ describe 'Страницы пользователя,' do
 					bad_id = User.maximum(:id)+1 
 					visit user_path(bad_id)
 				}
-				it_should_behave_like 'появление flash-сообщения', 'notice', 'Такой страницы не существует'
+				it_should_behave_like 'появление flash-сообщения', 'error', 'Такой страницы не существует'
 				it_should_behave_like 'страница с названием', title:'Пользователи'
 			end
 		end

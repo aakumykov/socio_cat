@@ -15,7 +15,9 @@
 			<tfoot>
 				<tr>
 					<td colspan=2 class='profile_edit_button'>
-						<%= link_to 'Редактировать', edit_user_path(@user), class:'btn' %>
+						<% if @user == current_user %>
+							<%= link_to 'Редактировать', edit_user_path(@user), class:'btn' %>
+						<% end %>
 					</td>
 				</tr>
 			</tfoot>
