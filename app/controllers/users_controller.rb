@@ -75,11 +75,11 @@ class UsersController < ApplicationController
 		end
 
 		def correct_user
-			user = User.find_by(id: params[:id])
-			if user != current_user
+			@user = User.find_by(id: params[:id])
+			if @user != current_user
 				#save_referer
 				flash[:error] = 'Доступ запрещён'
-				redirect_to user_path(user)
+				redirect_to user_path(@user)
 			end
 		end
 

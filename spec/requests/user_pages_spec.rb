@@ -236,132 +236,94 @@ describe 'Страницы пользователя,' do
 				password_confirmation: user.password,
 			}}
 		}
+		let(:wrong_id) { User.maximum(:id)+1000 }
 
 		describe 'НЕзарегистрированным,' do
-			describe '(1) форма,' do
+			describe 'посещение,' do
 				before { visit edit_user_path(user) }
 				it_should_behave_like 'требование входа'
 			end
 
-			describe '(2) отправка данных,' do
+			describe 'правка,' do
 				before { patch user_path(user), user_params }
-				specify { expect(response).to redirect_to root_url }
+				specify { expect(response).to redirect_to login_path }
 			end
 		end
 		
 		describe 'зарегистрированным,' do
-			before { sign_in user }
 
-			describe 'своей,' do
-				describe '(3) посещение,' do
+			describe 'посещение,' do
+				before { sign_in user }
+				
+				describe 'своей,' do
 					before { visit edit_user_path(user) }
 					it_should_behave_like 'форма редактирования'
 					describe 'форма редактирования -> страница редактирования'
 				end
 
-				describe 'отправка,' do
-					before { visit edit_user_path(user) }
-
-					describe '(4) с верными данными,' do
-						let(:new_name) { Faker::Name.first_name }
-						let(:new_email) { Faker::Internet.email }
-						before {
-							fill_in name_label, with: new_name
-							fill_in email_label, with: new_email
-							fill_in password_label, with: user.password
-							fill_in password2_label, with: user.password
-							click_button submit_button_edit
-						}
-						it_should_behave_like 'появление flash-сообщения', 'success', 'Изменения приняты'
-						it_should_behave_like 'страница пользователя', 'своя'
-						specify { expect(user.reload.name).to eq new_name }
-						specify { expect(user.reload.email).to eq new_email }
-					end
-
-					describe '(5) c неверными данными,' do
-						before { click_button submit_button_edit }
-						it_should_behave_like 'появление flash-сообщения', 'error'
-						it_should_behave_like 'исчезновение flash-сообщения'
-						specify { expect(user.reload.name).to eq user.name }
-						specify { expect(user.reload.email).to eq user.email }
-					end
-				end
-			end
-
-			describe 'чужой,' do
-				describe '(6) посещение,' do
+				describe 'чужой,' do
 					before { visit edit_user_path(other_user) }
 					it_should_behave_like 'появление flash-сообщения', 'error', 'Доступ запрещён'
 					it_should_behave_like 'страница пользователя'
 				end
 
-				describe '(7) отправка,' do
-					before { patch user_path(other_user), user_params }
-					specify{ expect(response).to redirect_to root_url }
-				end
-			end
-
-			describe 'несуществующей,' do
-				let(:wrong_id) { User.maximum(:id)+1000 }
-
-				describe '(8) посещение,' do
+				describe 'несуществующей,' do
 					before { visit user_path(wrong_id) }
 					it_should_behave_like 'появление flash-сообщения', 'error', 'Такой страницы не существует'
 					it_should_behave_like 'страница с названием', title:'Пользователи'
 				end
+			end
 
-				describe '(9) отправка,' do
+			describe 'правка своей,' do
+				before { 
+					sign_in(user)
+					visit edit_user_path(user)
+				}
+
+				describe '(4) с верными данными,' do
+					let(:new_name) { Faker::Name.first_name }
+					let(:new_email) { Faker::Internet.email }
+					before {
+						fill_in name_label, with: new_name
+						fill_in email_label, with: new_email
+						fill_in password_label, with: user.password
+						fill_in password2_label, with: user.password
+						click_button submit_button_edit
+					}
+					it_should_behave_like 'появление flash-сообщения', 'success', 'Изменения приняты'
+					it_should_behave_like 'страница пользователя', 'своя'
+					specify { expect(user.reload.name).to eq new_name }
+					specify { expect(user.reload.email).to eq new_email }
+				end
+
+				describe '(5) c неверными данными,' do
+					before { click_button submit_button_edit }
+					it_should_behave_like 'появление flash-сообщения', 'error'
+					it_should_behave_like 'исчезновение flash-сообщения'
+					specify { expect(user.reload.name).to eq user.name }
+					specify { expect(user.reload.email).to eq user.email }
+				end
+			end
+
+			describe 'правка не своей,' do
+				before { sign_in(user, no_capybara:true) }
+
+				describe 'чужой,' do
+					before { patch user_path(other_user), user_params }
+					
+					specify{ expect(other_user.reload.name).not_to eq user_params[:user][:name] }
+					specify{ expect(other_user.reload.email).not_to eq user_params[:user][:email] }
+
+					specify{ expect(response).to redirect_to user_path(other_user) }
+				end
+
+				describe 'несуществующей,' do
 					before { patch user_path(wrong_id), user_params }
 					specify{ expect(response).to redirect_to root_url }
 				end
 			end
 		end
 	end
-
-	# describe 'прямое (http) редактирование,' do
-
-	# 	let(:user) { FactoryGirl.create(:user) }
-	# 	let(:other_user) { FactoryGirl.create(:user) }
-	# 	let(:user_params) {
-	# 		{ user: {
-	# 			name: Faker::Name.first_name,
-	# 			email: Faker::Internet.email,
-	# 			password: user.password,
-	# 			password_confirmation: user.password,
-	# 		}}
-	# 	}
-	# 	let(:other_user_params) {
-	# 		{ user: {
-	# 			name: Faker::Name.first_name,
-	# 			email: Faker::Internet.email,
-	# 			password: other_user.password,
-	# 			password_confirmation: other_user.password,
-	# 		}}
-	# 	}
-
-	# 	describe 'НЕзарегистрированным,' do
-	# 		before { patch user_path(user), user_params }
-	# 		specify{ expect(user.reload.name).not_to eq user_params[:user][:name] }
-	# 		specify{ expect(user.reload.email).not_to eq user_params[:user][:email] }
-	# 		#specify{ expect(response).to redirect_to root_url }
-	# 	end
-
-	# 	describe 'зарегистрированным,' do
-	# 		before { sign_in user, no_capybara: true }
-
-	# 		describe 'своей,' do
-	# 			before { patch user_path(user), user_params }
-	# 			specify{ expect(user.reload.name).not_to eq user_params[:user][:name] }
-	# 			specify{ expect(user.reload.email).not_to eq user_params[:user][:email] }
-	# 		end
-			
-	# 		describe 'чужой,' do
-	# 			before { patch user_path(other_user), other_user_params }
-	# 			specify{ expect(other_user.reload.name).not_to eq user_params[:user][:name] }
-	# 			specify{ expect(other_user.reload.email).not_to eq user_params[:user][:email] }
-	# 		end
-	# 	end
-	# end
 
 	pending 'защищённые параметры,' do
 	end
