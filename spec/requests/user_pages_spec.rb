@@ -238,12 +238,12 @@ describe 'Страницы пользователя,' do
 		}
 
 		describe 'НЕзарегистрированным,' do
-			describe 'форма,' do
+			describe '(1) форма,' do
 				before { visit edit_user_path(user) }
 				it_should_behave_like 'требование входа'
 			end
 
-			describe 'отправка данных,' do
+			describe '(2) отправка данных,' do
 				before { patch user_path(user), user_params }
 				specify { expect(response).to redirect_to root_url }
 			end
@@ -252,30 +252,17 @@ describe 'Страницы пользователя,' do
 		describe 'зарегистрированным,' do
 			before { sign_in user }
 
-			describe 'чужой,' do
-				describe 'форма,' do
-					before { visit edit_user_path(other_user) }
-					it_should_behave_like 'появление flash-сообщения', 'error', 'Доступ запрещён'
-					it_should_behave_like 'страница пользователя'
-				end
-
-				describe 'отправка данных,' do
-					before { patch user_path(other_user), user_params }
-					specify{ expect(response).to redirect_to root_url }
-				end
-			end
-
 			describe 'своей,' do
-				describe 'форма,' do
+				describe '(3) посещение,' do
 					before { visit edit_user_path(user) }
 					it_should_behave_like 'форма редактирования'
 					describe 'форма редактирования -> страница редактирования'
 				end
 
-				describe 'работа,' do
+				describe 'отправка,' do
 					before { visit edit_user_path(user) }
 
-					describe 'с верными данными,' do
+					describe '(4) с верными данными,' do
 						let(:new_name) { Faker::Name.first_name }
 						let(:new_email) { Faker::Internet.email }
 						before {
@@ -291,7 +278,7 @@ describe 'Страницы пользователя,' do
 						specify { expect(user.reload.email).to eq new_email }
 					end
 
-					describe 'c неверными данными,' do
+					describe '(5) c неверными данными,' do
 						before { click_button submit_button_edit }
 						it_should_behave_like 'появление flash-сообщения', 'error'
 						it_should_behave_like 'исчезновение flash-сообщения'
@@ -301,16 +288,29 @@ describe 'Страницы пользователя,' do
 				end
 			end
 
-			describe 'несуществующей,' do
-				let(:wrong_id) { User.maximum(:id)+1 }
+			describe 'чужой,' do
+				describe '(6) посещение,' do
+					before { visit edit_user_path(other_user) }
+					it_should_behave_like 'появление flash-сообщения', 'error', 'Доступ запрещён'
+					it_should_behave_like 'страница пользователя'
+				end
 
-				describe 'форма,' do
+				describe '(7) отправка,' do
+					before { patch user_path(other_user), user_params }
+					specify{ expect(response).to redirect_to root_url }
+				end
+			end
+
+			describe 'несуществующей,' do
+				let(:wrong_id) { User.maximum(:id)+1000 }
+
+				describe '(8) посещение,' do
 					before { visit user_path(wrong_id) }
 					it_should_behave_like 'появление flash-сообщения', 'error', 'Такой страницы не существует'
 					it_should_behave_like 'страница с названием', title:'Пользователи'
 				end
 
-				describe 'отправка данных,' do
+				describe '(9) отправка,' do
 					before { patch user_path(wrong_id), user_params }
 					specify{ expect(response).to redirect_to root_url }
 				end
