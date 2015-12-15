@@ -230,72 +230,34 @@ describe 'Страницы пользователя,' do
 		let(:other_user) { FactoryGirl.create(:user) }
 		let(:user_params) {
 			{ user: {
-				name: user.name+'_new',
-				email: 'new_'+user.email,
+				name: user.name,
+				email: user.email,
 				password: user.password,
 				password_confirmation: user.password,
 			}}
 		}
-		let(:wrong_id) { User.maximum(:id)+1000 }
 
 		describe 'НЕзарегистрированным,' do
-			describe 'посещение,' do
+			describe '(1) форма,' do
 				before { visit edit_user_path(user) }
 				it_should_behave_like 'требование входа'
 			end
 
-			describe 'отправка,' do
+			describe '(2) отправка данных,' do
 				before { patch user_path(user), user_params }
 				specify { expect(response).to redirect_to root_url }
 			end
 		end
 		
 		describe 'зарегистрированным,' do
-
-			describe 'посещение,' do
-				before { sign_in user }
-				
-				describe 'своей,' do
-					before { visit edit_user_path(user) }
-					it_should_behave_like 'форма редактирования'
-				end
-				
-				describe 'чужой,' do
-					before { visit edit_user_path(other_user) }
-					it_should_behave_like 'появление flash-сообщения', 'error', 'Доступ запрещён'
-					it_should_behave_like 'страница пользователя', 'чужая'
-				end
-				
-				describe 'несуществующей,' do
-					before { visit user_path(wrong_id) }
-					it_should_behave_like 'появление flash-сообщения', 'error', 'Страницы не существует'
-					it_should_behave_like 'страница с названием', title:'Пользователи'
-				end
-			end
-
-			describe 'отправка,' do
-				before { sign_in user, no_capybara:true }
-
-				describe 'в свою,' do
-					before { post user_path(user), user_params }
-					specify { expect(response).to redirect_to user_path(user) }
-					specify{ expect(user.reload.name).to eq user_params[:user][:name] }
-					specify{ expect(user.reload.email).to eq user_params[:user][:email] }
-				end
-
-				describe 'в чужую,' do
-					before { post user_path(other_user), user_params }
-					specify { expect(response).to redirect_to user_path(other_user) }
-					specify{ expect(other_user.reload.name).not_to eq user_params[:user][:name] }
-					specify{ expect(other_user.reload.email).not_to eq user_params[:user][:email] }
-				end
-
-				describe 'в несуществующую,' do
-
-				end
-			end
+			before { sign_in user }
 
 			describe 'своей,' do
+				describe '(3) посещение,' do
+					before { visit edit_user_path(user) }
+					it_should_behave_like 'форма редактирования'
+					describe 'форма редактирования -> страница редактирования'
+				end
 
 				describe 'отправка,' do
 					before { visit edit_user_path(user) }
