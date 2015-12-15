@@ -225,7 +225,7 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
-	describe 'www-редактирование,' do
+	describe 'редактирование,' do
 		let(:user) { FactoryGirl.create(:user) }
 		let(:other_user) { FactoryGirl.create(:user) }
 		let(:user_params) {
@@ -238,21 +238,35 @@ describe 'Страницы пользователя,' do
 		}
 
 		describe 'НЕзарегистрированным,' do
-			before { visit edit_user_path(user) }
-			it_should_behave_like 'требование входа'
+			describe 'форма,' do
+				before { visit edit_user_path(user) }
+				it_should_behave_like 'требование входа'
+			end
+
+			describe 'отправка данных,' do
+				before { patch user_path(user), user_params }
+				specify { expect(response).to redirect_to root_url }
+			end
 		end
 		
 		describe 'зарегистрированным,' do
 			before { sign_in user }
 
 			describe 'чужой,' do
-				before { visit edit_user_path(other_user) }
-				it_should_behave_like 'появление flash-сообщения', 'error', 'Доступ запрещён'
-				it_should_behave_like 'страница пользователя'
+				describe 'форма,' do
+					before { visit edit_user_path(other_user) }
+					it_should_behave_like 'появление flash-сообщения', 'error', 'Доступ запрещён'
+					it_should_behave_like 'страница пользователя'
+				end
+
+				describe 'отправка данных,' do
+					before { patch user_path(other_user), user_params }
+					specify{ expect(response).to redirect_to root_url }
+				end
 			end
 
 			describe 'своей,' do
-				describe 'посещение,' do
+				describe 'форма,' do
 					before { visit edit_user_path(user) }
 					it_should_behave_like 'форма редактирования'
 					describe 'форма редактирования -> страница редактирования'
@@ -286,60 +300,69 @@ describe 'Страницы пользователя,' do
 					end
 				end
 			end
-		end
-	end
 
-	describe 'прямой доступ к контроллеру Users,' do
+			describe 'несуществующей,' do
+				let(:wrong_id) { User.maximum(:id)+1 }
 
-		let(:user) { FactoryGirl.create(:user) }
-		
-		let(:other_user) { FactoryGirl.create(:user) }
-		
-		let(:user_params) {
-			{ user: {
-				name: user.name,
-				email: user.email,
-				password: user.password,
-				password_confirmation: user.password,
-			}}
-		}
+				describe 'форма,' do
+					before { visit user_path(wrong_id) }
+					it_should_behave_like 'появление flash-сообщения', 'error', 'Такой страницы не существует'
+					it_should_behave_like 'страница с названием', title:'Пользователи'
+				end
 
-		describe 'POST to #create,' do
-			describe 'зарегистрированным пользователем,' do
-				before { sign_in user, no_capybara: true }
-				specify { expect{ post users_path, user_params }.not_to change(User,:count) }
-			end
-		end
-
-		describe 'PATCH to #update,' do
-
-			describe 'НЕзарегистрированным пользователем,' do
-				before { patch user_path(other_user), user_params }
-				specify { expect(other_user.reload.name).not_to eq user_params[:user][:name] }
-				#specify { expect(response).to redirect_to(root_url) }
-			end
-			
-			describe 'зарегистрированным пользователем,' do
-				before{ sign_in user, no_capybara: true }
-				describe 'чужой записи' do
-					before { patch user_path(other_user), user_params }
-					specify { expect(other_user.reload.name).not_to eq user_params[:user][:name] }
-					#specify { expect(response).to redirect_to(root_url) }
+				describe 'отправка данных,' do
+					before { patch user_path(wrong_id), user_params }
+					specify{ expect(response).to redirect_to root_url }
 				end
 			end
 		end
+	end
 
-		pending 'DELETE to #destroy,' do
-			describe 'НЕзарегистрированным пользователем,' do
-				specify { expect{ delete user_path(user)}.not_to change(User,:count) }
-				specify { expect{ delete user_path(other_user)}.not_to change(User,:count) }
-			end
-			describe 'зарегистрированным пользователем,' do
-				before{ sign_in user, no_capybara: true }
-				specify { expect{ delete user_path(user)}.not_to change(User,:count) }
-				specify { expect{ delete user_path(other_user)}.not_to change(User,:count) }
-			end
-		end
+	# describe 'прямое (http) редактирование,' do
 
+	# 	let(:user) { FactoryGirl.create(:user) }
+	# 	let(:other_user) { FactoryGirl.create(:user) }
+	# 	let(:user_params) {
+	# 		{ user: {
+	# 			name: Faker::Name.first_name,
+	# 			email: Faker::Internet.email,
+	# 			password: user.password,
+	# 			password_confirmation: user.password,
+	# 		}}
+	# 	}
+	# 	let(:other_user_params) {
+	# 		{ user: {
+	# 			name: Faker::Name.first_name,
+	# 			email: Faker::Internet.email,
+	# 			password: other_user.password,
+	# 			password_confirmation: other_user.password,
+	# 		}}
+	# 	}
+
+	# 	describe 'НЕзарегистрированным,' do
+	# 		before { patch user_path(user), user_params }
+	# 		specify{ expect(user.reload.name).not_to eq user_params[:user][:name] }
+	# 		specify{ expect(user.reload.email).not_to eq user_params[:user][:email] }
+	# 		#specify{ expect(response).to redirect_to root_url }
+	# 	end
+
+	# 	describe 'зарегистрированным,' do
+	# 		before { sign_in user, no_capybara: true }
+
+	# 		describe 'своей,' do
+	# 			before { patch user_path(user), user_params }
+	# 			specify{ expect(user.reload.name).not_to eq user_params[:user][:name] }
+	# 			specify{ expect(user.reload.email).not_to eq user_params[:user][:email] }
+	# 		end
+			
+	# 		describe 'чужой,' do
+	# 			before { patch user_path(other_user), other_user_params }
+	# 			specify{ expect(other_user.reload.name).not_to eq user_params[:user][:name] }
+	# 			specify{ expect(other_user.reload.email).not_to eq user_params[:user][:email] }
+	# 		end
+	# 	end
+	# end
+
+	pending 'защищённые параметры,' do
 	end
 end
