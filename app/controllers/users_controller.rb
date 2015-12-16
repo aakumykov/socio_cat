@@ -2,8 +2,8 @@ class UsersController < ApplicationController
 
 	before_action :signed_in_users, only: [:index, :show, :edit, :update, :destroy] #да
 	before_action :not_signed_in_users, only: [:new, :create] #да
-	before_action :editor_users, only: [:edit, :update] # ещё нет
-	before_action :admin_users, only: [:destroy] # ещё нет
+	before_action :editor_users, only: [:edit, :update] #да
+	before_action :destroy_users, only: [:destroy] # ещё нет
 
 	def new
 		@user = User.new
@@ -46,6 +46,10 @@ class UsersController < ApplicationController
 			flash.now[:error] = "Изменения отклонены"
 			render 'edit'
 		end
+	end
+
+	def destroy
+
 	end
 	
 

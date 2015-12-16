@@ -23,9 +23,24 @@ describe 'Страницы пользователя,' do
 		it { should have_selector('h1',text:title) }
 		if 'своя'==mode
 			it { should have_link('Редактировать') }
+			it { should have_link('Удалить') }
 		elsif
 			it { should_not have_link('Редактировать') }
 		end
+	end
+
+	shared_examples_for 'зарегистрированный пользователь' do
+		# it { should have_link('Мой профиль', user_path(user)) }
+		it { should have_link('Мой профиль') }
+		it { should have_link('Пользователи', users_path) }
+		it { should have_link('Выход', logout_path) }
+	end
+
+	shared_examples_for 'НЕзарегистрированный пользователь' do
+		#it { should_not have_link('Мой профиль', user_path(user)) }
+		it { should_not have_link('Мой профиль' }
+		it { should_not have_link('Пользователи', users_path) }
+		it { should_not have_link('Выход', logout_path) }
 	end
 
 	shared_examples_for 'форма редактирования' do
@@ -129,9 +144,7 @@ describe 'Страницы пользователя,' do
 						let(:user) { User.find_by(email: test_email) }
 						
 						it { should have_selector('.alert.alert-success', text:'Добро пожаловать на сайт!') }
-						it { should have_link('Мой профиль', user_path(user)) }
-						it { should have_link('Пользователи', users_path) }
-						it { should have_link('Выход', logout_path) }
+						it_should_behave_like 'зарегистрированный пользователь'
 					end
 				end
 				
@@ -320,6 +333,73 @@ describe 'Страницы пользователя,' do
 				describe 'несуществующей,' do
 					before { patch user_path(wrong_id), user_params }
 					specify{ expect(response).to redirect_to users_path }
+				end
+			end
+		end
+	end
+
+	describe 'удаление,' do
+		let(:user) { FactoryGirl.create(:user) }
+		let(:other_user) { FactoryGirl.create(:user) }
+		let(:admin_user) { FactoryGirl.create(:admin) }
+		let(:wrong_id) { User.maximum(:id)+1000 }
+
+		describe 'НЕзарегистрированным пользователем,' do
+			describe 'http-перенаправление,' do
+				before { delete user_path(user) }
+				specify { expect(response).to redirect_to(root_path) }
+			end
+			describe 'интактность БД,' do
+				specify{ expect{delete user_path(user)}.not_to change(User,:count) }
+			end
+		end
+
+		describe 'зарегистрированным пользователем,' do
+
+			describe 'через web-интерфейс, своей' do
+				before { 
+					sign_in user 
+					visit user_path(user)
+					click_button 'Удалить'
+				}
+				it_should_behave_like 'появление flash-сообщения', 'success', 'Пользователь удалён'
+				it_should_behave_like 'страница с названием', title:'Главная страница', heading:'Добро пожаловать'
+				it_should_behave_like 'НЕзарегистрированный пользователь'
+			end
+
+			describe 'http-запросом,' do
+				before { sign_in user, no_capybara:true }
+				
+				describe 'своей,' do
+					specify{ expect{delete user_path(user) }.to change(User,:count).by(-1) }
+					
+					specify{ expect(User.find_by(id:user.id)).to eq nil }
+					specify{ expect(response).to redirect_to root_path }
+				end
+
+				describe 'чужой,' do
+					specify{ expect{ delete user_path(other_user)}.not_to change(User,:count) }
+					specify{ expect(response).to redirect_to root_path }
+				end
+
+				describe 'несуществующей,' do
+					specify{ expect{delete user_path(:wrong_id)}.not_to change(User,:count) }
+					specify{ expect(response).to redirect_to root_path }
+				end
+			end
+			
+			pending 'администратором,' do
+				pending 'своей,' do
+				end
+
+				pending 'не своей,' do
+					before { sign_in admin, no_capybara:true }
+
+					pending 'чужой,' do
+					end
+
+					pending 'несуществующей,' do
+					end
 				end
 			end
 		end
