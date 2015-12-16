@@ -62,24 +62,24 @@ class UsersController < ApplicationController
 
 		def signed_in_user
 			if not signed_in?
-				#save_referer
 				redirect_to login_path, notice: 'Сначала войдите на сайт'
 			end
 		end
 
 		def not_signed_in_user
 			if signed_in?
-				#save_referer
-				redirect_to user_path(current_user), notice:'Вы уже зарегистрированы'
+				save_referer
+				flash[:notice] = 'Вы уже зарегистрированы'
+				redirect_back
 			end
 		end
 
 		def correct_user
 			@user = User.find_by(id: params[:id])
 			if @user != current_user
-				#save_referer
-				flash[:error] = 'Доступ запрещён'
-				redirect_to user_path(@user)
+				save_referer
+				flash[:error] = "Доступ запрещён #{cookies[:referer]}"
+				redirect_back
 			end
 		end
 

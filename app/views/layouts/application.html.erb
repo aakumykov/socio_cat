@@ -15,10 +15,20 @@
 		<div class="row main_content">
 			<%= yield %>
 		</div>
-		
 		<div class='row span10 offset1'>
 			<% if Rails.env.development? %>
+				REQUEST_URI:<br>
+				<%= debug(request.env['REQUEST_URI']) %>
+
+				request.referer:<br>
+				<%= debug(request.referer) %>
+				
+				cookies[:referer]:<br>
+				<%= debug(cookies[:referer]) %>
+
+				Params:<br>
 				<%= debug(params) %>
+				
 				Cookies:<br>
 				<%= debug(cookies[:referer]) %>
 			<% end %>

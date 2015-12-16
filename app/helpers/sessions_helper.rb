@@ -39,15 +39,30 @@ module SessionsHelper
 	def save_referer
 		referer = request.referer.blank? ? root_url : request.referer
 		cookies[:referer] = referer
+		cookies[:request_uri] = referer
 	end
 
 	def redirect_back
-		uri = URI(cookies[:referer])
-		if uri.host != request.host
-			referer = "#{request.host}:#{request.port}"
+		orig_referer = cookies[:referer] || request.referer
+
+		if orig_referer.nil?
+			referer = about_path
 		else
-			referer = uri.to_s
+			uri = URI(orig_referer)
+
+			# отклонение внешнего referer
+			if uri.host != request.host
+				referer = "#{request.host}:#{request.port}"
+			else
+				referer = uri.to_s
+			end
+
+			# защита от простого зацикливания
+			if referer == cookies[:request_uri]
+				referer = root_url
+			end
 		end
+
 		redirect_to referer
 		cookies.delete :referer
 	end
