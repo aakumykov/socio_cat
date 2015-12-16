@@ -1,9 +1,9 @@
 class UsersController < ApplicationController
 
-	before_action :signed_in_user, only: [:index, :show, :edit, :update] #да
-	before_action :not_signed_in_user, only: [:new, :create] #да
-	before_action :correct_user, only: [:edit, :update] # ещё нет
-	before_action :admin_user, only: [:destroy] # ещё нет
+	before_action :signed_in_users, only: [:index, :show, :edit, :update, :destroy] #да
+	before_action :not_signed_in_users, only: [:new, :create] #да
+	before_action :editor_users, only: [:edit, :update] # ещё нет
+	before_action :admin_users, only: [:destroy] # ещё нет
 
 	def new
 		@user = User.new
@@ -34,11 +34,11 @@ class UsersController < ApplicationController
 	end
 
 	def edit
-		@user = User.find_by(id:params[:id])
+		# @user устанавливается в editor_users()
 	end
 
 	def update
-		@user = User.find_by(params[:id])
+		# @user устанавливается в editor_users()
 		if @user.update_attributes(user_params)
 			flash[:success] = "Изменения приняты"
 			redirect_to user_path(@user)
@@ -60,30 +60,31 @@ class UsersController < ApplicationController
 			)
 		end
 
-		def signed_in_user
+		def signed_in_users
 			if not signed_in?
 				redirect_to login_path, notice: 'Сначала войдите на сайт'
 			end
 		end
 
-		def not_signed_in_user
+		def not_signed_in_users
 			if signed_in?
-				save_referer
 				flash[:notice] = 'Вы уже зарегистрированы'
-				redirect_back
+				redirect_to user_path(current_user)
 			end
 		end
 
-		def correct_user
+		def editor_users
 			@user = User.find_by(id: params[:id])
-			if @user != current_user
-				save_referer
-				flash[:error] = "Доступ запрещён #{cookies[:referer]}"
-				redirect_back
+			
+			if @user.nil?
+				redirect_to users_path
+			elsif @user != current_user
+				flash[:error] = 'Нельзя редактировать другого пользователя'
+				redirect_to user_path(@user)
 			end
 		end
 
-		def admin_user
+		def admin_users
 			true
 		end
 end
