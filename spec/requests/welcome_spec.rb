@@ -15,7 +15,7 @@ describe 'Статические welcome-страницы,' do
 
 	describe 'Главная страница,' do
 		before { visit root_path }
-		it { should have_title(full_title('Главная страница')) }
+		it { should have_title(full_title('Соционический каталог')) }
 		it { should have_selector('h1', text:'Добро пожаловать') }
 		it_should_behave_like 'all_welcome_pages'
 	end
