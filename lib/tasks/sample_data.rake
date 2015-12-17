@@ -2,8 +2,8 @@ namespace :db do
 	desc "Fill database with sample data"
 	task populate: :environment do
 		create_cards
-		create_users
 		create_admin_user
+		create_users
 	end
 end
 
