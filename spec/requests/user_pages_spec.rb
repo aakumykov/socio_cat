@@ -17,15 +17,27 @@ describe 'Страницы пользователя,' do
 
 	subject { page }
 
-	shared_examples_for 'страница пользователя' do |mode='чужая'|
+
+	shared_examples_for 'страница пользователя' do |mode='чужая',admin=false|
 		let(:title) { 'Страница пользователя' }
 		it { should have_title(full_title(title)) }
 		it { should have_selector('h1',text:title) }
-		if 'своя'==mode
-			it { should have_link('Редактировать') }
-			it { should have_link('Удалить') }
-		elsif
-			it { should_not have_link('Редактировать') }
+
+		if admin
+			if 'чужая'==mode
+				it { should have_link('Редактировать') }
+				it { should have_link('Удалить') }
+			else
+				it { should have_link('Редактировать') }
+				it { should_not have_link('Удалить') }
+			end
+		else
+			if 'своя'==mode
+				it { should have_link('Редактировать') }
+				it { should have_link('Удалить') }
+			elsif
+				it { should_not have_link('Редактировать') }
+			end
 		end
 	end
 
@@ -90,6 +102,8 @@ describe 'Страницы пользователя,' do
 		it { should have_title( full_title(title) ) }
 		it { should have_selector('h1',text:heading) }
 	end
+
+
 
 
 	describe 'создание,' do
@@ -219,12 +233,12 @@ describe 'Страницы пользователя,' do
 
 			describe 'своей страницы,' do
 				before { visit user_path(user) }
-				it_should_behave_like 'страница пользователя', 'своя'
+				it_should_behave_like 'страница пользователя', 'своя', false
 			end
 			
 			describe 'чужой страницы,' do
 				before { visit user_path(other_user) }
-				it_should_behave_like 'страница пользователя', 'чужая'
+				it_should_behave_like 'страница пользователя', 'чужая', false
 			end
 
 			describe 'несуществующей страницы' do
@@ -234,6 +248,21 @@ describe 'Страницы пользователя,' do
 				}
 				it_should_behave_like 'появление flash-сообщения', 'error', 'Такой страницы не существует'
 				it_should_behave_like 'страница с названием', title:'Пользователи'
+			end
+		end
+
+		describe 'администратором,' do
+			let(:admin) { FactoryGirl.create(:admin) }
+			before { sign_in admin }
+
+			describe 'своей,' do
+				before { visit user_path(admin) }
+				it_should_behave_like 'страница пользователя', 'своя', true
+			end
+			
+			describe 'чужой,' do
+				before { visit user_path(user) }
+				it_should_behave_like 'страница пользователя', 'чужая', true
 			end
 		end
 	end
@@ -277,7 +306,7 @@ describe 'Страницы пользователя,' do
 				describe 'чужой,' do
 					before { visit edit_user_path(other_user) }
 					it_should_behave_like 'появление flash-сообщения', 'error', 'Нельзя редактировать другого пользователя'
-					it_should_behave_like 'страница пользователя'
+					it_should_behave_like 'страница пользователя', 'чужая', false
 				end
 
 				describe 'несуществующей,' do
@@ -304,7 +333,7 @@ describe 'Страницы пользователя,' do
 						click_button submit_button_edit
 					}
 					it_should_behave_like 'появление flash-сообщения', 'success', 'Изменения приняты'
-					it_should_behave_like 'страница пользователя', 'своя'
+					it_should_behave_like 'страница пользователя', 'своя', false
 					specify { expect(user.reload.name).to eq new_name }
 					specify { expect(user.reload.email).to eq new_email }
 				end
