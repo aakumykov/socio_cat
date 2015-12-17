@@ -7,7 +7,6 @@ describe 'User,' do
 			email: 'homo@sapiens.it',
 			password: '0чень_сЛо#нЫй-пар0ль',
 			password_confirmation: '0чень_сЛо#нЫй-пар0ль',
-			#remember_token: User.encrypt( User.new_remember_token )
 		)
 	}
 	subject { @user }
@@ -19,6 +18,7 @@ describe 'User,' do
 	it { should respond_to(:password_confirmation) }
 	it { should respond_to(:authenticate) }
 	it { should respond_to(:remember_token) }
+	it { should respond_to(:admin) }
 
 	it { should be_valid }
 
@@ -135,5 +135,13 @@ describe 'User,' do
 	describe 'непустой remember_token,' do
 		before { @user.save }
 		its(:remember_token) { should_not be_blank }
+	end
+
+	describe 'с административным флагом,' do
+		before { 
+			@user.save!
+			@user.toggle!(:admin)
+		}
+		it { should  be_admin }
 	end
 end

@@ -38,7 +38,7 @@ describe 'Страницы пользователя,' do
 
 	shared_examples_for 'НЕзарегистрированный пользователь' do
 		#it { should_not have_link('Мой профиль', user_path(user)) }
-		it { should_not have_link('Мой профиль' }
+		it { should_not have_link('Мой профиль') }
 		it { should_not have_link('Пользователи', users_path) }
 		it { should_not have_link('Выход', logout_path) }
 	end
