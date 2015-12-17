@@ -338,25 +338,25 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
-	describe 'удаление,' do
+	pending 'удаление,' do
 		let(:user) { FactoryGirl.create(:user) }
 		let(:other_user) { FactoryGirl.create(:user) }
 		let(:admin_user) { FactoryGirl.create(:admin) }
 		let(:wrong_id) { User.maximum(:id)+1000 }
 
-		describe 'НЕзарегистрированным пользователем,' do
-			describe 'http-перенаправление,' do
+		pending 'НЕзарегистрированным пользователем,' do
+			pending 'http-перенаправление,' do
 				before { delete user_path(user) }
 				specify { expect(response).to redirect_to(root_path) }
 			end
-			describe 'интактность БД,' do
+			pending 'интактность БД,' do
 				specify{ expect{delete user_path(user)}.not_to change(User,:count) }
 			end
 		end
 
-		describe 'зарегистрированным пользователем,' do
+		pending 'зарегистрированным пользователем,' do
 
-			describe 'через web-интерфейс, своей' do
+			pending 'через web-интерфейс, своей' do
 				before { 
 					sign_in user 
 					visit user_path(user)
@@ -367,22 +367,22 @@ describe 'Страницы пользователя,' do
 				it_should_behave_like 'НЕзарегистрированный пользователь'
 			end
 
-			describe 'http-запросом,' do
+			pending 'http-запросом,' do
 				before { sign_in user, no_capybara:true }
 				
-				describe 'своей,' do
+				pending 'своей,' do
 					specify{ expect{delete user_path(user) }.to change(User,:count).by(-1) }
 					
 					specify{ expect(User.find_by(id:user.id)).to eq nil }
 					specify{ expect(response).to redirect_to root_path }
 				end
 
-				describe 'чужой,' do
+				pending 'чужой,' do
 					specify{ expect{ delete user_path(other_user)}.not_to change(User,:count) }
 					specify{ expect(response).to redirect_to root_path }
 				end
 
-				describe 'несуществующей,' do
+				pending 'несуществующей,' do
 					specify{ expect{delete user_path(:wrong_id)}.not_to change(User,:count) }
 					specify{ expect(response).to redirect_to root_path }
 				end

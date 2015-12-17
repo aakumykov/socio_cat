@@ -15,9 +15,16 @@
 			<tfoot>
 				<tr>
 					<td colspan=2 class='profile_edit_button'>
-						<% if @user == current_user %>
-							<%= link_to 'Редактировать', edit_user_path(@user), class:'btn' %>
-						<% end %>
+						<div class='row'>
+							<% if @user == current_user %>
+								<%= link_to 'Редактировать', edit_user_path(@user), class:'btn pull-left' %>
+								<%= link_to 'Удалить', @user,
+										method: :delete,
+										data: { confirm: 'Вы уверены?' },
+										class:'btn btn-danger pull-right'
+								%>
+							<% end %>
+						</div>
 					</td>
 				</tr>
 			</tfoot>
