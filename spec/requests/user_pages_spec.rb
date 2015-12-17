@@ -2,17 +2,15 @@ require 'spec_helper'
 
 describe 'Страницы пользователя,' do
 
-	let(:login_title) { 'Вход на сайт' }
-	let(:submit_button_create) { 'Создать' }
-	let(:submit_button_edit) { 'Изменить' }
+	let(:create_element) { 'Создать' }
+	let(:edit_element) { 'Изменить' }
+	let(:delete_element) { 'Удалить' }
 
 	let(:name_label) { 'Имя' }
 	let(:email_label) { 'Электронная почта' }
 	let(:password_label) { 'Пароль' }
 	let(:password2_label) { 'Подтверждение пароля' }
 
-	#let(:test_name) { 'Проверяльщик Иван' }
-	#let(:test_email) { 'test-user@example.com' }
 	let(:test_password) { 'Qwerty123!@#' }
 
 	subject { page }
@@ -46,6 +44,7 @@ describe 'Страницы пользователя,' do
 		it { should have_link('Мой профиль') }
 		it { should have_link('Пользователи', users_path) }
 		it { should have_link('Выход', logout_path) }
+		it { should_not have_link('Вход', login_path) }
 	end
 
 	shared_examples_for 'НЕзарегистрированный пользователь' do
@@ -53,6 +52,7 @@ describe 'Страницы пользователя,' do
 		it { should_not have_link('Мой профиль') }
 		it { should_not have_link('Пользователи', users_path) }
 		it { should_not have_link('Выход', logout_path) }
+		it { should have_link('Вход', login_path) }
 	end
 
 	shared_examples_for 'форма редактирования' do
@@ -84,13 +84,6 @@ describe 'Страницы пользователя,' do
 		it { should_not have_selector("div.alert.alert-#{mode}") }
 	end
 
-	shared_examples_for 'страница входа' do
-		it { should have_title( full_title(login_title) ) }
-		it { should have_selector('h1',text:login_title) }
-		it { should have_selector(:xpath,"//input[@type='submit']")}
-		it { should have_selector(:xpath,"//input[@value='Войти']")}
-	end
-
 	shared_examples_for 'требование входа' do
 		it_should_behave_like 'страница входа'
 		it_should_behave_like 'появление flash-сообщения', 'notice', 'Сначала войдите на сайт'
@@ -102,11 +95,24 @@ describe 'Страницы пользователя,' do
 		it { should have_title( full_title(title) ) }
 		it { should have_selector('h1',text:heading) }
 	end
+	
+	shared_examples_for 'главная страница' do
+		it_should_behave_like 'страница с названием', title:'Соционический каталог', heading:'Добро пожаловать'
+	end
+
+	shared_examples_for 'страница входа' do
+		it_should_behave_like 'страница с названием', title:'Вход на сайт'
+		it { should have_selector(:xpath,"//input[@type='submit']")}
+		it { should have_selector(:xpath,"//input[@value='Войти']")}
+	end
+
 
 
 
 
 	describe 'создание,' do
+
+		pending 'user should not be_admin'
 
 		describe 'посещение страницы регистрации зарегистрированным пользователем,' do
 			before {
@@ -144,16 +150,16 @@ describe 'Страницы пользователя,' do
 					}
 					
 					it 'появление пользователя,' do
-						expect{ click_button(submit_button_create) }.to change(User, :count).by(1)
+						expect{ click_button(create_element) }.to change(User, :count).by(1)
 					end
 					
 					describe 'сообщение об успехе,' do
-						before { click_button(submit_button_create) }
+						before { click_button(create_element) }
 						it_should_behave_like 'страница пользователя', 'своя'
 					end
 
 					describe 'автоматический вход пользователя на сайт,' do
-						before { click_button submit_button_create }
+						before { click_button create_element }
 						
 						let(:user) { User.find_by(email: test_email) }
 						
@@ -164,10 +170,10 @@ describe 'Страницы пользователя,' do
 				
 				describe 'с неверными данными,' do
 					it 'отклонение нового пользователя,' do
-						expect{ click_button(submit_button_create) }.not_to change(User,:count)
+						expect{ click_button(create_element) }.not_to change(User,:count)
 					end
 					describe 'сообщение об ошибке,' do
-						before { click_button(submit_button_create) }
+						before { click_button(create_element) }
 						it_should_behave_like 'появление flash-сообщения', 'error'
 					end
 					it_should_behave_like 'исчезновение flash-сообщения', 'error'
@@ -177,14 +183,14 @@ describe 'Страницы пользователя,' do
 					describe 'имя,' do
 						before {
 							fill_in 'Имя', with: 'Человече'
-							click_button(submit_button_create)
+							click_button(create_element)
 						}
 						it_should_behave_like 'появление flash-сообщения', 'error'
 					end
 					describe 'электронная почта,' do
 						before {
 							fill_in 'Электронная почта', with: 'user@example.we'
-							click_button(submit_button_create)
+							click_button(create_element)
 						}
 						it_should_behave_like 'появление flash-сообщения', 'error'
 					end
@@ -330,7 +336,7 @@ describe 'Страницы пользователя,' do
 						fill_in email_label, with: new_email
 						fill_in password_label, with: user.password
 						fill_in password2_label, with: user.password
-						click_button submit_button_edit
+						click_button edit_element
 					}
 					it_should_behave_like 'появление flash-сообщения', 'success', 'Изменения приняты'
 					it_should_behave_like 'страница пользователя', 'своя', false
@@ -339,7 +345,7 @@ describe 'Страницы пользователя,' do
 				end
 
 				describe '(5) c неверными данными,' do
-					before { click_button submit_button_edit }
+					before { click_button edit_element }
 					it_should_behave_like 'появление flash-сообщения', 'error'
 					it_should_behave_like 'исчезновение flash-сообщения'
 					specify { expect(user.reload.name).to eq user.name }
@@ -367,73 +373,113 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
-	pending 'удаление,' do
+	describe 'удаление,' do
 		let(:user) { FactoryGirl.create(:user) }
 		let(:other_user) { FactoryGirl.create(:user) }
-		let(:admin_user) { FactoryGirl.create(:admin) }
+		let(:admin) { FactoryGirl.create(:admin) }
 		let(:wrong_id) { User.maximum(:id)+1000 }
 
-		pending 'НЕзарегистрированным пользователем,' do
-			pending 'http-перенаправление,' do
+		describe 'НЕзарегистрированным пользователем,' do
+			describe 'http-перенаправление,' do
 				before { delete user_path(user) }
 				specify { expect(response).to redirect_to(root_path) }
 			end
-			pending 'интактность БД,' do
+			describe 'интактность БД,' do
 				specify{ expect{delete user_path(user)}.not_to change(User,:count) }
 			end
 		end
 
-		pending 'зарегистрированным пользователем,' do
+		describe 'зарегистрированным пользователем,' do
 
-			pending 'через web-интерфейс, своей' do
+			describe 'через web-интерфейс, своей' do
 				before { 
 					sign_in user 
 					visit user_path(user)
-					click_button 'Удалить'
+					click_link delete_element
 				}
-				it_should_behave_like 'появление flash-сообщения', 'success', 'Пользователь удалён'
-				it_should_behave_like 'страница с названием', title:'Главная страница', heading:'Добро пожаловать'
+				it_should_behave_like 'появление flash-сообщения', 'success', "Пользователь удалён"
+				it_should_behave_like 'главная страница'
 				it_should_behave_like 'НЕзарегистрированный пользователь'
 			end
 
-			pending 'http-запросом,' do
+			describe 'http-запросом,' do
 				before { sign_in user, no_capybara:true }
 				
-				pending 'своей,' do
-					specify{ expect{delete user_path(user) }.to change(User,:count).by(-1) }
+				describe 'своей,' do
+					describe '1,' do
+						specify{ expect{delete user_path(user) }.to change(User,:count).by(-1) }
+					end
 					
-					specify{ expect(User.find_by(id:user.id)).to eq nil }
-					specify{ expect(response).to redirect_to root_path }
+					describe '2,' do
+						before { delete user_path(user) }
+						specify{ expect(response).to redirect_to root_path }
+					end
+					
+					describe '3,' do
+						before { delete user_path(user) }
+						specify{ expect(User.find_by(id:user.id)).to eq nil }
+					end
 				end
 
-				pending 'чужой,' do
-					specify{ expect{ delete user_path(other_user)}.not_to change(User,:count) }
-					specify{ expect(response).to redirect_to root_path }
+				describe 'чужой,' do
+					describe '1,' do
+						specify{ expect{ delete user_path(other_user) }.not_to change(User,:count) }
+					end
+					describe '2,' do
+						before { delete user_path(other_user) }
+						specify{ expect(response).to redirect_to root_path }
+					end
 				end
 
-				pending 'несуществующей,' do
+				describe 'несуществующей,' do
 					specify{ expect{delete user_path(:wrong_id)}.not_to change(User,:count) }
 					specify{ expect(response).to redirect_to root_path }
 				end
 			end
-			
-			pending 'администратором,' do
-				pending 'своей,' do
-				end
+		end
 
-				pending 'не своей,' do
-					before { sign_in admin, no_capybara:true }
+		describe 'администратором,' do
+			before { sign_in admin }
 
-					pending 'чужой,' do
-					end
-
-					pending 'несуществующей,' do
-					end
-				end
+			describe 'своей,' do
+				before {
+					#sign_in admin
+					visit user_path(admin)
+				}
+				specify{ expect{ click_link delete_element }.not_to change(User,:count) }
+				it_should_behave_like 'появление flash-сообщения', 'Администратор не может удалить сам себя'
+				it_should_behave_like 'страница пользователя', 'своя', true
 			end
+
+			describe 'чужой,' do
+				before { visit user_path(user) }
+				specify{ expect{ click_link delete_element }.to change(User,:count).by(-1) }
+				it_should_behave_like 'появление flash-сообщения', 'success', "Пользователь удалён"
+				it_should_behave_like 'страница с названием', title:'Пользователи'
+			end	
+
+			describe 'несуществующей,' do
+				specify { expect{ delete user_path(wrong_id)}.not_to change(User,:count) }
+				it_should_behave_like 'появление flash-сообщения', 'error', 'Несуществующий пользователь'
+				it_should_behave_like 'страница с названием', title:'Пользователи'
+			end
+
+			# describe 'не своей,' do
+			# 	before { sign_in admin, no_capybara:true }
+
+			# 	describe 'чужой,' do
+			# 		specify { expect{ delete user_path(user)}.to change(User,:count).by(-1) }
+			# 		specify { expect{ delete user_path(other_user)}.to change(User,:count).by(-1) }
+			# 	end
+
+			# 	describe 'несуществующей,' do
+			# 		specify { expect{ delete user_path(wrong_id)}.not_to change(User,:count) }
+			# 	end
+			# end
 		end
 	end
 
 	pending 'защищённые параметры,' do
 	end
 end
+

@@ -49,11 +49,23 @@ class UsersController < ApplicationController
 	end
 
 	def destroy
-
+		if @user.destroy
+			#flash[:notice] = "Пользователь «#{@user.name}» удалён"
+			flash[:success] = "Пользователь удалён"
+			@user=nil
+		else
+			flash[:error] = "Ошибка удаления пользователя «#{@user.name}»"
+		end
+		
+		redirect_to root_path
 	end
 	
 
 	private
+
+		def id2user
+			User.find_by(id: params[:id])
+		end
 
 		def user_params
 			params.require(:user).permit(
@@ -88,7 +100,7 @@ class UsersController < ApplicationController
 			end
 		end
 
-		def admin_users
-			true
+		def destroy_users
+			@user = id2user
 		end
 end
