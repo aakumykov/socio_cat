@@ -2,6 +2,7 @@ namespace :db do
 	desc "Fill database with sample data"
 	task populate: :environment do
 		create_cards
+		create_users
 		create_admin_user
 	end
 end
@@ -13,6 +14,16 @@ def create_cards
 			content: Faker::Lorem.paragraph,
 		)
 	end
+end
+
+def create_users
+	User.create!(
+		name: 'Демьян',
+		email: 'debian@linux.com',
+		password: 'Qwerty123!@#',
+		password_confirmation: 'Qwerty123!@#',
+		#admin: false,
+	)
 end
 
 def create_admin_user
