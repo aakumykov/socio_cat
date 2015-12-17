@@ -19,6 +19,7 @@ describe 'User,' do
 	it { should respond_to(:password_confirmation) }
 	it { should respond_to(:authenticate) }
 	it { should respond_to(:remember_token) }
+	it { should respond_to(:admin) }
 
 	it { should be_valid }
 
@@ -135,5 +136,13 @@ describe 'User,' do
 	describe 'непустой remember_token,' do
 		before { @user.save }
 		its(:remember_token) { should_not be_blank }
+	end
+
+	describe 'флаг администратора,' do
+		before { 
+			@user.save!
+			@user.toggle!(:admin)
+		}
+		it { should be_admin }
 	end
 end
