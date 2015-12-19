@@ -28,6 +28,13 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
+	shared_examples_for 'страница пользователя 2' do
+		let(:title) { "Страница пользователя «#{name}»" }
+		
+		it { should have_title(full_title(title)) }
+		it { should have_selector('h1',text:title) }
+	end
+
 	shared_examples_for 'форма редактирования' do
 		it { should have_selector('label',text:'Имя') }
 		it { should have_selector(:xpath, "//input[@name='user[name]']") }
@@ -206,7 +213,10 @@ describe 'Страницы пользователя,' do
 
 			describe 'своей страницы,' do
 				before { visit user_path(user) }
-				it_should_behave_like 'страница пользователя', 'своя'
+				#it_should_behave_like 'страница пользователя', 'своя'
+				it_should_behave_like 'страница пользователя 2' do
+					let(:name) { user.name }
+				end
 			end
 			
 			describe 'чужой страницы,' do
