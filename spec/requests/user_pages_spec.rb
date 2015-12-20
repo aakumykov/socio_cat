@@ -24,23 +24,29 @@ describe 'Страницы пользователя,' do
 		it { should_not have_selector("div.alert.alert-#{mode}") }
 	end
 
-	shared_examples_for 'страница пользователя' do
-		it { should have_title( full_title("Страница пользователя «#{page_user.name}»") ) }
-		it_should_behave_like 'данные пользователя' do
-			let(:data_user) { page_user }
-		end
+	shared_examples_for 'страница с названием' do
+		it { should have_title( full_title(title) ) }
+		it { should have_selector('h1',text:heading) }
 	end
 
-	shared_examples_for 'данные пользователя' do
+	shared_examples_for 'страница пользователя' do
+		it_should_behave_like 'страница с названием' do
+			let(:title) { "Страница пользователя «#{the_user.name}»" }
+			let(:heading) { "Страница пользователя «#{the_user.name}»" }
+		end
+		
 		it { should have_content('Имя:') }
-		it { should have_content(data_user.name) }
+		it { should have_content(the_user.name) }
 		
 		it { should have_content('Электронная почта:') }
-		it { should have_content(data_user.email) }
+		it { should have_content(the_user.email) }
 	end
 
 	shared_examples_for 'страница входа' do
-		#it_should_behave_like 'страница с названием', title:'Вход на сайт'
+		it_should_behave_like 'страница с названием' do
+			let(:title) {'Вход на сайт'}
+			let(:heading) {'Вход на сайт'}
+		end
 		it { should have_selector(:xpath,"//input[@type='submit']")}
 		it { should have_selector(:xpath,"//input[@value='Войти']")}
 	end
@@ -65,11 +71,13 @@ describe 'Страницы пользователя,' do
 					sign_in user
 					visit user_path(user)
 				}
-				it_should_behave_like 'страница пользователя' do
-					let(:page_user) { user }
+				it_should_behave_like 'страница пользователя' do 
+					let(:the_user) { user }
 				end
 			end
 		end
+
+		
 	end
 
 
