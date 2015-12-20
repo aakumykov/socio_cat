@@ -15,7 +15,7 @@ class UsersController < ApplicationController
 	def create
 		@user = User.new(user_params)
 		if @user.save
-			flash[:success] = "Добро пожаловать на сайт!"
+			flash[:success] = "Добро пожаловать на сайт, «#{@user.name}»!"
 			sign_in @user
 			redirect_to user_path(@user)
 		else
@@ -43,7 +43,7 @@ class UsersController < ApplicationController
 	def update
 		# @user устанавливается в editor_users()
 		if @user.update_attributes(user_params)
-			flash[:success] = "Изменения приняты"
+			flash[:success] = "Изменения профиля приняты"
 			redirect_to user_path(@user)
 		else
 			flash.now[:error] = "Изменения отклонены"
@@ -52,9 +52,10 @@ class UsersController < ApplicationController
 	end
 
 	def destroy
+		@user = User.find_by(id: params[:id])
+
 		if @user.destroy
-			#flash[:notice] = "Пользователь «#{@user.name}» удалён"
-			flash[:success] = "Пользователь удалён"
+			flash[:notice] = "Пользователь «#{@user.name}» удалён"
 			@user=nil
 		else
 			flash[:error] = "Ошибка удаления пользователя «#{@user.name}»"
@@ -99,7 +100,7 @@ class UsersController < ApplicationController
 		def editor_users
 			@user = User.find_by(id: params[:id])
 
-			if @user != current_user
+			if current_user != @user
 				flash[:error] = 'Нельзя редактировать другого пользователя'
 				redirect_to user_path(@user)
 			end
