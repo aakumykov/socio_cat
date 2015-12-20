@@ -25,8 +25,18 @@ describe 'Страницы пользователя,' do
 	end
 
 	shared_examples_for 'страница пользователя' do
-		#it { should have_title( full_title(the_title) ) }
-		it { should have_title( full_title("Страница пользователя «#{the_user.name}»") ) }
+		it { should have_title( full_title("Страница пользователя «#{page_user.name}»") ) }
+		it_should_behave_like 'данные пользователя' do
+			let(:data_user) { page_user }
+		end
+	end
+
+	shared_examples_for 'данные пользователя' do
+		it { should have_content('Имя:') }
+		it { should have_content(data_user.name) }
+		
+		it { should have_content('Электронная почта:') }
+		it { should have_content(data_user.email) }
 	end
 
 	shared_examples_for 'страница входа' do
@@ -56,8 +66,7 @@ describe 'Страницы пользователя,' do
 					visit user_path(user)
 				}
 				it_should_behave_like 'страница пользователя' do
-					#let(:the_title) { "Страница пользователя «#{user.name}»"}
-					let(:the_user) { user }
+					let(:page_user) { user }
 				end
 			end
 		end
