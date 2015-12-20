@@ -1,9 +1,12 @@
 class UsersController < ApplicationController
 
-	before_action :signed_in_users, only: [:index, :show, :edit, :update, :destroy] #да
-	before_action :not_signed_in_users, only: [:new, :create] #да
-	before_action :editor_users, only: [:edit, :update] #да
-	before_action :admin_users, only: [:destroy] # ещё нет
+	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
+
+	before_action :not_signed_in_users, only: [:new, :create]
+	before_action :signed_in_users, only: [:show, :edit, :update, :destroy]
+	before_action :editor_users, only: [:edit, :update]
+	before_action :admin_users, only: [:destroy]
+
 
 	def new
 		@user = User.new
@@ -63,10 +66,6 @@ class UsersController < ApplicationController
 
 	private
 
-		def id2user
-			User.find_by(id: params[:id])
-		end
-
 		def user_params
 			params.require(:user).permit(
 				:name,
@@ -74,6 +73,14 @@ class UsersController < ApplicationController
 				:password,
 				:password_confirmation,
 			)
+		end
+
+		def reject_nil_target
+			#if params[:id].nil? || User.find_by(id: params[:id]).nil?
+			if User.find_by(id: params[:id]).nil?
+				flash[:error] = 'Несуществующий объект'
+				redirect_to root_path
+			end
 		end
 
 		def signed_in_users
@@ -84,23 +91,24 @@ class UsersController < ApplicationController
 
 		def not_signed_in_users
 			if signed_in?
-				flash[:notice] = 'Вы уже зарегистрированы'
+				flash[:notice] = 'Вы уже вошли на сайт'
 				redirect_to user_path(current_user)
 			end
 		end
 
 		def editor_users
 			@user = User.find_by(id: params[:id])
-			
-			if @user.nil?
-				redirect_to users_path
-			elsif @user != current_user
+
+			if @user != current_user
 				flash[:error] = 'Нельзя редактировать другого пользователя'
 				redirect_to user_path(@user)
 			end
 		end
 
 		def admin_users
-			@user = id2user
+			if not current_user.admin?
+				flash[:error] = 'Доступно только администратору'
+				redirect_to root_path
+			end
 		end
 end
