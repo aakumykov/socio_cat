@@ -24,19 +24,23 @@ describe 'Страницы пользователя,' do
 		it { should_not have_selector("div.alert.alert-#{mode}") }
 	end
 
-	shared_examples_for 'страница' do |data|
-		title = data[:title]
-		heading = data[:heading] || title
+	shared_examples_for 'страница' do |title,heading|
+		heading ||= title
 		it { should have_title( full_title(title) ) }
 		it { should have_selector('h1',text:heading) }
 	end
 
 	shared_examples_for 'главная страница' do
-		it_should_behave_like 'страница', title:'Соционический каталог', heading:'Добро пожаловать'
+		it_should_behave_like 'страница' do
+			let(:title) { 'Соционический каталог' }
+			let(:heading) { 'Добро пожаловать' }
+		end
 	end
 
 	shared_examples_for 'страница входа' do
-		it_should_behave_like 'страница', title:'Вход на сайт'
+		it_should_behave_like 'страница' do
+			let(:title) { 'Вход на сайт' }
+		end
 		it { should have_selector(:xpath,"//input[@type='submit']")}
 		it { should have_selector(:xpath,"//input[@value='Войти']")}
 	end
@@ -46,13 +50,18 @@ describe 'Страницы пользователя,' do
 		it_should_behave_like 'появление flash-сообщения', 'notice', 'Сначала войдите на сайт'
 	end
 
-	shared_examples_for 'страница пользователя' do |the_user|
-		it_should_behave_like 'страница', title:"Страница пользователя «#{the_user.name}»"
+	shared_examples_for 'страница пользователя' do |name|
+		it_should_behave_like 'страница' do
+			let(:title) { "Страница пользователя «#{name}»"}
+			let(:heading) { "Страница пользователя «#{name}»"}
+		end
 		it_should_behave_like 'данные пользователя'
 	end
 
-	shared_examples_for 'страница редактирования' do |the_user|
-		it_should_behave_like 'страница', title:"Редактирование пользователя «#{the_user.name}»"
+	shared_examples_for 'страница редактирования' do |name|
+		it_should_behave_like 'страница' do
+			let(:title) { "Редактирование пользователя «#{name}»" }
+		end
 		it_should_behave_like 'форма редактирования'
 	end
 
@@ -97,7 +106,7 @@ describe 'Страницы пользователя,' do
 				}
 				it_should_behave_like 'появление flash-сообщения', 'Вы уже вошли на сайт'
 				it_should_behave_like 'страница пользователя' do
-					let(:the_user) { user }
+					let(:name) { user.name }
 				end
 			end
 		end
@@ -114,7 +123,7 @@ describe 'Страницы пользователя,' do
 					visit user_path(user) 
 				}
 				it_should_behave_like 'страница пользователя' do
-					let(:the_user) { user }
+					let(:name) { user.name }
 				end
 			end
 		end
@@ -125,15 +134,16 @@ describe 'Страницы пользователя,' do
 					sign_in user
 					visit edit_user_path(user)
 				}
-				it_should_behave_like 'страница', title:"Редактирование пользователя «#{user.name}»"
-				it_should_behave_like 'форма редактирования'
+				it_should_behave_like 'страница редактирования' do
+					let(:name) { user.name }
+				end
 			end
 
 			context 'не редактор,' do
 				before { visit edit_user_path(other_user) }
 				it_should_behave_like 'появление flash-сообщения', 'Нельзя редактировать другого пользователя'
 				it_should_behave_like 'страница пользователя' do
-					let(:the_user) { other_user }
+					let(:name) { other_user.name }
 				end
 			end
 		end
@@ -162,7 +172,7 @@ describe 'Страницы пользователя,' do
 			context 'объект существует' do
 				before { visit user_path(user) }
 				it_should_behave_like 'страница пользователя' do
-					let(:the_user) { user }
+					let(:name) { user.name }
 				end
 			end
 		end
