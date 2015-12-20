@@ -24,7 +24,7 @@ describe 'Страницы пользователя,' do
 		it { should_not have_selector("div.alert.alert-#{mode}") }
 	end
 
-	shared_examples_for 'страница c названием' do
+	shared_examples_for 'страница пользователя' do
 		#it { should have_title( full_title(the_title) ) }
 		it { should have_title( full_title("Страница пользователя «#{the_user.name}»") ) }
 	end
@@ -55,7 +55,7 @@ describe 'Страницы пользователя,' do
 					sign_in user
 					visit user_path(user)
 				}
-				it_should_behave_like 'страница c названием' do
+				it_should_behave_like 'страница пользователя' do
 					#let(:the_title) { "Страница пользователя «#{user.name}»"}
 					let(:the_user) { user }
 				end
