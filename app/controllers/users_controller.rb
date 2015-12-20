@@ -19,7 +19,7 @@ class UsersController < ApplicationController
 			sign_in @user
 			redirect_to user_path(@user)
 		else
-			flash.now[:error] = 'ОШИБКА: пользователь не создан'
+			flash.now[:error] = 'ОШИБКА. Пользователь не создан'
 			render 'new'
 		end
 	end

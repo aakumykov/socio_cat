@@ -2,13 +2,20 @@ require 'spec_helper'
 
 describe 'Страницы пользователя,' do
 
-	let(:create_button) { 'Создать' }
+	let!(:admin) { FactoryGirl.create(:admin) }
+	let!(:user) { FactoryGirl.create(:user) }
+	let!(:other_user) { FactoryGirl.create(:user) }
+	let(:wrong_id) { User.maximum(:id)+1 }
+
+	let(:register_button) { 'Зарегистрироваться' }
 	let(:edit_button) { 'Изменить' }
+	let(:save_button) { 'Сохранить' }
 	let(:delete_button) { 'Удалить' }
 
 	let(:test_password) { 'Qwerty123!@#' }
 
 	subject { page }
+
 
 
 	shared_examples_for 'появление flash-сообщения' do |mode,text=''|
@@ -69,6 +76,7 @@ describe 'Страницы пользователя,' do
 			let(:heading) { "Редактирование пользователя «#{the_user.name}»" }
 		end
 		it_should_behave_like 'форма редактирования'
+		pending 'кнопка'
 	end
 
 	shared_examples_for 'страница регистрации' do
@@ -77,6 +85,7 @@ describe 'Страницы пользователя,' do
 			let(:heading) { 'Регистрация пользователя' }
 		end
 		it_should_behave_like 'форма редактирования'
+		pending 'кнопка'
 	end
 
 	shared_examples_for 'форма редактирования' do
@@ -97,14 +106,8 @@ describe 'Страницы пользователя,' do
 
 
 
-
 	describe 'предфильтры,' do
 		pending 'Один тест на группу! Следи за правильным включением предфильтров!'
-
-		let!(:admin) { FactoryGirl.create(:admin) }
-		let!(:user) { FactoryGirl.create(:user) }
-		let!(:other_user) { FactoryGirl.create(:user) }
-		let(:wrong_id) { User.maximum(:id)+1 }
 
 		describe 'not_signed_in_users(),' do
 			# должен отказывать вошедшим
@@ -215,6 +218,36 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
-	pending 'регистрация пользователя,'
+	describe 'регистрация пользователя,' do
+		before { visit register_path }
+		it_should_behave_like 'страница регистрации'
+
+		describe 'отправка данных,' do
+			context 'верных,' do
+				before {
+					fill_in 'Имя', with: Faker::Name.first_name
+					fill_in 'Электронная почта', with: Faker::Internet.email
+					fill_in 'Пароль', with: test_password
+					fill_in 'Подтверждение пароля', with: test_password
+				}
+				specify{ expect{ click_button register_button}.to change(User,:count).by(1) }
+
+				describe 'уведомление об успехе,' do
+					before { click_button register_button }
+					it_should_behave_like 'появление flash-сообщения', 'success', 'Добро пожаловать'
+				end
+			end
+			context 'неверных,' do
+				specify{ expect{ click_button register_button}.not_to change(User,:count) }
+
+				describe 'уведомление об ошибке,' do
+					before { click_button register_button }
+					it_should_behave_like 'появление flash-сообщения', 'error', 'ОШИБКА. Пользователь не создан'
+				end
+			end
+		end
+	end
+
+
 
 end
