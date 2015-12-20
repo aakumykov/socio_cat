@@ -92,7 +92,7 @@ class UsersController < ApplicationController
 
 		def not_signed_in_users
 			if signed_in?
-				flash[:notice] = 'Вы уже вошли на сайт'
+				flash[:error] = 'Вы уже зарегистрированы'
 				redirect_to user_path(current_user)
 			end
 		end
@@ -100,7 +100,7 @@ class UsersController < ApplicationController
 		def editor_users
 			@user = User.find_by(id: params[:id])
 
-			if current_user != @user
+			if (current_user != @user) && (not current_user.admin?)
 				flash[:error] = 'Нельзя редактировать другого пользователя'
 				redirect_to user_path(@user)
 			end

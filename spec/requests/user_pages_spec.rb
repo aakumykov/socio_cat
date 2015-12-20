@@ -71,6 +71,14 @@ describe 'Страницы пользователя,' do
 		it_should_behave_like 'форма редактирования'
 	end
 
+	shared_examples_for 'страница регистрации' do
+		it_should_behave_like 'страница с названием' do
+			let(:title) { 'Регистрация пользователя' }
+			let(:heading) { 'Регистрация пользователя' }
+		end
+		it_should_behave_like 'форма редактирования'
+	end
+
 	shared_examples_for 'форма редактирования' do
 		it { should have_selector('label',text:'Имя') }
 		it { should have_selector(:xpath, "//input[@name='user[name]']") }
@@ -99,23 +107,28 @@ describe 'Страницы пользователя,' do
 		let(:wrong_id) { User.maximum(:id)+1 }
 
 		describe 'not_signed_in_users(),' do
-			context 'невошедший пользователь,' do
-				before { visit user_path(user) }
-				it_should_behave_like 'страница входа'
-			end
+			# должен отказывать вошедшим
 
 			context 'вошедший пользователь,' do
 				before {
 					sign_in user
-					visit user_path(user)
+					visit register_path
 				}
-				it_should_behave_like 'страница пользователя' do 
+				it_should_behave_like 'появление flash-сообщения', 'error', 'Вы уже зарегистрированы'
+				it_should_behave_like 'страница пользователя' do
 					let(:the_user) { user }
 				end
+			end
+
+			context 'невошедший пользователь,' do
+				before { visit register_path }
+				it_should_behave_like 'страница регистрации'
 			end
 		end
 
 		describe 'signed_in_users(),' do
+			# должен отказывать вошедшим
+
 			context 'невошедший пользователь,' do
 				before { visit user_path(user) }
 				it_should_behave_like 'требование входа'
@@ -133,37 +146,58 @@ describe 'Страницы пользователя,' do
 		end
 
 		describe 'editor_users(),' do
-			before { sign_in user }
+			# должен отказывать всем кроме владельца и админа
 
-			context 'редактор,' do
-				before { visit edit_user_path(user) }
+			context 'не редактор,' do
+				before { 
+					sign_in other_user
+					visit edit_user_path(user)
+				}
+				it_should_behave_like 'появление flash-сообщения', 'error', 'Нельзя редактировать другого пользователя'
+				it_should_behave_like 'страница пользователя' do
+					let(:the_user) { user }
+				end
+			end
+
+			context 'владелец,' do
+				before { 
+					sign_in user
+					visit edit_user_path(user)
+				}
 				it_should_behave_like 'страница редактирования' do
 					let(:the_user) { user }
 				end
 			end
 
-			context 'не редактор,' do
-				before { visit edit_user_path(other_user) }
-				it_should_behave_like 'появление flash-сообщения', 'error', 'Нельзя редактировать другого пользователя'
-				it_should_behave_like 'страница пользователя' do
-					let(:the_user) { other_user }
+			context 'администратор,' do
+				before { 
+					sign_in admin 
+					visit edit_user_path(user)
+				}
+				it_should_behave_like 'страница редактирования' do
+					let(:the_user) { user }
 				end
 			end
 		end
 
 		describe 'admin_users(),' do
+			# должен отказывать всем загеристрированным кроме админа
+			# (незарегистрированных отшивает другой фильтр)
+
+			describe 'не админ,' do
+				before { sign_in other_user, no_capybara: true }
+				specify{ expect{ delete user_path(user) }.not_to change(User,:count) }
+			end			
+
 			describe 'админ,' do
 				before { sign_in admin, no_capybara: true }
 				specify{ expect{ delete user_path(user) }.to change(User,:count).by(-1) }
 			end
-
-			describe 'не админ,' do
-				before { sign_in user, no_capybara: true }
-				specify{ expect{ delete user_path(other_user) }.not_to change(User,:count) }
-			end			
 		end
 
 		describe 'reject_nil_target(),' do
+			# отклоняет действия над несуществующим пользователем
+
 			before { sign_in user  }
 
 			context 'объекта не существует' do
@@ -181,5 +215,6 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
+	pending 'регистрация пользователя,'
 
 end
