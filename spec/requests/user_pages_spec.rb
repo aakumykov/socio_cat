@@ -2,9 +2,9 @@ require 'spec_helper'
 
 describe 'Страницы пользователя,' do
 
-	let!(:admin) { FactoryGirl.create(:admin) }
-	let!(:user) { FactoryGirl.create(:user) }
-	let!(:other_user) { FactoryGirl.create(:user) }
+	let(:admin) { FactoryGirl.create(:admin) }
+	let(:user) { FactoryGirl.create(:user) }
+	let(:other_user) { FactoryGirl.create(:user) }
 	let(:wrong_id) { User.maximum(:id)+1 }
 
 	let(:register_button) { 'Зарегистрироваться' }
@@ -57,7 +57,7 @@ describe 'Страницы пользователя,' do
 		it_should_behave_like 'появление flash-сообщения', 'notice', 'Сначала войдите на сайт'
 	end
 
-	shared_examples_for 'страница пользователя' do
+	shared_examples_for 'страница пользователя' do |mode|
 		it_should_behave_like 'страница с названием' do
 			let(:title) { "Страница пользователя «#{the_user.name}»" }
 			let(:heading) { "Страница пользователя «#{the_user.name}»" }
@@ -68,6 +68,19 @@ describe 'Страницы пользователя,' do
 		
 		it { should have_content('Электронная почта:') }
 		it { should have_content(the_user.email) }
+
+		case mode
+		when 'владелец' || 'для админа'
+			it { should have_link(edit_button, href: edit_user_path(the_user)) }
+		when 'админ'
+			it { should have_link(delete_button) }
+			#it { should have_selector(:xpath,"//a[text()='#{delete_button}']") }
+			#it { should have_selector(:xpath,"//a[text()='#{delete_button}' @href='#{user_path(the_user)}']") }
+		else
+			it { should_not have_link(edit_button) }
+			it { should_not have_link(delete_button) }
+		end
+			
 	end
 
 	shared_examples_for 'страница редактирования' do
@@ -118,7 +131,7 @@ describe 'Страницы пользователя,' do
 					visit register_path
 				}
 				it_should_behave_like 'появление flash-сообщения', 'error', 'Вы уже зарегистрированы'
-				it_should_behave_like 'страница пользователя' do
+				it_should_behave_like 'страница пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
 			end
@@ -130,7 +143,7 @@ describe 'Страницы пользователя,' do
 		end
 
 		describe 'signed_in_users(),' do
-			# должен отказывать вошедшим
+			# должен отказывать не вошедшим
 
 			context 'невошедший пользователь,' do
 				before { visit user_path(user) }
@@ -142,7 +155,7 @@ describe 'Страницы пользователя,' do
 					sign_in user
 					visit user_path(user) 
 				}
-				it_should_behave_like 'страница пользователя' do
+				it_should_behave_like 'страница пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
 			end
@@ -211,7 +224,7 @@ describe 'Страницы пользователя,' do
 
 			context 'объект существует' do
 				before { visit user_path(user) }
-				it_should_behave_like 'страница пользователя' do
+				it_should_behave_like 'страница пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
 			end
@@ -254,7 +267,7 @@ describe 'Страницы пользователя,' do
 				sign_in user
 				visit user_path(user) 
 			}
-			it_should_behave_like 'страница пользователя', 'своя' do
+			it_should_behave_like 'страница пользователя', 'владелец' do
 				let(:the_user) { user }
 			end
 			
@@ -277,7 +290,7 @@ describe 'Страницы пользователя,' do
 				 	
 				 	specify{ expect(user.reload.name).to eq new_name }
 				 	
-				 	it_should_behave_like 'страница пользователя' do
+				 	it_should_behave_like 'страница пользователя', 'владелец' do
 				 		let(:the_user) { User.find_by(id: user.id) }
 				 	end
 				end
@@ -285,6 +298,6 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
-	
+
 
 end
