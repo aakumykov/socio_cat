@@ -3,7 +3,7 @@ class UsersController < ApplicationController
 	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
 
 	before_action :not_signed_in_users, only: [:new, :create]
-	before_action :signed_in_users, only: [:show, :edit, :update, :destroy]
+	before_action :signed_in_users, only: [:show, :edit, :update]
 	before_action :editor_users, only: [:edit, :update]
 	before_action :admin_users, only: [:destroy]
 
