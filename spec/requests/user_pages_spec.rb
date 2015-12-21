@@ -248,6 +248,43 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
+	describe 'просмотр и редактирование пользователя,' do
+		describe 'просмотр,' do
+			before { 
+				sign_in user
+				visit user_path(user) 
+			}
+			it_should_behave_like 'страница пользователя', 'своя' do
+				let(:the_user) { user }
+			end
+			
+			describe 'редактирование,' do
+				before { click_link edit_button }
+				
+				it_should_behave_like 'страница редактирования' do
+					let(:the_user) { user }
+				end
 
+				describe 'изменение данных,' do
+					let(:new_name) { Faker::Name.first_name }
+				 	
+				 	before {
+				 		fill_in 'Имя', with: new_name
+				 		fill_in 'Пароль', with: test_password
+				 		fill_in 'Подтверждение пароля', with: test_password
+				 		click_button save_button
+				 	}
+				 	
+				 	specify{ expect(user.reload.name).to eq new_name }
+				 	
+				 	it_should_behave_like 'страница пользователя' do
+				 		let(:the_user) { User.find_by(id: user.id) }
+				 	end
+				end
+			end
+		end
+	end
+
+	
 
 end
