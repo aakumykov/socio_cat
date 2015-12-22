@@ -55,13 +55,13 @@ class UsersController < ApplicationController
 		@user = User.find_by(id: params[:id])
 
 		if @user.destroy
-			flash[:notice] = "Пользователь «#{@user.name}» удалён"
+			flash[:success] = "Пользователь «#{@user.name}» удалён"
 			@user=nil
 		else
 			flash[:error] = "Ошибка удаления пользователя «#{@user.name}»"
 		end
 		
-		redirect_to root_path
+		redirect_to users_path
 	end
 	
 

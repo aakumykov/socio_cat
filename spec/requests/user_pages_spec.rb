@@ -10,7 +10,7 @@ describe 'Страницы пользователя,' do
 	let(:register_button) { 'Зарегистрироваться' }
 	let(:edit_button) { 'Изменить' }
 	let(:save_button) { 'Сохранить' }
-	let(:delete_button) { 'Удалить2' }
+	let(:delete_button) { 'Удалить' }
 
 	let(:test_password) { 'Qwerty123!@#' }
 
@@ -72,18 +72,11 @@ describe 'Страницы пользователя,' do
 		when 'владелец' || 'для админа'
 			it { should have_link(edit_button, href: edit_user_path(the_user)) }
 		when 'админ'
-			#it { should have_link(delete_button) }
-			#it { should have_selector(:xpath,"//a[@href='#{user_path(the_user)}']") }
-			#it { should have_selector(:xpath,"//a/text(#{delete_button})") }
-			#it { should have_selector(:xpath,"//a[@href='#{user_path(the_user)}']/text(#{delete_button})") }
-			#it { should have_selector(:xpath,"//a[text(#{delete_button})]") }
-			it { should have_selector(:xpath,"//a[@href='#{user_path(the_user)}' text(#{delete_button})]") }
-			#it { should have_selector(:xpath,"//a[text()='#{delete_button}' @href='#{user_path(the_user)}']") }
+			it { should have_selector(:xpath,"//a[@href='#{user_path(the_user)}' and @data-method='delete' and text()='#{delete_button}']") }
 		else
 			it { should_not have_link(edit_button) }
 			it { should_not have_link(delete_button) }
 		end
-			
 	end
 
 	shared_examples_for 'страница редактирования' do
@@ -269,6 +262,10 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
+	pending 'список пользователей,' do
+
+	end
+
 	describe 'просмотр и редактирование пользователя,' do
 		describe 'просмотр,' do
 			before { 
@@ -306,6 +303,35 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
+	describe 'удаление пользователя,' do
+		before {
+			user.save!
+			other_user.save!
+			sign_in admin
+			visit user_path(user)
+		}
 
+		describe 'вид страницы,' do
+			it_should_behave_like 'страница пользователя', 'админ' do
+				let(:the_user) { user }
+			end
+		end
 
+		describe 'удаление кнопкой,' do
+			describe 'уменьшение количества пользователей,' do
+				specify{ expect{ click_link delete_button }.to change(User,:count).by(-1) }
+			end
+			
+			describe 'сообщение об успехе,' do
+				before { click_link delete_button }
+				it_should_behave_like 'появление flash-сообщения', 'success', 'Пользователь'
+				it_should_behave_like 'появление flash-сообщения', 'success', 'удалён'
+				#it_should_behave_like 'список пользователей'
+				it_should_behave_like 'страница с названием' do
+					let(:title) { 'Пользователи' }
+					let(:heading) { 'Пользователи' }
+				end
+			end
+		end
+	end
 end
