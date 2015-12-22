@@ -129,7 +129,10 @@ describe 'Страницы пользователя,' do
 
 
 	describe 'предфильтры,' do
-		pending 'Один тест на группу! Следи за правильным включением предфильтров!'
+		# --------------------------------------------------------------------#
+		# Один тест на группу, обрабатываемую предфильтром.
+		# Следи за из корректным включением!
+		# --------------------------------------------------------------------#
 
 		describe 'not_signed_in_users(),' do
 			# должен отказывать вошедшим
@@ -376,6 +379,20 @@ describe 'Страницы пользователя,' do
 
 	# итого тест 7 действий
 
-	pending 'защищённые параметры,' do
+	describe 'запрещённые атрибуты,' do
+		let(:user_params) {
+			{ user: {
+				name: Faker::Name.first_name,
+				email: Faker::Internet.email,
+				password: test_password,
+				password_confirmation: test_password,
+				admin: true
+			}}
+		}
+		before { 
+			sign_in user, no_capybara: true
+			patch user_path(user), user_params
+		}
+		specify{ expect(user.reload).not_to be_admin }
 	end
 end
