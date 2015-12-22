@@ -89,7 +89,7 @@ describe 'Страницы пользователя,' do
 			let(:heading) { "Редактирование пользователя «#{the_user.name}»" }
 		end
 		it_should_behave_like 'форма редактирования'
-		pending 'кнопка'
+		it { should have_selector(:xpath,"//input[@type='submit' and @value='#{save_button}']") }
 	end
 
 	shared_examples_for 'список пользователей' do
@@ -108,7 +108,7 @@ describe 'Страницы пользователя,' do
 			let(:heading) { 'Регистрация пользователя' }
 		end
 		it_should_behave_like 'форма редактирования'
-		pending 'кнопка'
+		it { should have_selector(:xpath,"//input[@type='submit' and @value='#{register_button}']") }
 	end
 
 	shared_examples_for 'форма редактирования' do
