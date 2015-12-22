@@ -30,9 +30,9 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
-	shared_examples_for 'исчезновение flash-сообщения' do |mode|
+	shared_examples_for 'исчезновение flash-сообщения' do
 		before { visit root_path }
-		it { should_not have_selector("div.alert.alert-#{mode}") }
+		it { should_not have_selector("div.alert") }
 	end
 
 	shared_examples_for 'страница с названием' do
@@ -272,6 +272,7 @@ describe 'Страницы пользователя,' do
 				describe 'уведомление об ошибке,' do
 					before { click_button register_button }
 					it_should_behave_like 'появление flash-сообщения', 'error', 'ОШИБКА. Пользователь не создан'
+					it_should_behave_like 'исчезновение flash-сообщения'
 				end
 			end
 		end
@@ -305,20 +306,29 @@ describe 'Страницы пользователя,' do
 				end
 
 				describe 'изменение данных,' do
-					let(:new_name) { Faker::Name.first_name }
-				 	
-				 	before {
-				 		fill_in 'Имя', with: new_name
-				 		fill_in 'Пароль', with: test_password
-				 		fill_in 'Подтверждение пароля', with: test_password
-				 		click_button save_button
-				 	}
-				 	
-				 	specify{ expect(user.reload.name).to eq new_name }
-				 	
-				 	it_should_behave_like 'страница пользователя', 'владелец' do
-				 		let(:the_user) { User.find_by(id: user.id) }
-				 	end
+					describe 'верное,' do
+						let(:new_name) { Faker::Name.first_name }
+					 	
+					 	before {
+					 		fill_in 'Имя', with: new_name
+					 		fill_in 'Пароль', with: test_password
+					 		fill_in 'Подтверждение пароля', with: test_password
+					 		click_button save_button
+					 	}
+					 	
+					 	specify{ expect(user.reload.name).to eq new_name }
+					 	
+					 	it_should_behave_like 'страница пользователя', 'владелец' do
+					 		let(:the_user) { User.find_by(id: user.id) }
+					 	end
+					 end
+
+					 describe 'неверное,' do
+					 	before { click_button save_button }
+					 	it_should_behave_like 'появление flash-сообщения', 'error', 'Изменения отклонены'
+					 	it_should_behave_like 'исчезновение flash-сообщения'
+					 	specify{ expect(user.reload.name).to eq user.name }
+					 end
 				end
 			end
 		end
@@ -353,5 +363,12 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
+	pending 'удаление админом самого себя,' do
+
+	end
+
 	# итого тест 7 действий
+
+	pending 'защищённые параметры,' do
+	end
 end
