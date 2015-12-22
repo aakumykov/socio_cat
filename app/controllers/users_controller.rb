@@ -54,14 +54,19 @@ class UsersController < ApplicationController
 	def destroy
 		@user = User.find_by(id: params[:id])
 
-		if @user.destroy
-			flash[:success] = "Пользователь «#{@user.name}» удалён"
-			@user=nil
-		else
-			flash[:error] = "Ошибка удаления пользователя «#{@user.name}»"
+		if @user.admin? 
+			flash[:error] = 'Админ не может удалить себя'
+			redirect_to user_path(@user)
+		else				
+			if @user.destroy
+				flash[:success] = "Пользователь «#{@user.name}» удалён"
+				@user=nil
+			else
+				flash[:error] = "Ошибка удаления пользователя «#{@user.name}»"
+			end
+
+			redirect_to users_path
 		end
-		
-		redirect_to users_path
 	end
 	
 	# итого 7 действий

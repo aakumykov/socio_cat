@@ -363,8 +363,15 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
-	pending 'удаление админом самого себя,' do
+	describe 'удаление админом самого себя,' do
+		before { sign_in admin, no_capybara: true }
+		
+		specify{ expect{ delete user_path(admin) }.not_to change(User,:count) }
 
+		describe 'перенаправление на страницу пользователя (админа),' do
+			before { delete user_path(admin) }
+			specify{ expect(response).to redirect_to user_path(admin) }
+		end
 	end
 
 	# итого тест 7 действий
