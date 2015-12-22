@@ -10,7 +10,7 @@ describe 'Страницы пользователя,' do
 	let(:register_button) { 'Зарегистрироваться' }
 	let(:edit_button) { 'Изменить' }
 	let(:save_button) { 'Сохранить' }
-	let(:delete_button) { 'Удалить' }
+	let(:delete_button) { 'Удалить2' }
 
 	let(:test_password) { 'Qwerty123!@#' }
 
@@ -48,8 +48,7 @@ describe 'Страницы пользователя,' do
 			let(:title) {'Вход на сайт'}
 			let(:heading) {'Вход на сайт'}
 		end
-		it { should have_selector(:xpath,"//input[@type='submit']")}
-		it { should have_selector(:xpath,"//input[@value='Войти']")}
+		it { should have_selector(:xpath,"//input[@type='submit' and @value='Войти']")}
 	end
 
 	shared_examples_for 'требование входа' do
@@ -73,8 +72,12 @@ describe 'Страницы пользователя,' do
 		when 'владелец' || 'для админа'
 			it { should have_link(edit_button, href: edit_user_path(the_user)) }
 		when 'админ'
-			it { should have_link(delete_button) }
-			#it { should have_selector(:xpath,"//a[text()='#{delete_button}']") }
+			#it { should have_link(delete_button) }
+			#it { should have_selector(:xpath,"//a[@href='#{user_path(the_user)}']") }
+			#it { should have_selector(:xpath,"//a/text(#{delete_button})") }
+			#it { should have_selector(:xpath,"//a[@href='#{user_path(the_user)}']/text(#{delete_button})") }
+			#it { should have_selector(:xpath,"//a[text(#{delete_button})]") }
+			it { should have_selector(:xpath,"//a[@href='#{user_path(the_user)}' text(#{delete_button})]") }
 			#it { should have_selector(:xpath,"//a[text()='#{delete_button}' @href='#{user_path(the_user)}']") }
 		else
 			it { should_not have_link(edit_button) }
@@ -199,6 +202,11 @@ describe 'Страницы пользователя,' do
 		describe 'admin_users(),' do
 			# должен отказывать всем загеристрированным кроме админа
 			# (незарегистрированных отшивает другой фильтр)
+
+			before {
+				user.save!
+				other_user.save!
+			}
 
 			describe 'не админ,' do
 				before { sign_in other_user, no_capybara: true }
