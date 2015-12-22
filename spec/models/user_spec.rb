@@ -21,6 +21,8 @@ describe 'User,' do
 	it { should respond_to(:remember_token) }
 	it { should respond_to(:admin) }
 
+	it { should_not be_admin }
+
 	it { should be_valid }
 
 	describe 'с некорректными данными,' do
