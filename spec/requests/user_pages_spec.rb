@@ -7,6 +7,10 @@ describe 'Страницы пользователя,' do
 	let(:other_user) { FactoryGirl.create(:user) }
 	let(:wrong_id) { User.maximum(:id)+1 }
 
+	# массовка для списка
+	let!(:user1) { FactoryGirl.create(:user) }
+	let!(:user2) { FactoryGirl.create(:user) }
+
 	let(:register_button) { 'Зарегистрироваться' }
 	let(:edit_button) { 'Изменить' }
 	let(:save_button) { 'Сохранить' }
@@ -86,6 +90,16 @@ describe 'Страницы пользователя,' do
 		end
 		it_should_behave_like 'форма редактирования'
 		pending 'кнопка'
+	end
+
+	shared_examples_for 'список пользователей' do
+		it_should_behave_like 'страница с названием' do
+			let(:title) { 'Пользователи' }
+			let(:heading) { 'Пользователи' }
+		end
+
+		it { should have_link(user1.name, href:user_path(user1.id)) }
+		it { should have_link(user2.name, href:user_path(user2.id)) }
 	end
 
 	shared_examples_for 'страница регистрации' do
@@ -262,8 +276,12 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
-	pending 'список пользователей,' do
-
+	describe 'список пользователей,' do
+		before { 
+			sign_in user
+			visit users_path
+		}
+		it_should_behave_like 'список пользователей'
 	end
 
 	describe 'просмотр и редактирование пользователя,' do
@@ -326,11 +344,7 @@ describe 'Страницы пользователя,' do
 				before { click_link delete_button }
 				it_should_behave_like 'появление flash-сообщения', 'success', 'Пользователь'
 				it_should_behave_like 'появление flash-сообщения', 'success', 'удалён'
-				#it_should_behave_like 'список пользователей'
-				it_should_behave_like 'страница с названием' do
-					let(:title) { 'Пользователи' }
-					let(:heading) { 'Пользователи' }
-				end
+				it_should_behave_like 'список пользователей'
 			end
 		end
 	end
