@@ -64,6 +64,7 @@ class UsersController < ApplicationController
 		redirect_to users_path
 	end
 	
+	# итого 7 действий
 
 	private
 

@@ -128,7 +128,6 @@ describe 'Страницы пользователя,' do
 	end
 
 
-
 	describe 'предфильтры,' do
 		pending 'Один тест на группу! Следи за правильным включением предфильтров!'
 
@@ -246,6 +245,8 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
+
+	# #new, #create
 	describe 'регистрация пользователя,' do
 		before { visit register_path }
 		it_should_behave_like 'страница регистрации'
@@ -276,6 +277,7 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
+	# #index
 	describe 'список пользователей,' do
 		before { 
 			sign_in user
@@ -284,6 +286,7 @@ describe 'Страницы пользователя,' do
 		it_should_behave_like 'список пользователей'
 	end
 
+	# #show, #edit. #update
 	describe 'просмотр и редактирование пользователя,' do
 		describe 'просмотр,' do
 			before { 
@@ -321,6 +324,7 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
+	# #destroy
 	describe 'удаление пользователя,' do
 		before {
 			user.save!
@@ -348,4 +352,6 @@ describe 'Страницы пользователя,' do
 			end
 		end
 	end
+
+	# итого тест 7 действий
 end
