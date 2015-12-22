@@ -377,5 +377,19 @@ describe 'Страницы пользователя,' do
 	# итого тест 7 действий
 
 	pending 'защищённые параметры,' do
+		let(:user_params) {
+			{ user: {
+				name: Faker::Name.first_name,
+				email: Faker::Internet.email,
+				password: test_password,
+				password_confirmation: test_password,
+				admin: true
+			}}
+		}
+		before { 
+			sign_in user 
+			patch user_path(user), user_params
+		}
+		specify{ expect(user.reload).not_to be_admin }
 	end
 end

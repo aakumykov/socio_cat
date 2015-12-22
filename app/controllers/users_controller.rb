@@ -43,6 +43,14 @@ class UsersController < ApplicationController
 	def update
 		# @user устанавливается в editor_users()
 		if @user.update_attributes(user_params)
+		#if @user.update_attributes!(params[:user])
+		# if 
+		# 	@user.update_attribute(:name,params[:user][:name]) && 
+		# 	@user.update_attribute(:email,params[:user][:email]) && 
+		# 	@user.update_attribute(:password,params[:user][:password]) && 
+		# 	@user.update_attribute(:password_confirmation,params[:user][:password_confirmation]) &&
+		# 	@user.update_attribute(:admin,params[:user][:admin]) 
+			
 			flash[:success] = "Изменения профиля приняты"
 			redirect_to user_path(@user)
 		else
