@@ -390,7 +390,7 @@ describe 'Страницы пользователя,' do
 			}}
 		}
 		before { 
-			sign_in user, no_capybara: true
+			sign_in user 
 			patch user_path(user), user_params
 		}
 		specify{ expect(user.reload).not_to be_admin }
