@@ -14,10 +14,10 @@
 	case mode
 	when 'edit'
 		cancel_path = user_path(@user)
-		button_text = 'Изменить'
+		button_text = 'Сохранить'
 	when 'create'
 		cancel_path = users_path
-		button_text = 'Создать'
+		button_text = 'Зарегистрироваться'
 	else
 		cancel_path = root_path
 		button_text = 'Отправить'

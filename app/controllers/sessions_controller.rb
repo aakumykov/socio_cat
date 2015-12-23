@@ -24,7 +24,7 @@ class SessionsController < ApplicationController
 		sign_out
 		flash[:success] = 'Вы вышли с сайта'
 		
-		redirect_to root_url
+		redirect_to login_path
 	end
 	
 end

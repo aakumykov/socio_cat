@@ -15,9 +15,20 @@
 			<tfoot>
 				<tr>
 					<td colspan=2 class='profile_edit_button'>
-						<% if @user == current_user %>
-							<%= link_to 'Редактировать', edit_user_path(@user), class:'btn' %>
-						<% end %>
+						<div class='row'>
+							<% if current_user==@user or current_user.admin? %>
+								<%= link_to 'Изменить', edit_user_path(@user), class:'btn pull-left' %>
+								
+								<% if current_user.admin? and current_user != @user %>
+									<%= link_to 'Удалить', @user,
+											method: :delete,
+											data: { confirm: "Удалить пользователя «#{@user.name}»?" },
+											class:'btn btn-danger pull-right'
+									%>
+								<% end %>
+							
+							<% end %>
+						</div>
 					</td>
 				</tr>
 			</tfoot>

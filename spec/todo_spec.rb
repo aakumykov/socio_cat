@@ -8,4 +8,6 @@ describe 'TODO,' do
 	pending 'Как насчёт валидации для remember_token?'
 	pending 'Ситуация, когда текущий пользователь не найден по кукам.'
 	pending 'ситуация current_user = nil'
+	pending 'В учебнике сказано, что на каждой странице создаётся новый remember_tiken. Где это?'
+
 end
