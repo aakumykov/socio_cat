@@ -152,16 +152,37 @@ describe 'Пользователь,' do
 	end
 
 	describe 'связь с карточками,' do
-		let!(:older_card) { FactoryGirl.create(:card, user:@user, created_at: 1.day.ago ) }
-		let!(:newer_card) { FactoryGirl.create(:card, user:@user, created_at: 1.week.ago ) }
+		let(:user) { FactoryGirl.create(:user) }
+		#let!(:older_card) { FactoryGirl.create(:card, user:@user, created_at: 1.day.ago ) }
+		#let!(:newer_card) { FactoryGirl.create(:card, user:@user, created_at: 1.week.ago ) }
+		let!(:older_card) { user.cards.create(title: Faker::Lorem.word.capitalize, content: Faker::Lorem.paragraph, created_at: 1.month.ago) }
+		let!(:newer_card) { user.cards.create(title: Faker::Lorem.word.capitalize, content: Faker::Lorem.paragraph, created_at: 1.hour.ago) }
 
-		# it 'карточки располагаются в правильном порядке,' do
-		# 	expect(@user.cards.to_a).to eq [newer_card, older_card]
-		# end
-
-		# describe 'карточки удаляются вместе с пользователем,' do
-		# 	before{ user.destroy }
-		# 	specify{ expect(Card.find_by(user_id: user.id)).to be_blank }
-		# end
+		subject { user }
+		
+		# должен иметь метод "cards"
+		it { should respond_to(:cards) }
+		
+		it 'пользователь.карточка == карточка' do
+			expect(user.cards.first).to eq older_card
+			expect(user.cards.last).to eq newer_card
+		end
+		
+		it 'должен обладать всеми созданными карточками' do
+			expect(user.cards.to_a).to include(older_card)
+			expect(user.cards.to_a).to include(newer_card)
+		end
+		
+		it 'они должны располагаться по порядку' do
+			expect(user.cards.to_a).to eq [older_card,newer_card]
+		end
+		
+		describe 'при уничтожении пользователя кардочки должны сохраняться,' do
+			before { user.destroy }
+			specify{ expect(Card.all).to include(older_card) }
+			specify{ expect(Card.all).to include(newer_card) }
+			specify{ expect(Card.first.user).to be_nil }
+			specify{ expect(Card.last.user).to be_nil }
+		end
 	end
 end
