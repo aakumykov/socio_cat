@@ -36,11 +36,11 @@ describe 'Карточка,' do
 	
 	it { should respond_to(:user) }
 	it { should respond_to(:user_id) }
-	its(:user) { should eq user }
 
 	## правильность
 	# общая
 	it { should be_valid }
+	its(:user) { should eq user }
 
 	# частная
 	describe 'когда отсутствует заголовок,' do

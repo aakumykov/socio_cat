@@ -2,6 +2,7 @@ FactoryGirl.define do
 	factory :card do
 		title 'Какой-то заголовок'
 		content 'Некое содержимое. Правда-правда, это некоторое содержимое. Очень странное, но очень настоящее содержимое.'
+		user
 	end
 
 	factory :user do

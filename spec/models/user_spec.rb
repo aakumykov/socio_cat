@@ -1,13 +1,14 @@
 require 'spec_helper'
 
-describe 'User,' do
+describe 'Пользователь,' do
+	let(:test_password) { '0чень_сЛо#нЫй-пар0ль' }
+
 	before(:each) { 
 		@user = User.new(
-			name: 'Человече Разумный',
-			email: 'homo@sapiens.it',
-			password: '0чень_сЛо#нЫй-пар0ль',
-			password_confirmation: '0чень_сЛо#нЫй-пар0ль',
-			#remember_token: User.encrypt( User.new_remember_token )
+			name: Faker::Name.first_name,
+			email: Faker::Internet.email,
+			password: test_password,
+			password_confirmation: test_password,
 		)
 	}
 	subject { @user }
@@ -148,5 +149,19 @@ describe 'User,' do
 			@user.toggle!(:admin)
 		}
 		it { should be_admin }
+	end
+
+	describe 'связь с карточками,' do
+		let!(:older_card) { FactoryGirl.create(:card, user:@user, created_at: 1.day.ago ) }
+		let!(:newer_card) { FactoryGirl.create(:card, user:@user, created_at: 1.week.ago ) }
+
+		# it 'карточки располагаются в правильном порядке,' do
+		# 	expect(@user.cards.to_a).to eq [newer_card, older_card]
+		# end
+
+		# describe 'карточки удаляются вместе с пользователем,' do
+		# 	before{ user.destroy }
+		# 	specify{ expect(Card.find_by(user_id: user.id)).to be_blank }
+		# end
 	end
 end
