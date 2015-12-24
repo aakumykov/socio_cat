@@ -12,21 +12,20 @@ require 'spec_helper'
 
 describe 'Карточка,' do
 
-	# before(:each) do
-	# 	@card = Card.new(
-	# 		title: 'Проверочная карточка',
-	# 		content: 'Какое-нибудь содержимое',
-	# 	)
-	# end
-	# subject { @card }
-
 	# тестовая модель
+	let(:user) { FactoryGirl.create(:user) }
+
 	let(:card) {
-		Card.new(
-			title: 'Проверочная карточка',
-			content: 'Какое-нибудь содержимое',
+		# Card.new(
+		# 	title: 'Проверочная карточка',
+		# 	content: 'Какое-нибудь содержимое',
+		# )
+		user.cards.build(
+			title: Faker::Lorem.word.capitalize,
+			content: Faker::Lorem.paragraph,
 		)
 	}
+	
 	subject { card }
 
 
@@ -34,6 +33,10 @@ describe 'Карточка,' do
 	## наличие
 	it { should respond_to(:title) }
 	it { should respond_to(:content) }
+	
+	it { should respond_to(:user) }
+	it { should respond_to(:user_id) }
+	its(:user) { should eq user }
 
 	## правильность
 	# общая
