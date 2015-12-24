@@ -52,6 +52,13 @@ describe 'Страницы пользователя,' do
 			let(:title) {'Вход на сайт'}
 			let(:heading) {'Вход на сайт'}
 		end
+
+		it { should have_selector('label',text:'Электронная почта') }
+		it { should have_selector(:xpath,"//input[@id='session_email']") }
+
+		it { should have_selector('label',text:'Пароль') }
+		it { should have_selector(:xpath,"//input[@id='session_password']") }
+
 		it { should have_selector(:xpath,"//input[@type='submit' and @value='Войти']")}
 	end
 
