@@ -188,7 +188,7 @@ describe 'Страницы пользователя,' do
 					sign_in other_user
 					visit edit_user_path(user)
 				}
-				it_should_behave_like 'появление flash-сообщения', 'error', 'Нельзя редактировать другого пользователя'
+				it_should_behave_like 'появление flash-сообщения', 'error', 'Редактирование запрещено'
 				it_should_behave_like 'страница пользователя' do
 					let(:the_user) { user }
 				end

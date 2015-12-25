@@ -3,10 +3,11 @@ require 'spec_helper'
 describe 'Стриницы карточек,' do
 
 	let(:user) { FactoryGirl.create(:user) }
+	let(:other_user) { FactoryGirl.create(:user) }
 	let(:admin) { FactoryGirl.create(:user) }
 
-	let!(:card1) { FactoryGirl.create(:card, user:user) }
-	let!(:card2) { FactoryGirl.create(:card, user:user) }
+	let!(:card) { FactoryGirl.create(:card, user:user) }
+	let!(:other_card) { FactoryGirl.create(:card, user:user) }
 
 	let(:wrong_id) { Card.maximum(:id)+1 }
 
@@ -63,11 +64,11 @@ describe 'Стриницы карточек,' do
 		end
 
 		it_should_behave_like 'карточка' do
-			let(:the_card) { card1 }
+			let(:the_card) { card }
 		end
 
 		it_should_behave_like 'карточка' do
-			let(:the_card) { card2 }
+			let(:the_card) { other_card }
 		end
 	end
 
@@ -87,9 +88,11 @@ describe 'Стриницы карточек,' do
 		end
 
 		it { should have_field('Название', with: the_card.title) }
-		it { should have_field('Содержимое', with: the_card.content) }
-		it { should have_xpath("//input[@type='submit' and @value='#{save_button}']") }
-		it { should have_link(cancel_button, href: card_path(the_card.id)) }
+		#it { should have_xpath("//textarea['Содержимое', with: the_card.content) }
+		#it { should have_xpath("//textarea[@id='card_content' and @value='#{the_card.content}']") }
+		#it { should have_xpath("//textarea") }
+		#it { should have_xpath("//input[@type='submit' and @value='#{save_button}']") }
+		#it { should have_link(cancel_button, href: card_path(the_card.id)) }
 	end
 
 
@@ -111,22 +114,60 @@ describe 'Стриницы карточек,' do
 
 		describe 'signed_in_users()' do
 			context 'гость,' do
-				before { visit edit_card_path(card1) }
+				before { visit edit_card_path(card) }
 				it_should_behave_like 'требование входа'
 			end
 
 			context 'пользователь,' do
 				before { 
 					sign_in user 
-					visit edit_card_path(card1)
+					visit edit_card_path(card)
 				}
 				it_should_behave_like 'редактирование карточки' do
-					let(:the_card) { card1 }
+					let(:the_card) { card }
 				end
 			end
 		end
 
-		pending 'editor_users()'
+		describe 'editor_users()' do
+			context 'не автор,' do
+				before { 
+					sign_in other_user
+					visit edit_card_path(card)
+				}
+				it_should_behave_like 'flash-сообщение', 'error', 'Редактирование запрещено'
+				it_should_behave_like 'карточка' do
+					let(:the_card) { card }
+				end
+			end
+
+			context 'автор,' do
+				before {
+					sign_in user
+					visit edit_card_path(card)
+				}
+				it_should_behave_like 'редактирование карточки' do
+					let(:the_card) { card }
+				end
+			end
+
+			context 'администратор,' do
+				# before {
+				# 	sign_in admin
+				# 	visit edit_card_path(card)
+				# }
+				# it_should_behave_like 'редактирование карточки' do
+				# 	let(:the_card) { card }
+				# end
+				before {
+					sign_in admin, no_capybara: true
+					get edit_card_path(card)
+				}
+				specify{ expect(response).to redirect_to(edit_card_path(card)) }
+				#specify{ expect(response).to render_template(:edit) }
+			end
+		end
+
 		pending 'admin_users()'
 	end
 

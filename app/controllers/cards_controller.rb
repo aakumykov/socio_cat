@@ -89,6 +89,14 @@ class CardsController < ApplicationController
 		end
 
 		def editor_users
+			@card = Card.find_by(id: params[:id])
+
+			return true if current_user.admin?
+
+			if (current_user != @card.user)# && (not current_user.admin?)
+				flash[:error] = 'Редактирование запрещено'
+				redirect_to card_path(@card)
+			end
 		end
 
 		def admin_users
