@@ -76,16 +76,20 @@ class CardsController < ApplicationController
 		end
 
 		def reject_nil_target
+			# if Card.find_by(id: params[:id]).nil?
+			# 	flash[:error] = 'Нет такой карточки'
+			# 	redirect_to cards_path
+			# end
 		end
-		
+
 		def signed_in_users
 		end
-		
+
 		def editor_users
 		end
-		
+
 		def admin_users
 		end
-	
+
 end
 
