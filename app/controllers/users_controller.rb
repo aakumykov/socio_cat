@@ -115,7 +115,7 @@ class UsersController < ApplicationController
 			@user = User.find_by(id: params[:id])
 
 			if (current_user != @user) && (not current_user.admin?)
-				flash[:error] = 'Нельзя редактировать другого пользователя'
+				flash[:error] = 'Редактирование запрещено'
 				redirect_to user_path(@user)
 			end
 		end

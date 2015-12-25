@@ -3,10 +3,11 @@ require 'spec_helper'
 describe 'Стриницы карточек,' do
 
 	let(:user) { FactoryGirl.create(:user) }
-	let(:admin) { FactoryGirl.create(:user) }
+	let(:other_user) { FactoryGirl.create(:user) }
+	let(:admin) { FactoryGirl.create(:admin) }
 
-	let!(:card1) { FactoryGirl.create(:card, user:user) }
-	let!(:card2) { FactoryGirl.create(:card, user:user) }
+	let!(:card) { FactoryGirl.create(:card, user:user) }
+	let!(:other_card) { FactoryGirl.create(:card, user:user) }
 
 	let(:wrong_id) { Card.maximum(:id)+1 }
 
@@ -51,27 +52,27 @@ describe 'Стриницы карточек,' do
 		it { should have_selector(:xpath,"//input[@type='submit' and @value='Войти']")}
 	end
 
-	shared_examples_for 'требование входа' do
+	shared_examples_for 'требование_входа' do
 		it_should_behave_like 'страница входа'
 		it_should_behave_like 'flash-сообщение', 'notice', 'Сначала войдите на сайт'
 	end
 
-	shared_examples_for 'страница карточек' do
+	shared_examples_for 'список_карточек' do
 		it_should_behave_like 'страница с названием' do
 			let(:title) {'Карточки'}
 			let(:heading) { title }
 		end
 
-		it_should_behave_like 'карточка' do
-			let(:the_card) { card1 }
+		it_should_behave_like 'просмотр_карточки' do
+			let(:the_card) { card }
 		end
 
-		it_should_behave_like 'карточка' do
-			let(:the_card) { card2 }
+		it_should_behave_like 'просмотр_карточки' do
+			let(:the_card) { other_card }
 		end
 	end
 
-	shared_examples_for 'карточка' do
+	shared_examples_for 'просмотр_карточки' do
 		it { should have_css("#card#{the_card.id}") }		
 		it { should have_css(".card_title", text: the_card.title) }
 		it { should have_css(".card_content") }
@@ -80,15 +81,27 @@ describe 'Стриницы карточек,' do
 		it { should have_content(the_card.content) }
 	end
 
-	shared_examples_for 'редактирование карточки' do
+	shared_examples_for 'редактирование_карточки' do
 		it_should_behave_like 'страница с названием' do
 			let(:title) { 'Редактирование карточки' }
 			let(:heading) { title }
 		end
-
+		it_should_behave_like 'форма_карточки'
+		it { should have_xpath("//input[@type='submit' and @value='#{save_button}']") }
+	end
+	
+	shared_examples_for 'создание_карточки' do
+		it_should_behave_like 'страница с названием' do
+			let(:title) { 'Создание карточки' }
+			let(:heading) { title }
+		end
+		it_should_behave_like 'форма_карточки'
+		it { should have_xpath("//input[@type='submit' and @value='#{create_button}']") }
+	end
+	
+	shared_examples_for 'форма_карточки' do
 		it { should have_field('Название', with: the_card.title) }
 		it { should have_field('Содержимое', with: the_card.content) }
-		it { should have_xpath("//input[@type='submit' and @value='#{save_button}']") }
 		it { should have_link(cancel_button, href: card_path(the_card.id)) }
 	end
 
@@ -105,28 +118,51 @@ describe 'Стриницы карточек,' do
 			describe 'www,' do
 				before { visit card_path(wrong_id) }
 				it_should_behave_like 'flash-сообщение', 'error', 'Нет такой карточки'
-				it_should_behave_like 'страница карточек'
+				it_should_behave_like 'список_карточек'
 			end
 		end
 
 		describe 'signed_in_users()' do
 			context 'гость,' do
-				before { visit edit_card_path(card1) }
-				it_should_behave_like 'требование входа'
+				before { visit new_card_path }
+				it_should_behave_like 'требование_входа'
 			end
 
 			context 'пользователь,' do
 				before { 
-					sign_in user 
-					visit edit_card_path(card1)
+					sign_in user, no_capybara:true
+					get new_card_path
 				}
-				it_should_behave_like 'редактирование карточки' do
-					let(:the_card) { card1 }
-				end
+				specify{ expect(response).to render_template(:new) }
 			end
 		end
 
-		pending 'editor_users()'
+		describe 'editor_users()' do
+			context 'не автор,' do
+				before {
+					sign_in other_user, no_capybara: true
+					get edit_card_path(card)
+				}
+				specify{ expect(response).to redirect_to(card_path(card)) }
+			end
+
+			context 'автор,' do
+				before {
+					sign_in user, no_capybara: true
+					get edit_card_path(card)
+				}
+				specify{ expect(response).to render_template(:edit) }
+			end
+
+			context 'администратор,' do
+				before {
+					sign_in admin, no_capybara: true
+					get edit_card_path(card)
+				}
+				specify{ expect(response).to render_template(:edit) }
+			end
+		end
+
 		pending 'admin_users()'
 	end
 
