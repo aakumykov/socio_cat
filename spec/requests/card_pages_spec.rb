@@ -1,219 +1,24 @@
 require 'spec_helper'
 
 describe 'Стриницы карточек,' do
-	subject { page }
+	let(:user) { FactoryGirl.create(:user) }
+	let(:admin) { FactoryGirl.create(:user) }
 
-	let(:card_title) { 'Проверочный заголовок' }
-	let(:card_content) { 'Проверочное наполнение (соционической функции).' }
+	let(:create_button) { 'Создать' }
+	let(:change_button) { 'Изменить' }
+	let(:save_button) { 'Сохранить' }
+	let(:cancel_button) { 'Отмена' }
 
-	before(:each) {
-		@card = FactoryGirl.create(:card, title: card_title, content: card_content)
-		visit cards_path
-	}
-
-	shared_examples_for 'карточка в списке' do
-		it { should have_selector('fieldset.card') }
-		it { should have_selector('legend.card_title',text: card_title) }
-		it { should have_selector('div.card_content', text: card_content) }
+	pending 'предфильтры' do
+		pending 'reject_nil_target()'
+		pending 'signed_in_users()'
+		pending 'editor_users()'
+		pending 'admin_users()'
 	end
 
-	shared_examples_for 'форма редактирования карточки' do
-		#it { should have_title(full_title('Новая карточка')) }
-		#it { should have_selector('h1', text:'Новая карточка') }
-
-		it { should have_selector('label', text:'Название') }
-		it { should have_selector(:xpath,'//input[@name="card[title]"]') }
-
-		it { should have_selector('label', text:'Содержимое') }
-		it { should have_selector(:xpath,'//textarea[@name="card[content]"]') }
-	end
-
-	shared_examples_for 'кнопки удобства' do
-		it { should have_link('Все карточки', href: cards_path) }
-		it { should have_link('Новая', href: new_card_path) }
-	end
-
-	shared_examples_for 'кнопка списка карточек' do
-		it { should have_link('Список', href: new_card_path) }
-	end
-
-	# index
-	# СДЕЛАТЬ: проверку того, что это именно список
-	describe 'список,' do
-		before(:each) { 
-			@card1 = FactoryGirl.create(:card)
-			@card2 = FactoryGirl.create(:card)
-			visit cards_path 
-		}
-
-		it { should have_title('Список карточек') }
-		it { should have_selector('h1','Список карточек') }
-		it_should_behave_like 'кнопки удобства'
-		
-		it 'присутствует несколько карточек,' do
-			Card.all.each do |c|
-			 	have_link(c.title,card_path(c))
-			 	have_content(c.content)
-			 	have_selector(:xpath,"//fieldset[@id='#{card_id(c.id)}']")
-			end
-		end
-	end
-
-	# new
-	describe 'создание,' do
-
-		before(:each) { visit new_card_path }
-
-		describe 'статика,' do
-			it_should_behave_like 'форма редактирования карточки'
-			it { should have_selector(:xpath,"//input[@value='Создать' and @name='commit']") }
-		end
-
-		describe 'динамика,' do
-			
-			describe 'с неверными данными,' do
-				it 'карточка не должна создаваться' do
-					expect { click_button 'Создать' }.not_to change(Card,:count)
-				end
-				
-				describe 'сообщение об ошибке' do
-					let(:error_message) { 'ОШИБКА, карточка не создана' }
-
-					before { click_button 'Создать' }
-					
-					it { should have_selector('div.alert.alert-error', text:error_message) }
-
-					describe 'сообщение об ошибке должно исчезать при переходе на другую страницу,' do
-						before { visit root_url }
-						it { should_not have_selector('div.alert.alert-error', text:error_message) }
-					end
-				end
-				
-				describe 'отображение формы редактирования карточки,' do
-					it_should_behave_like 'форма редактирования карточки'
-				end
-			end
-
-			describe 'с верными данными,' do
-				before(:each) do
-					fill_in 'Название', with: card_title
-					fill_in 'Содержимое', with: card_content
-				end
-
-				it 'должна создаваться карточка,' do
-					expect { click_button 'Создать'}.to change(Card, :count).by(1)
-				end
-
-				describe 'сообщение об успехе,' do
-					before { click_button 'Создать' }
-					it { should have_selector('div.alert.alert-success', text:"Карточка «#{@card.title}» создана") }
-				end
-
-				describe 'должна отображаться вновь созданная карточка,' do
-					let(:title) { 'O_o' }
-					before { click_button 'Создать' }
-					
-					it { should have_title(title) }
-					it { should have_selector('h1',text:title) }
-
-					it_should_behave_like 'карточка в списке'
-				end
-			end
-
-		end
-	end
-
-	# show
-	describe 'просмотр одной,' do
-		before {
-			@card = Card.all.first
-			visit card_path(@card.id)
-		}
-
-		it_should_behave_like 'карточка в списке'
-		it { should have_link('Изменить', edit_card_path(@card)) }
-		it_should_behave_like 'кнопки удобства'
-		#it_should_behave_like 'кнопка списка карточек'
-	end
-
-	# edit
-	describe 'редактирование,' do
-		let(:new_title) {@card.title + ' ИЗМЕНЕНО'}
-		let(:new_content) {@card.content + ' ИЗМЕНЕНО'}
-
-		before(:each) { 
-			visit edit_card_path(@card)
-		}
-		
-		describe 'форма,' do
-			it_should_behave_like 'форма редактирования карточки'
-			it { should have_selector(:xpath,"//input[@value='Сохранить' and @name='commit']") }
-			it { should have_link('Отмена', href:card_path(@card)) }
-		end
-
-		describe 'сохранение изменений,' do
-			before { 
-				fill_in 'Название', with: new_title
-				fill_in 'Содержимое', with: new_content
-				click_button 'Сохранить'
-			}
-			
-			it_should_behave_like 'карточка в списке'
-			it { should have_content(new_title) }
-			it { should have_content(new_content) }
-		end
-
-		describe 'отказ от изменений,' do
-			before {
-		 		click_link 'Отмена'
-		 	}
-			
-			it_should_behave_like 'карточка в списке'
-
-			it 'сохранение прежнего заголовка,' do
-				should have_content(@card.title)
-			end
-			
-			it 'сохранение прежнего содержимого,' do
-				should have_content(@card.content)
-			end
-		 end
-	end
-
-	#destroy
-	describe 'удаление,' do
-		before { visit card_path(@card) }
-
-		# штатная ситуаиця
-		it 'кнопка удалить существует,' do
-			page.should have_link('Удалить', href: card_path(@card))
-		end
-
-		it 'кнопка удалить работает,' do
-			expect{ click_link 'Удалить'}.to change(Card,:count).by(-1)
-		end
-
-		describe 'перенаправление после удаления,' do
-			before { click_link 'Удалить' }
-			it { should have_selector('h1',text: 'Список карточек') }
-		end
-
-		# нештатная ситуаиця
-		describe 'удаление несуществующей карточки' do
-			specify { 
-				expect { delete card_path(Card.last.id+1) }.not_to change(Card,:count) 
-			}
-			before {
-				delete card_path(Card.last.id+1)
-			}
-			specify {
-				expect(response).to redirect_to(cards_path)
-			}
-			#subject { page }
-			#it { should have_selector('div.alert.alert-error', text:'Ошибка удаления карточки') }
-			#it { should have_content('Список') }
-			#it { should have_selector('div') } # работает только это
-		end
-	end
-
+	pending 'список,'
+	pending 'просмотр,'
+	pending 'создание,'
+	pending 'изменение,'
+	pending 'удаление,'
 end
