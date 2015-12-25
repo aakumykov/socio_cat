@@ -16,10 +16,6 @@ describe 'Карточка,' do
 	let(:user) { FactoryGirl.create(:user) }
 
 	let(:card) {
-		# Card.new(
-		# 	title: 'Проверочная карточка',
-		# 	content: 'Какое-нибудь содержимое',
-		# )
 		user.cards.build(
 			title: Faker::Lorem.word.capitalize,
 			content: Faker::Lorem.paragraph,
@@ -33,9 +29,6 @@ describe 'Карточка,' do
 	## наличие
 	it { should respond_to(:title) }
 	it { should respond_to(:content) }
-	
-	it { should respond_to(:user) }
-	it { should respond_to(:user_id) }
 
 	## правильность
 	# общая
@@ -61,5 +54,26 @@ describe 'Карточка,' do
 	describe 'когда длина содержимого с лишком' do
 		before { card.content = 'a'*10000 }
 		it { should_not be_valid }
+	end
+
+
+	describe 'связь с пользователем,' do
+
+		it 'должен иметь метод #user' do
+			should respond_to(:user)
+			should respond_to(:user_id)
+		end
+
+		it 'пользователь карточки тождественен пользователю' do
+			expect(card.user).to eq user
+		end
+
+		describe 'удаление карточки не ведёт к удалению пользователя,' do
+			before { card.destroy }
+			specify{ expect(User.find(card.user_id)).to eq user }
+			specify{ expect(user.reload.id).to eq user.id }
+			specify{ expect(user.reload).to eq user }
+		end
+
 	end
 end
