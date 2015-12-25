@@ -4,7 +4,7 @@ class CardsController < ApplicationController
 
 	before_action :signed_in_users, only: [:new, :create, :edit, :update]
 	before_action :editor_users, only: [:edit, :update]
-	before_action :admin_users, only: [:destroy]
+	before_action :admin_users, only: [:destroy, :block]
 	
 	def index
 		@all_cards = Card.all
@@ -98,6 +98,7 @@ class CardsController < ApplicationController
 		end
 
 		def admin_users
+			redirect_to cards_path if not current_user.admin?
 		end
 
 end

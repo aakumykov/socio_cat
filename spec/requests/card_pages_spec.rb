@@ -16,6 +16,14 @@ describe 'Стриницы карточек,' do
 	let(:save_button) { 'Сохранить' }
 	let(:cancel_button) { 'Отмена' }
 
+	def console_user
+		sign_in user, no_capybara: true
+	end
+	
+	def console_admin
+		sign_in admin, no_capybara: true
+	end
+
 	subject { page }
 
 
@@ -163,7 +171,24 @@ describe 'Стриницы карточек,' do
 			end
 		end
 
-		pending 'admin_users()'
+		describe 'admin_users()' do
+			context 'не админ' do
+				let!(:cards_count) { Card.all.count }
+				before {
+					console_user
+					delete card_path(card)
+				}
+				specify{ expect(response).to redirect_to(cards_path) }
+				specify{ expect(cards_count).to eq Card.all.count }
+			end
+			
+			context 'админ' do
+				before { console_admin }
+				specify{ expect{ delete card_path(card) }.to change(Card,:count).by(-1) }
+			end
+		end
+		
+		pending 'уведомления'
 	end
 
 	pending 'список,'
