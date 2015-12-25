@@ -1,7 +1,7 @@
 FactoryGirl.define do
 	factory :card do
-		title 'Какой-то заголовок'
-		content 'Некое содержимое. Правда-правда, это некоторое содержимое. Очень странное, но очень настоящее содержимое.'
+		title Faker::Lorem.word.capitalize
+		content Faker::Lorem.paragraph
 		user
 	end
 

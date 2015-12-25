@@ -83,6 +83,9 @@ class CardsController < ApplicationController
 		end
 
 		def signed_in_users
+			if not signed_in?
+				redirect_to login_path, notice: 'Сначала войдите на сайт'
+			end
 		end
 
 		def editor_users

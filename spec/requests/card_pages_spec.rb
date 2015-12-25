@@ -2,11 +2,6 @@ require 'spec_helper'
 
 describe 'Стриницы карточек,' do
 
-	let(:create_button) { 'Создать' }
-	let(:change_button) { 'Изменить' }
-	let(:save_button) { 'Сохранить' }
-	let(:cancel_button) { 'Отмена' }
-
 	let(:user) { FactoryGirl.create(:user) }
 	let(:admin) { FactoryGirl.create(:user) }
 
@@ -14,6 +9,11 @@ describe 'Стриницы карточек,' do
 	let!(:card2) { FactoryGirl.create(:card, user:user) }
 
 	let(:wrong_id) { Card.maximum(:id)+1 }
+
+	let(:create_button) { 'Создать' }
+	let(:change_button) { 'Изменить' }
+	let(:save_button) { 'Сохранить' }
+	let(:cancel_button) { 'Отмена' }
 
 	subject { page }
 
@@ -36,25 +36,25 @@ describe 'Стриницы карточек,' do
 		it { should have_selector('h1',text:heading) }
 	end
 
-	# shared_examples_for 'страница входа' do
-	# 	it_should_behave_like 'страница с названием' do
-	# 		let(:title) {'Вход на сайт'}
-	# 		let(:heading) {'Вход на сайт'}
-	# 	end
+	shared_examples_for 'страница входа' do
+		it_should_behave_like 'страница с названием' do
+			let(:title) {'Вход на сайт'}
+			let(:heading) {'Вход на сайт'}
+		end
 
-	# 	it { should have_selector('label',text:'Электронная почта') }
-	# 	it { should have_selector(:xpath,"//input[@id='session_email']") }
+		it { should have_selector('label',text:'Электронная почта') }
+		it { should have_selector(:xpath,"//input[@id='session_email']") }
 
-	# 	it { should have_selector('label',text:'Пароль') }
-	# 	it { should have_selector(:xpath,"//input[@id='session_password']") }
+		it { should have_selector('label',text:'Пароль') }
+		it { should have_selector(:xpath,"//input[@id='session_password']") }
 
-	# 	it { should have_selector(:xpath,"//input[@type='submit' and @value='Войти']")}
-	# end
+		it { should have_selector(:xpath,"//input[@type='submit' and @value='Войти']")}
+	end
 
-	# shared_examples_for 'требование входа' do
-	# 	it_should_behave_like 'страница входа'
-	# 	it_should_behave_like 'появление flash-сообщения', 'notice', 'Сначала войдите на сайт'
-	# end
+	shared_examples_for 'требование входа' do
+		it_should_behave_like 'страница входа'
+		it_should_behave_like 'flash-сообщение', 'notice', 'Сначала войдите на сайт'
+	end
 
 	shared_examples_for 'страница карточек' do
 		it_should_behave_like 'страница с названием' do
@@ -72,12 +72,26 @@ describe 'Стриницы карточек,' do
 	end
 
 	shared_examples_for 'карточка' do
-		it { should have_selector("#card#{the_card.id}") }
-		it { should have_selector(".card_title") }
-		it { should have_selector(".card_content") }
+		it { should have_css("#card#{the_card.id}") }		
+		it { should have_css(".card_title", text: the_card.title) }
+		it { should have_css(".card_content") }
+		
 		it { should have_content(the_card.title) }
 		it { should have_content(the_card.content) }
 	end
+
+	shared_examples_for 'редактирование карточки' do
+		it_should_behave_like 'страница с названием' do
+			let(:title) { 'Редактирование карточки' }
+			let(:heading) { title }
+		end
+
+		it { should have_field('Название', with: the_card.title) }
+		it { should have_field('Содержимое', with: the_card.content) }
+		it { should have_xpath("//input[@type='submit' and @value='#{save_button}']") }
+		it { should have_link(cancel_button, href: card_path(the_card.id)) }
+	end
+
 
 
 	describe 'предфильтры' do
@@ -95,7 +109,23 @@ describe 'Стриницы карточек,' do
 			end
 		end
 
-		pending 'signed_in_users()'
+		describe 'signed_in_users()' do
+			context 'гость,' do
+				before { visit edit_card_path(card1) }
+				it_should_behave_like 'требование входа'
+			end
+
+			context 'пользователь,' do
+				before { 
+					sign_in user 
+					visit edit_card_path(card1)
+				}
+				it_should_behave_like 'редактирование карточки' do
+					let(:the_card) { card1 }
+				end
+			end
+		end
+
 		pending 'editor_users()'
 		pending 'admin_users()'
 	end
