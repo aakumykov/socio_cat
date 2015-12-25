@@ -1,6 +1,10 @@
 class CardsController < ApplicationController
 
-	public
+	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
+
+	before_action :signed_in_users, only: [:new, :create, :edit, :update]
+	before_action :editor_users, only: [:edit, :update]
+	before_action :admin_users, only: [:destroy]
 	
 	def index
 		@all_cards = Card.all
@@ -64,11 +68,24 @@ class CardsController < ApplicationController
 
 	private	
 
-	def user_params
-		params.require(:card).permit(
-			:title,
-			:content,
-		)
-	end
+		def user_params
+			params.require(:card).permit(
+				:title,
+				:content,
+			)
+		end
+
+		def reject_nil_target
+		end
+		
+		def signed_in_users
+		end
+		
+		def editor_users
+		end
+		
+		def admin_users
+		end
+	
 end
 
