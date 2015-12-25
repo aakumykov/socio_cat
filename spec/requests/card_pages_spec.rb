@@ -279,5 +279,16 @@ describe 'Стриницы карточек,' do
 		specify{ expect(card.reload.content).to eq new_content}
 	end
 
-	pending 'удаление,'
+	describe 'удаление,' do
+		before { console_admin }
+		
+		describe 'изменение БД,' do
+			specify{ expect{ delete card_path(card) }.to change(Card,:count).by(-1) }
+		end
+
+		describe 'перенаправление к списку,' do
+			before { delete card_path(card) }
+			specify{ expect(response).to redirect_to(cards_path) }
+		end
+	end
 end
