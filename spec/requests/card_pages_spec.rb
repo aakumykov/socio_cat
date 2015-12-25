@@ -257,6 +257,27 @@ describe 'Стриницы карточек,' do
 		end
 	end
 
-	pending 'изменение,'
+	describe 'изменение,' do
+		let(:new_title) {card.title + ' ' + Faker::Lorem.word}
+		let(:new_content) {Faker::Lorem.paragraph}
+
+		let(:new_card_params) {
+			{ card: {
+				title: new_title,
+				content: new_content,
+				user: user,
+			}}
+		}
+
+		before {
+			console_user
+			patch card_path(card), new_card_params
+		}
+		specify{ expect(response).to redirect_to card_path(card) }
+		
+		specify{ expect(card.reload.title).to eq new_title}
+		specify{ expect(card.reload.content).to eq new_content}
+	end
+
 	pending 'удаление,'
 end
