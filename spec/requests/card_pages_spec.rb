@@ -94,7 +94,9 @@ describe 'Стриницы карточек,' do
 			let(:title) { 'Редактирование карточки' }
 			let(:heading) { title }
 		end
-		it_should_behave_like 'форма_карточки'
+		it { should have_field('Название', with: the_card.title) }
+		it { should have_field('Содержимое', with: the_card.content) }
+		it { should have_link(cancel_button, href: card_path(the_card.id)) }
 		it { should have_xpath("//input[@type='submit' and @value='#{save_button}']") }
 	end
 	
@@ -103,15 +105,17 @@ describe 'Стриницы карточек,' do
 			let(:title) { 'Создание карточки' }
 			let(:heading) { title }
 		end
-		it_should_behave_like 'форма_карточки'
+		it { should have_field('Название') }
+		it { should have_field('Содержимое') }
+		it { should have_link(cancel_button) }
 		it { should have_xpath("//input[@type='submit' and @value='#{create_button}']") }
 	end
 	
-	shared_examples_for 'форма_карточки' do
-		it { should have_field('Название', with: the_card.title) }
-		it { should have_field('Содержимое', with: the_card.content) }
-		it { should have_link(cancel_button, href: card_path(the_card.id)) }
-	end
+	# shared_examples_for 'форма_карточки' do
+	# 	it { should have_field('Название', with: the_card.title) }
+	# 	it { should have_field('Содержимое', with: the_card.content) }
+	# 	it { should have_link(cancel_button, href: card_path(the_card.id)) }
+	# end
 
 
 
@@ -191,9 +195,68 @@ describe 'Стриницы карточек,' do
 		pending 'уведомления'
 	end
 
-	pending 'список,'
-	pending 'просмотр,'
-	pending 'создание,'
+	describe 'список,' do
+		before { visit cards_path }
+		it_should_behave_like 'список_карточек'
+	end
+
+	describe 'просмотр,' do
+		before { visit card_path(card) }
+		it_should_behave_like 'просмотр_карточки' do
+			let(:the_card) { card }
+		end
+	end
+
+	describe 'создание,' do
+
+		let(:card_params) {
+			{ card: {
+				title: Faker::Lorem.word.capitalize,
+				content: Faker::Lorem.paragraph,
+				user: user,
+			}}
+		}
+
+		let(:new_card) { 
+			Card.new(
+				title: card_params[:card][:title],
+				content: card_params[:card][:content],
+				user: user,
+			)
+		}
+
+		describe 'www,' do
+			before { 
+				sign_in user 
+				visit new_card_path
+			}
+
+			describe 'вид,' do
+				it_should_behave_like 'создание_карточки'
+			end
+
+			describe 'работа,' do
+				before {
+					fill_in 'Название', with: new_card.title
+					fill_in 'Содержимое', with: new_card.content
+					click_button create_button
+				}
+				it_should_behave_like 'просмотр_карточки' do
+					let(:the_card) { Card.last }
+				end
+				#it_should_behave_like 'flash-сообщение', 'success', 'Карточка создана'
+			end
+		end
+
+		describe 'http,' do
+			before {
+				console_user
+				post cards_path, card_params
+			}
+			specify{ expect(response).to redirect_to cards_path }
+		end
+	end
+
 	pending 'изменение,'
 	pending 'удаление,'
 end
