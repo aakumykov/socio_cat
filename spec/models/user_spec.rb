@@ -22,11 +22,13 @@ describe 'Пользователь,' do
 	it { should respond_to(:remember_token) }
 	it { should respond_to(:admin) }
 	
-	it { should respond_to(:cards) }
+	#it { should respond_to(:cards) } # теперь в разделе 'связь с карточками'
 
 	it { should_not be_admin }
 
-	it { should be_valid }
+	it 'с корректными данными' do
+		should be_valid
+	end
 
 	describe 'с некорректными данными,' do
 		describe 'отсутствует имя,' do
@@ -90,28 +92,28 @@ describe 'Пользователь,' do
 				end
 			end
 		end
+		describe 'повторяющиеся данные,' do
+			describe 'имя,' do
+				before {
+					user2 = @user.dup
+					user2.email = SecureRandom.uuid.gsub('-','') + '@example.org'
+					user2.name = @user.name.upcase
+					user2.save!
+				}
+				it { should_not be_valid }
+			end
+			describe 'электронка,' do
+				before {
+					user2 = @user.dup
+					user2.name = @user.name + '123'
+					user2.email = @user.email.upcase
+					user2.save!
+				}
+				it { should_not be_valid }
+			end
+		end
 	end
 
-	describe 'повторяющиеся данные,' do
-		describe 'имя,' do
-			before {
-				user2 = @user.dup
-				user2.email = SecureRandom.uuid.gsub('-','') + '@example.org'
-				user2.name = @user.name.upcase
-				user2.save!
-			}
-			it { should_not be_valid }
-		end
-		describe 'электронка,' do
-			before {
-				user2 = @user.dup
-				user2.name = @user.name + '123'
-				user2.email = @user.email.upcase
-				user2.save!
-			}
-			it { should_not be_valid }
-		end
-	end
 
 	describe 'перевод почты в нижний регистр,' do
 		let(:email) { 'address@exampe.com' }
@@ -151,17 +153,18 @@ describe 'Пользователь,' do
 		it { should be_admin }
 	end
 
+
 	describe 'связь с карточками,' do
 		let(:user) { FactoryGirl.create(:user) }
-		#let!(:older_card) { FactoryGirl.create(:card, user:@user, created_at: 1.day.ago ) }
-		#let!(:newer_card) { FactoryGirl.create(:card, user:@user, created_at: 1.week.ago ) }
+		
 		let!(:older_card) { user.cards.create(title: Faker::Lorem.word.capitalize, content: Faker::Lorem.paragraph, created_at: 1.month.ago) }
 		let!(:newer_card) { user.cards.create(title: Faker::Lorem.word.capitalize, content: Faker::Lorem.paragraph, created_at: 1.hour.ago) }
 
 		subject { user }
 		
-		# должен иметь метод "cards"
-		it { should respond_to(:cards) }
+		it 'должен иметь метод #cards' do
+			should respond_to(:cards)
+		end
 		
 		it 'пользователь.карточка == карточка' do
 			expect(user.cards.first).to eq older_card
