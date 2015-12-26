@@ -1,6 +1,7 @@
 class Card < ActiveRecord::Base
 
 	belongs_to :user, inverse_of: :cards
+	#validates_associated :user
 
 	validates :title, {
 		presence: true,
@@ -12,5 +13,8 @@ class Card < ActiveRecord::Base
 		length: { maximum: 1000 }
 	}
 
-	
+	validates :user_id, {
+		presence: true,
+		format: /\A[0-9]+\z/,
+	}
 end

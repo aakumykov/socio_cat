@@ -56,6 +56,11 @@ describe 'Карточка,' do
 		it { should_not be_valid }
 	end
 
+	describe 'когда нет user_id,' do
+		before{ card.user_id = nil }
+		it { should_not be_valid }
+	end
+
 
 	describe 'связь с пользователем,' do
 
@@ -74,6 +79,5 @@ describe 'Карточка,' do
 			specify{ expect(user.reload.id).to eq user.id }
 			specify{ expect(user.reload).to eq user }
 		end
-
 	end
 end
