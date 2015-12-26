@@ -291,4 +291,6 @@ describe 'Стриницы карточек,' do
 			specify{ expect(response).to redirect_to(cards_path) }
 		end
 	end
+
+	pending 'создание карточки от имени другого пользователя'
 end
