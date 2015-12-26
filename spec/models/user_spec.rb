@@ -140,11 +140,12 @@ describe 'Пользователь,' do
 		end
 	end
 
+	# Эти свойства приходят не от пользователя,
+	# поэтому проверяются не валидациями, а здесь, вручную.
 	describe 'непустой remember_token,' do
 		before { @user.save }
 		its(:remember_token) { should_not be_blank }
 	end
-
 	describe 'флаг администратора,' do
 		before { 
 			@user.save!

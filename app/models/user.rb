@@ -2,7 +2,7 @@ class User < ActiveRecord::Base
 
 	has_many :cards, inverse_of: :user
 
-	before_create :create_remember_token
+	before_save :create_remember_token
 	before_save { email.downcase! }
 
 	validates :name, { 
@@ -25,10 +25,6 @@ class User < ActiveRecord::Base
 		password_strenth: true,
 	}
 
-	# validates :remember_token, {
-	# 	presence: true,
-	# 	uniqueness: { case_sensitive: true },
-	# }
 
 	def User.new_remember_token
 		SecureRandom.urlsafe_base64
