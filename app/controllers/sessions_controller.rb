@@ -8,7 +8,7 @@ class SessionsController < ApplicationController
 		user = User.find_by(email: params[:session][:email].downcase)
 		
 		if user && user.authenticate(params[:session][:password])
-			flash[:success] = 'Вы вошли на сайт'
+			flash[:success] = "Добро пожаловать на сайт, «#{user.name}»!"
 			sign_in(user)
 			redirect_back
 			#redirect_to user_path(user)
