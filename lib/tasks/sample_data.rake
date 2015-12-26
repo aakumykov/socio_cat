@@ -1,18 +1,9 @@
 namespace :db do
 	desc "Fill database with sample data"
 	task populate: :environment do
-		create_cards
 		create_admin_user
 		create_users
-	end
-end
-
-def create_cards
-	5.times do
-		Card.create!(
-			title: Faker::Lorem.word.capitalize,
-			content: Faker::Lorem.paragraph,
-		)
+		create_cards
 	end
 end
 
@@ -34,4 +25,14 @@ def create_admin_user
 		password_confirmation: 'Qwerty123!@#',
 		admin: true
 	)
+end
+
+def create_cards
+	5.times do
+		Card.create!(
+			title: Faker::Lorem.word.capitalize,
+			content: Faker::Lorem.paragraph,
+			user: User.where(admin:false).first,
+		)
+	end
 end
