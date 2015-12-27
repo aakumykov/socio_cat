@@ -158,6 +158,14 @@ describe 'Стриницы карточек,' do
 				specify{ expect(response).to redirect_to(card_path(card)) }
 			end
 
+			context 'не автор www,' do
+				before {
+					sign_in other_user
+					visit edit_card_path(card.id)
+				}
+				it_should_behave_like 'flash-сообщение', 'error', 'Редактирование запрещено'
+			end
+
 			context 'автор,' do
 				before {
 					sign_in user, no_capybara: true
@@ -190,9 +198,10 @@ describe 'Стриницы карточек,' do
 				before { console_admin }
 				specify{ expect{ delete card_path(card) }.to change(Card,:count).by(-1) }
 			end
+
+			pending 'уведомления предфильтра admin_users пока не тестируются' do
+			end
 		end
-		
-		pending 'уведомления'
 	end
 
 	describe 'список,' do

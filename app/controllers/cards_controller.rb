@@ -86,6 +86,7 @@ class CardsController < ApplicationController
 		end
 
 		def admin_users
+			flash[:error] = 'Вы не администратор'
 			redirect_to cards_path if not current_user.admin?
 		end
 
