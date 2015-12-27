@@ -244,7 +244,7 @@ describe 'Стриницы карточек,' do
 				it_should_behave_like 'просмотр_карточки' do
 					let(:the_card) { Card.last }
 				end
-				#it_should_behave_like 'flash-сообщение', 'success', 'Карточка создана'
+				it_should_behave_like 'flash-сообщение', 'success', 'Карточка создана'
 			end
 		end
 
@@ -253,7 +253,7 @@ describe 'Стриницы карточек,' do
 				console_user
 				post cards_path, card_params
 			}
-			specify{ expect(response).to redirect_to cards_path }
+			specify{ expect(response).to redirect_to card_path(Card.last) }
 		end
 	end
 
@@ -291,6 +291,4 @@ describe 'Стриницы карточек,' do
 			specify{ expect(response).to redirect_to(cards_path) }
 		end
 	end
-
-	pending 'создание карточки от имени другого пользователя'
 end

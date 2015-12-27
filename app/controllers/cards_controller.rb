@@ -15,11 +15,11 @@ class CardsController < ApplicationController
 	end
 
 	def create
-		@card = Card.new(user_params)
+		@card = current_user.cards.new(user_params)
 		if @card.save
 			flash[:success] = "Карточка создана"
-			#redirect_to card_path(@card)
-			redirect_to cards_path
+			redirect_to card_path(@card)
+			#redirect_to cards_path
 		else
 			flash.now[:error] = 'ОШИБКА, карточка не создана'
 			render 'new'
