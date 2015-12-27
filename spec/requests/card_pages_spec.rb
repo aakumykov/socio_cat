@@ -87,6 +87,7 @@ describe 'Стриницы карточек,' do
 		
 		it { should have_content(the_card.title) }
 		it { should have_content(the_card.content) }
+		it { should have_content("от #{the_card.user.name}") }
 	end
 
 	shared_examples_for 'редактирование_карточки' do
