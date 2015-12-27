@@ -19,7 +19,6 @@ class CardsController < ApplicationController
 		if @card.save
 			flash[:success] = "Карточка создана"
 			redirect_to card_path(@card)
-			#redirect_to cards_path
 		else
 			flash.now[:error] = 'ОШИБКА, карточка не создана'
 			render 'new'
@@ -28,18 +27,10 @@ class CardsController < ApplicationController
 
 	def show
 		@card = Card.find_by(id: params[:id])
-		if nil==@card
-			flash[:error] = 'Нет такой карточки'
-			redirect_to cards_path
-		end
 	end
 
 	def edit
 		@card = Card.find_by(id: params[:id])
-		if nil==@card
-			flash[:error] = 'Нет такой карточки'
-			redirect_to cards_path
-		end
 	end
 
 	def update
@@ -54,10 +45,7 @@ class CardsController < ApplicationController
 
 	def destroy
 		@card = Card.find_by(id: params[:id])
-		if nil==@card
-			flash[:error] = "Ошибка удаления карточки"
-			redirect_to cards_path
-		elsif @card.destroy
+		if @card.destroy
 			flash[:warning] = "Карточка «#{@card.title}» удалена"
 			redirect_to cards_path
 		else
@@ -76,10 +64,10 @@ class CardsController < ApplicationController
 		end
 
 		def reject_nil_target
-			# if Card.find_by(id: params[:id]).nil?
-			# 	flash[:error] = 'Нет такой карточки'
-			# 	redirect_to cards_path
-			# end
+			if Card.find_by(id: params[:id]).nil?
+				flash[:error] = 'Нет такой карточки'
+				redirect_to cards_path
+			end
 		end
 
 		def signed_in_users
