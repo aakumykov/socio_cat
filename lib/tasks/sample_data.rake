@@ -13,7 +13,12 @@ def create_users
 		email: 'debian@linux.com',
 		password: 'Qwerty123!@#',
 		password_confirmation: 'Qwerty123!@#',
-		#admin: false,
+	)
+	User.create!(
+		name: 'Убунту',
+		email: 'ubuntu@linux.com',
+		password: 'Qwerty123!@#',
+		password_confirmation: 'Qwerty123!@#',
 	)
 end
 
@@ -28,11 +33,19 @@ def create_admin_user
 end
 
 def create_cards
-	5.times do
+	2.times do
 		Card.create!(
 			title: Faker::Lorem.word.capitalize,
 			content: Faker::Lorem.paragraph,
 			user: User.where(admin:false).first,
+		)
+	end
+
+	2.times do
+		Card.create!(
+			title: Faker::Lorem.word.capitalize,
+			content: Faker::Lorem.paragraph,
+			user: User.where(admin:false).last,
 		)
 	end
 end
