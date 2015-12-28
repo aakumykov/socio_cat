@@ -7,7 +7,7 @@ class CardsController < ApplicationController
 	before_action :admin_users, only: [:destroy, :block]
 	
 	def index
-		@all_cards = Card.all
+		@all_cards = Card.all.order('created_at DESC')
 	end
 
 	def new
