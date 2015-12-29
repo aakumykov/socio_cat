@@ -49,3 +49,13 @@ def create_cards
 		)
 	end
 end
+
+def create_categoties
+	4.times do
+		Category.create!(
+			name: Faker::Lorem.word.capitalize,
+			description: Faker::Lorem.paragraph,
+			user: User.where(admin:true).first,
+		)
+	end
+end

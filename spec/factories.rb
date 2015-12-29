@@ -15,4 +15,10 @@ FactoryGirl.define do
 			admin true
 		end
 	end
+
+	factory :category do
+		name { Faker::Lorem.word.capitalize }
+		description { Faker::Lorem.paragraph }
+		user
+	end
 end
