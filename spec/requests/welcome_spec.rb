@@ -6,6 +6,7 @@ describe 'Статические welcome-страницы,' do
 	shared_examples_for 'all_welcome_pages' do
 		context 'гость,' do
 			it { should have_link('Главная страница', href: home_path) }
+			it { should have_link('Категории', href: categories_path) }
 			it { should have_link('Карточки', href: cards_path) }
 			it { should have_link('О проекте', href: about_path) }
 			it { should have_link('Помощь', href: help_path) }

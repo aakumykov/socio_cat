@@ -1,9 +1,4 @@
 SocioCat::Application.routes.draw do
-  # get "users/new"
-  # get "welcome/home"
-  # get "welcome/about"
-  # get "welcome/help"
-
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -25,8 +20,9 @@ SocioCat::Application.routes.draw do
   delete 'logout' => 'sessions#destroy', as: :logout
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
-  resources :cards
   resources :users
+  resources :categories
+  resources :cards
   resources :sessions, only: [:new, :create, :destroy]
 
   # Example resource route with options:
