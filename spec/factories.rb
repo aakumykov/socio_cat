@@ -1,4 +1,6 @@
 FactoryGirl.define do
+	#ActionView::Helpers::TextHelper
+
 	factory :card do
 		title Faker::Lorem.word.capitalize
 		content Faker::Lorem.paragraph
@@ -16,9 +18,9 @@ FactoryGirl.define do
 		end
 	end
 
-	factory :category do
-		name { Faker::Lorem.word.capitalize }
-		description { Faker::Lorem.paragraph }
-		user
-	end
+	# factory :category do
+	# 	name { truncate(Faker::Lorem.word.capitalize, length: 10, separator: ' ') }
+	# 	description { truncate(Faker::Lorem.paragraph, length: 120, separator: ' ') }
+	# 	#user
+	# end
 end
