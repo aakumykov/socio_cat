@@ -78,6 +78,8 @@ describe 'Стриницы карточек,' do
 		it_should_behave_like 'просмотр_карточки' do
 			let(:the_card) { other_card }
 		end
+
+		it_should_behave_like 'кнопки_удобства'
 	end
 
 	shared_examples_for 'просмотр_карточки' do
@@ -88,6 +90,13 @@ describe 'Стриницы карточек,' do
 		it { should have_content(the_card.title) }
 		it { should have_content(the_card.content) }
 		it { should have_content("от #{the_card.user.name}") }
+	end
+
+	shared_examples_for 'кнопки_удобства' do
+		it { should have_link('Все карточки', cards_path) }
+		context 'зарегистрированный пользователь' do
+			it { should have_link('Новая', new_card_path) }
+		end
 	end
 
 	shared_examples_for 'редактирование_карточки' do

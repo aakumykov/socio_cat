@@ -1,4 +1,5 @@
 <%= link_to 'Главная страница', home_path, class: 'btn btn-primary' %>
+<%= link_to 'Категории', categories_path, class: 'btn btn-success' %>
 <%= link_to 'Карточки', cards_path, class: 'btn btn-warning' %>
 <% if signed_in? %>
 	<%= link_to 'Пользователи', users_path, class: 'btn btn-danger' %>
