@@ -1,4 +1,5 @@
 require 'spec_helper'
+require 'shared/pages_specs'
 
 describe 'Страницы пользователя,' do
 
@@ -20,52 +21,6 @@ describe 'Страницы пользователя,' do
 
 	subject { page }
 
-
-
-	shared_examples_for 'появление flash-сообщения' do |mode,text=''|
-		if text.blank?
-			it { should have_selector("div.alert.alert-#{mode}") }
-		else
-			it { should have_selector("div.alert.alert-#{mode}", text:text) }
-		end
-	end
-
-	shared_examples_for 'исчезновение flash-сообщения' do
-		before { visit root_path }
-		it { should_not have_selector("div.alert") }
-	end
-
-	shared_examples_for 'страница с названием' do
-		it { should have_title( full_title(title) ) }
-		it { should have_selector('h1',text:heading) }
-	end
-
-	shared_examples_for 'главная страница' do
-		it_should_behave_like 'страница с названием' do
-			let(:title) { 'Соционический каталог' }
-			let(:heading) { 'Добро пожаловать' }
-		end
-	end
-
-	shared_examples_for 'страница входа' do
-		it_should_behave_like 'страница с названием' do
-			let(:title) {'Вход на сайт'}
-			let(:heading) {'Вход на сайт'}
-		end
-
-		it { should have_selector('label',text:'Электронная почта') }
-		it { should have_selector(:xpath,"//input[@id='session_email']") }
-
-		it { should have_selector('label',text:'Пароль') }
-		it { should have_selector(:xpath,"//input[@id='session_password']") }
-
-		it { should have_selector(:xpath,"//input[@type='submit' and @value='Войти']")}
-	end
-
-	shared_examples_for 'требование входа' do
-		it_should_behave_like 'страница входа'
-		it_should_behave_like 'появление flash-сообщения', 'notice', 'Сначала войдите на сайт'
-	end
 
 	shared_examples_for 'страница пользователя' do |mode|
 		it_should_behave_like 'страница с названием' do
@@ -149,7 +104,7 @@ describe 'Страницы пользователя,' do
 					sign_in user
 					visit register_path
 				}
-				it_should_behave_like 'появление flash-сообщения', 'error', 'Вы уже зарегистрированы'
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы уже зарегистрированы'
 				it_should_behave_like 'страница пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
@@ -166,7 +121,7 @@ describe 'Страницы пользователя,' do
 
 			context 'невошедший пользователь,' do
 				before { visit user_path(user) }
-				it_should_behave_like 'требование входа'
+				it_should_behave_like 'требование_входа'
 			end
 
 			context 'вошедший пользователь,' do
@@ -188,7 +143,7 @@ describe 'Страницы пользователя,' do
 					sign_in other_user
 					visit edit_user_path(user)
 				}
-				it_should_behave_like 'появление flash-сообщения', 'error', 'Редактирование запрещено'
+				it_should_behave_like 'flash-сообщение', 'error', 'Редактирование запрещено'
 				it_should_behave_like 'страница пользователя' do
 					let(:the_user) { user }
 				end
@@ -242,8 +197,8 @@ describe 'Страницы пользователя,' do
 
 			context 'объекта не существует' do
 				before { visit user_path(wrong_id) }
-				it_should_behave_like 'появление flash-сообщения', 'error', 'Несуществующий объект'
-				it_should_behave_like 'главная страница'
+				it_should_behave_like 'flash-сообщение', 'error', 'Несуществующий объект'
+				it_should_behave_like 'главная_страница'
 			end
 
 			context 'объект существует' do
@@ -273,7 +228,7 @@ describe 'Страницы пользователя,' do
 
 				describe 'уведомление об успехе,' do
 					before { click_button register_button }
-					it_should_behave_like 'появление flash-сообщения', 'success', 'Добро пожаловать'
+					it_should_behave_like 'flash-сообщение', 'success', 'Добро пожаловать'
 				end
 			end
 			context 'неверных,' do
@@ -281,8 +236,7 @@ describe 'Страницы пользователя,' do
 
 				describe 'уведомление об ошибке,' do
 					before { click_button register_button }
-					it_should_behave_like 'появление flash-сообщения', 'error', 'ОШИБКА. Пользователь не создан'
-					it_should_behave_like 'исчезновение flash-сообщения'
+					it_should_behave_like 'flash-сообщение', 'error', 'ОШИБКА. Пользователь не создан'
 				end
 			end
 		end
@@ -335,8 +289,7 @@ describe 'Страницы пользователя,' do
 
 					 describe 'неверное,' do
 					 	before { click_button save_button }
-					 	it_should_behave_like 'появление flash-сообщения', 'error', 'Изменения отклонены'
-					 	it_should_behave_like 'исчезновение flash-сообщения'
+					 	it_should_behave_like 'flash-сообщение', 'error', 'Изменения отклонены'
 					 	specify{ expect(user.reload.name).to eq user.name }
 					 end
 				end
@@ -366,8 +319,8 @@ describe 'Страницы пользователя,' do
 			
 			describe 'сообщение об успехе,' do
 				before { click_link delete_button }
-				it_should_behave_like 'появление flash-сообщения', 'success', 'Пользователь'
-				it_should_behave_like 'появление flash-сообщения', 'success', 'удалён'
+				it_should_behave_like 'flash-сообщение', 'success', 'Пользователь'
+				it_should_behave_like 'flash-сообщение', 'success', 'удалён'
 				it_should_behave_like 'список пользователей'
 			end
 		end
