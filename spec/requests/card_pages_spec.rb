@@ -100,7 +100,7 @@ describe 'Стриницы карточек,' do
 
 			describe 'www,' do
 				before { visit card_path(wrong_id) }
-				it_should_behave_like 'flash-сообщение', 'error', 'Нет такой карточки'
+				it_should_behave_like 'flash-сообщение', 'error', 'Запрошенный объект не существует'
 				it_should_behave_like 'список_карточек'
 			end
 		end

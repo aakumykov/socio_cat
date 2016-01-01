@@ -22,7 +22,7 @@ describe 'Страницы пользователя,' do
 	subject { page }
 
 
-	shared_examples_for 'страница пользователя' do |mode|
+	shared_examples_for 'страница_пользователя' do |mode|
 		it_should_behave_like 'страница с названием' do
 			let(:title) { "Страница пользователя «#{the_user.name}»" }
 			let(:heading) { "Страница пользователя «#{the_user.name}»" }
@@ -45,16 +45,16 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
-	shared_examples_for 'страница редактирования' do
+	shared_examples_for 'страница_редактирования' do
 		it_should_behave_like 'страница с названием' do
 			let(:title) { "Редактирование пользователя «#{the_user.name}»" }
 			let(:heading) { "Редактирование пользователя «#{the_user.name}»" }
 		end
-		it_should_behave_like 'форма редактирования'
+		it_should_behave_like 'форма_редактирования'
 		it { should have_selector(:xpath,"//input[@type='submit' and @value='#{save_button}']") }
 	end
 
-	shared_examples_for 'список пользователей' do
+	shared_examples_for 'список_пользователей' do
 		it_should_behave_like 'страница с названием' do
 			let(:title) { 'Пользователи' }
 			let(:heading) { 'Пользователи' }
@@ -64,16 +64,16 @@ describe 'Страницы пользователя,' do
 		it { should have_link(user2.name, href:user_path(user2.id)) }
 	end
 
-	shared_examples_for 'страница регистрации' do
+	shared_examples_for 'страница_регистрации' do
 		it_should_behave_like 'страница с названием' do
 			let(:title) { 'Регистрация пользователя' }
 			let(:heading) { 'Регистрация пользователя' }
 		end
-		it_should_behave_like 'форма редактирования'
+		it_should_behave_like 'форма_редактирования'
 		it { should have_selector(:xpath,"//input[@type='submit' and @value='#{register_button}']") }
 	end
 
-	shared_examples_for 'форма редактирования' do
+	shared_examples_for 'форма_редактирования' do
 		it { should have_selector('label',text:'Имя') }
 		it { should have_selector(:xpath, "//input[@name='user[name]']") }
 
@@ -105,14 +105,14 @@ describe 'Страницы пользователя,' do
 					visit register_path
 				}
 				it_should_behave_like 'flash-сообщение', 'error', 'Вы уже зарегистрированы'
-				it_should_behave_like 'страница пользователя', 'владелец' do
+				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
 			end
 
 			context 'невошедший пользователь,' do
 				before { visit register_path }
-				it_should_behave_like 'страница регистрации'
+				it_should_behave_like 'страница_регистрации'
 			end
 		end
 
@@ -129,7 +129,7 @@ describe 'Страницы пользователя,' do
 					sign_in user
 					visit user_path(user) 
 				}
-				it_should_behave_like 'страница пользователя', 'владелец' do
+				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
 			end
@@ -144,7 +144,7 @@ describe 'Страницы пользователя,' do
 					visit edit_user_path(user)
 				}
 				it_should_behave_like 'flash-сообщение', 'error', 'Редактирование запрещено'
-				it_should_behave_like 'страница пользователя' do
+				it_should_behave_like 'страница_пользователя' do
 					let(:the_user) { user }
 				end
 			end
@@ -154,7 +154,7 @@ describe 'Страницы пользователя,' do
 					sign_in user
 					visit edit_user_path(user)
 				}
-				it_should_behave_like 'страница редактирования' do
+				it_should_behave_like 'страница_редактирования' do
 					let(:the_user) { user }
 				end
 			end
@@ -164,7 +164,7 @@ describe 'Страницы пользователя,' do
 					sign_in admin 
 					visit edit_user_path(user)
 				}
-				it_should_behave_like 'страница редактирования' do
+				it_should_behave_like 'страница_редактирования' do
 					let(:the_user) { user }
 				end
 			end
@@ -197,13 +197,13 @@ describe 'Страницы пользователя,' do
 
 			context 'объекта не существует' do
 				before { visit user_path(wrong_id) }
-				it_should_behave_like 'flash-сообщение', 'error', 'Несуществующий объект'
-				it_should_behave_like 'главная_страница'
+				it_should_behave_like 'flash-сообщение', 'error', 'Запрошенный объект не существует'
+				it_should_behave_like 'список_пользователей'
 			end
 
 			context 'объект существует' do
 				before { visit user_path(user) }
-				it_should_behave_like 'страница пользователя', 'владелец' do
+				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
 			end
@@ -214,7 +214,7 @@ describe 'Страницы пользователя,' do
 	# #new, #create
 	describe 'регистрация пользователя,' do
 		before { visit register_path }
-		it_should_behave_like 'страница регистрации'
+		it_should_behave_like 'страница_регистрации'
 
 		describe 'отправка данных,' do
 			context 'верных,' do
@@ -248,7 +248,7 @@ describe 'Страницы пользователя,' do
 			sign_in user
 			visit users_path
 		}
-		it_should_behave_like 'список пользователей'
+		it_should_behave_like 'список_пользователей'
 	end
 
 	# #show, #edit. #update
@@ -258,14 +258,14 @@ describe 'Страницы пользователя,' do
 				sign_in user
 				visit user_path(user) 
 			}
-			it_should_behave_like 'страница пользователя', 'владелец' do
+			it_should_behave_like 'страница_пользователя', 'владелец' do
 				let(:the_user) { user }
 			end
 			
 			describe 'редактирование,' do
 				before { click_link edit_button }
 				
-				it_should_behave_like 'страница редактирования' do
+				it_should_behave_like 'страница_редактирования' do
 					let(:the_user) { user }
 				end
 
@@ -282,7 +282,7 @@ describe 'Страницы пользователя,' do
 					 	
 					 	specify{ expect(user.reload.name).to eq new_name }
 					 	
-					 	it_should_behave_like 'страница пользователя', 'владелец' do
+					 	it_should_behave_like 'страница_пользователя', 'владелец' do
 					 		let(:the_user) { User.find_by(id: user.id) }
 					 	end
 					 end
@@ -307,7 +307,7 @@ describe 'Страницы пользователя,' do
 		}
 
 		describe 'вид страницы,' do
-			it_should_behave_like 'страница пользователя', 'админ' do
+			it_should_behave_like 'страница_пользователя', 'админ' do
 				let(:the_user) { user }
 			end
 		end
@@ -321,7 +321,7 @@ describe 'Страницы пользователя,' do
 				before { click_link delete_button }
 				it_should_behave_like 'flash-сообщение', 'success', 'Пользователь'
 				it_should_behave_like 'flash-сообщение', 'success', 'удалён'
-				it_should_behave_like 'список пользователей'
+				it_should_behave_like 'список_пользователей'
 			end
 		end
 	end
