@@ -7,7 +7,8 @@ class CardsController < ApplicationController
 	before_action :admin_users, only: [:destroy, :block]
 	
 	def index
-		@all_cards = Card.all.order('created_at DESC')
+		#@all_cards = Card.all.order('created_at DESC')
+		@all_cards = controller_name.classify.constantize.all.order('created_at DESC')
 	end
 
 	def new
@@ -64,9 +65,13 @@ class CardsController < ApplicationController
 		end
 
 		def reject_nil_target
-			if Card.find_by(id: params[:id]).nil?
-				flash[:error] = 'Нет такой карточки'
-				redirect_to cards_path
+			the_model = controller_name.classify.constantize
+			if the_model.find_by(id: params[:id]).nil?
+				flash[:error] = 'Запрошенный объект не существует'
+				redirect_to url_for(
+								controller: controller_name, 
+								action: 'index',
+							)
 			end
 		end
 
