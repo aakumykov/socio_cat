@@ -1,7 +1,6 @@
 class UsersController < ApplicationController
 
-	#before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
-
+	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
 	before_action :not_signed_in_users, only: [:new, :create]
 	before_action :signed_in_users, only: [:show, :edit, :update]
 	before_action :editor_users, only: [:edit, :update]
@@ -90,32 +89,12 @@ class UsersController < ApplicationController
 			)
 		end
 
-		def signed_in_users
-			if not signed_in?
-				redirect_to login_path, notice: 'Сначала войдите на сайт'
-			end
-		end
-
-		def not_signed_in_users
-			if signed_in?
-				flash[:error] = 'Вы уже зарегистрированы'
-				redirect_to user_path(current_user)
-			end
-		end
-
 		def editor_users
 			@user = User.find_by(id: params[:id])
 
 			if (current_user != @user) && (not current_user.admin?)
 				flash[:error] = 'Редактирование запрещено'
 				redirect_to user_path(@user)
-			end
-		end
-
-		def admin_users
-			if not current_user.admin?
-				flash[:error] = 'Доступно только администратору'
-				redirect_to root_path
 			end
 		end
 end

@@ -1,7 +1,6 @@
 class CardsController < ApplicationController
 
-	#before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
-
+	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
 	before_action :signed_in_users, only: [:new, :create, :edit, :update]
 	before_action :editor_users, only: [:edit, :update]
 	before_action :admin_users, only: [:destroy, :block]
@@ -64,12 +63,6 @@ class CardsController < ApplicationController
 			)
 		end
 
-		def signed_in_users
-			if not signed_in?
-				redirect_to login_path, notice: 'Сначала войдите на сайт'
-			end
-		end
-
 		def editor_users
 			@card = Card.find_by(id: params[:id])
 
@@ -78,11 +71,5 @@ class CardsController < ApplicationController
 				redirect_to card_path(@card)
 			end
 		end
-
-		def admin_users
-			flash[:error] = 'Вы не администратор'
-			redirect_to cards_path if not current_user.admin?
-		end
-
 end
 
