@@ -57,7 +57,12 @@ describe 'Стриницы карточек,' do
 
 	shared_examples_for 'кнопки_удобства' do
 		it { should have_link('Все карточки', cards_path) }
+		
 		context 'зарегистрированный пользователь' do
+			before { 
+				sign_in user 
+				visit cards_path
+			}
 			it { should have_link('Новая', new_card_path) }
 		end
 	end
