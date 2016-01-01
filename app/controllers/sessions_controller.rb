@@ -1,5 +1,7 @@
 class SessionsController < ApplicationController
 
+	skip_before_action :reject_nil_target
+
 	def new
 		save_referer
 	end

@@ -1,6 +1,6 @@
 class UsersController < ApplicationController
 
-	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
+	#before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
 
 	before_action :not_signed_in_users, only: [:new, :create]
 	before_action :signed_in_users, only: [:show, :edit, :update]
@@ -88,14 +88,6 @@ class UsersController < ApplicationController
 				:password,
 				:password_confirmation,
 			)
-		end
-
-		def reject_nil_target
-			#if params[:id].nil? || User.find_by(id: params[:id]).nil?
-			if User.find_by(id: params[:id]).nil?
-				flash[:error] = 'Несуществующий объект'
-				redirect_to root_path
-			end
 		end
 
 		def signed_in_users
