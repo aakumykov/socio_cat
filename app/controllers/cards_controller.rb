@@ -1,6 +1,6 @@
 class CardsController < ApplicationController
 
-	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
+	#before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
 
 	before_action :signed_in_users, only: [:new, :create, :edit, :update]
 	before_action :editor_users, only: [:edit, :update]
@@ -62,17 +62,6 @@ class CardsController < ApplicationController
 				:title,
 				:content,
 			)
-		end
-
-		def reject_nil_target
-			the_model = controller_name.classify.constantize
-			if the_model.find_by(id: params[:id]).nil?
-				flash[:error] = 'Запрошенный объект не существует'
-				redirect_to url_for(
-								controller: controller_name, 
-								action: 'index',
-							)
-			end
 		end
 
 		def signed_in_users
