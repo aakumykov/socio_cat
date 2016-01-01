@@ -66,3 +66,7 @@ shared_examples_for 'все статические страницы' do
 	end
 end
 
+
+shared_examples_for 'кнопка' do |opt|
+	it { should have_selector(:xpath,"//input[@type='submit' and @value='opt[:value]'") }
+end
