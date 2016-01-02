@@ -7,48 +7,10 @@ class CategoriesController < ApplicationController
 	before_action :editor_users, only: [:edit, :update]
 	before_action :admin_users, only: [:destroy, :block]
 
-	def index
-	end
-
-	def show
-		@ctg = the_model.find(id: params[:id])
-	end
-
-	def new
-	end
-
 	def create
 	end
 
-	def update
-		@ctg = the_target
-		if @ctg.update_attributes(user_params)
-			flash[:success] = 'Изменения сохранены'
-			redirect_to category_path(@ctg)
-		else
-			flash.now[:error] = 'Изменения отклонены'
-			render :edit
-		end
-	end
-
-	def destroy
-		@ctg = the_target
-		if @ctg.destroy
-			flash[:notice] = "Категория «#{ctg.name}» удалена"
-			redirect_to url_for(controller: controller_name, action: 'index')
-		else
-			flash[:error] = "Ошибка удаления категории «#{ctg.name}»"
-			redirect_to url_for(controller: controller_name, action: 'show', id: @ctg.id)
-		end
-	end
-
 	private
-
-
-
-		def the_target
-			the_model.find_by(id: params[:id])
-		end
 
 		def user_params
 			params.require(:category).permit(

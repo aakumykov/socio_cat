@@ -20,7 +20,39 @@ class ApplicationController < ActionController::Base
 		@obj = the_model.find_by(id: params[:id])
 	end
 
-	
+	def update
+		@obj = the_model.find_by(id: params[:id])
+		if @obj.update_attributes(user_params)
+			flash[:success] = 'Изменения сохранены'
+			redirect_to url_for(
+					controller: controller_name,
+					action: 'show',
+					id: @obj.id,
+				)
+		else
+			flash.now[:error] = 'Изменения отклонены'
+			render :edit
+		end
+	end
+
+	def destroy
+		@obj = the_model.find_by(id: params[:id])
+		if @obj.destroy
+			flash[:warning] = "Объект удалён"
+			redirect_to url_for(
+					controller: controller_name,
+					action: 'index',
+				)
+		else
+			flash[:error] = "Ошибка удаления"
+			redirect_to url_for(
+					controller: controller_name,
+					action: 'show',
+					id: @obj.id,
+				)
+		end
+	end
+
 	# Реализация предфильтров
 	private
 		def the_model
