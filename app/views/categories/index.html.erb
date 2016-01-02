@@ -4,5 +4,11 @@
 
 
 <div class='span8 offset2'>
-
+	<ul>
+		<% @list.each do |ctg| %>
+			<li id='category_list_item<%= ctg.id %>'>
+				<%= link_to ctg.name, category_path(ctg.id) %>
+			</li>
+		<% end %>
+	</ul>
 </div>

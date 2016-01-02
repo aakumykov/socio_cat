@@ -1,2 +1,25 @@
-<h1>Categories#show</h1>
-<p>Find me in app/views/categories/show.html.erb</p>
+<% provide(:title,"Категория «#{@obj.name}»") %>
+
+<h1 class='page_title'><%= yield(:title) %></h1>
+
+<div class='span8 offset2'>
+	<div class='row description'><%= @obj.description %></div>
+	<div class='row'>
+		<%= 
+			link_to(
+				'Изменить', 
+				edit_category_path(@obj.id), 
+				class:'btn',
+			) if signed_in? 
+		%>
+		<%= 
+			link_to(
+				'Удалить', 
+				category_path(@obj.id), 
+				method: :delete, 
+				data: {confirm:"Удалить категорию\n\n«#{@obj.name}»"},
+				class: 'btn btn-danger pull-right',
+			) if (signed_in? && current_user.admin?)
+		%>
+	</div>
+</div>

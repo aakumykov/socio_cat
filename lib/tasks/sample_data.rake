@@ -4,6 +4,7 @@ namespace :db do
 		create_admin_user
 		create_users
 		create_cards
+		create_categoties
 	end
 end
 
@@ -55,7 +56,7 @@ def create_categoties
 		Category.create!(
 			name: Faker::Lorem.word.capitalize,
 			description: Faker::Lorem.paragraph,
-			user: User.where(admin:true).first,
+			#user: User.where(admin:true).first,
 		)
 	end
 end

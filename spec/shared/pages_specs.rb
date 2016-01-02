@@ -68,5 +68,6 @@ end
 
 
 shared_examples_for 'кнопка' do |opt|
-	it { should have_selector(:xpath,"//input[@type='submit' and @value='opt[:value]'") }
+	opt[:type] ||= 'submit'
+	it { should have_selector(:xpath,"//input[@type='#{opt[:type]}' and @value='opt[:value]'") }
 end

@@ -18,9 +18,9 @@ FactoryGirl.define do
 		end
 	end
 
-	# factory :category do
-	# 	name { truncate(Faker::Lorem.word.capitalize, length: 10, separator: ' ') }
-	# 	description { truncate(Faker::Lorem.paragraph, length: 120, separator: ' ') }
-	# 	#user
-	# end
+	factory :category do
+		name { Faker::Lorem.word.capitalize }
+		description { Faker::Lorem.paragraph }
+		#user
+	end
 end

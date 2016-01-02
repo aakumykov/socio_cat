@@ -1,7 +1,5 @@
 class CategoriesController < ApplicationController
 
-	include ResourceFiltersModule
-
 	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
 	before_action :signed_in_users, only: [:new, :create, :edit, :update]
 	before_action :editor_users, only: [:edit, :update]

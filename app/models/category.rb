@@ -5,13 +5,13 @@ class Category < ActiveRecord::Base
 	# проверки
 	validates :name, {
 		presence: true,
-		length: { minimum: 2, maximum: 20 },
+		length: { minimum: 2, maximum: 24 },
 		uniqueness: { case_sensitive: false },
 	}
 
 	validates :description, {
 		presence: true,
-		length: { minimum: 3, maximum: 240 }
+		length: { minimum: 3, maximum: 500 }
 	}
 
 	# общие методы
