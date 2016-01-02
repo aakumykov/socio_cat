@@ -1,6 +1,6 @@
 <fieldset class='card' id="<%= card_id(card.id) %>">
 	<legend class='card_title'>
-		<a href='<%= card_path(card.id) %>'><%= card.title %></a><span class='card_user'>, от <%= link_to(card.user.name, user_path(card.user), class: 'badge') %></span>
+		<a href='<%= card_path(card.id) %>'><%= card.title %></a><span class='item_user'>, от <%= link_to(card.user.name, user_path(card.user), class: 'badge') %></span>
 	</legend>
 	<div class='btn-group btn-group-vertical pull-right buttons_container'>
 		<% if true==editable %>

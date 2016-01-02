@@ -65,9 +65,3 @@ shared_examples_for 'все статические страницы' do
 		it { should have_link('Пользователи', href: users_path) }
 	end
 end
-
-
-shared_examples_for 'кнопка' do |opt|
-	opt[:type] ||= 'submit'
-	it { should have_selector(:xpath,"//input[@type='#{opt[:type]}' and @value='opt[:value]'") }
-end

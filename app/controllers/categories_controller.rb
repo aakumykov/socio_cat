@@ -8,7 +8,8 @@ class CategoriesController < ApplicationController
 	def create
 		@ctg = Category.new(user_params)
 		if @ctg.save
-			flash[:success] = "Категория «#{@ctg.name}» создана"
+			#flash[:success] = "Категория «#{@ctg.name}» создана"
+			flash[:success] = "Категория создана"
 			redirect_to category_path(@ctg)
 		else
 			flash.now[:error] = "Ошибка создания категории"

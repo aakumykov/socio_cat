@@ -1,2 +1,10 @@
-<h1>Categories#new</h1>
-<p>Find me in app/views/categories/new.html.erb</p>
+<% provide(:title,'Новая категория') %>
+
+<h1 class='page_title'><%= yield(:title) %></h1>
+
+<div class='card_edit span8 offset2'>
+    <%= form_for(@obj) do |f| %>
+    	<%= render 'shared/error_messages.html.erb', object:f.object %>
+    	<%= render 'form', f:f, mode: 'new', button_text: 'Создать' %>
+    <% end %>
+</div>

@@ -33,11 +33,14 @@ describe 'Категории,' do
 	end
 
 	shared_examples_for 'форма категории' do
-		it { should have_selector('label',text:'Название') }
-		it { should have_field('name') }
+		#it { should have_selector('label',text:'Имя') }
+		#it { should have_field('name') }
 
-		it { should have_selector('label',text:'Описание') }
-		it { should have_field('description') }
+		#it { should have_selector('label',text:'Описание') }
+		#it { should have_field('description') }
+		
+		it { should have_field('Имя') }
+		it { should have_field('Описание') }
 	end
 
 	shared_examples_for 'просмотр категории' do
@@ -74,42 +77,46 @@ describe 'Категории,' do
 		it_should_behave_like 'список_категорий'
 	end
 	
-	describe 'Создание,' do
-		before { sign_in user }
+	describe 'Созидание,' do
+		before { 
+			sign_in user 
+			visit new_category_path
+		}
 
 		describe 'форма,' do
-			before { visit new_category_path }
 			it_should_behave_like 'страница с названием' do
 				let(:title) { 'Новая категория' }
 				let(:heading) { title }
 			end
 			it_should_behave_like 'форма категории'
-			it { should have_link 'Новая', href: create_button }
+			it { should have_selector(:xpath,"//input[@type='submit' and @value='#{create_button}']") }
+			pending 'Ищейка "конпка"'
 		end
 
-		# describe 'работа формы,' do
-		# 	describe 'www,' do
-		# 		before {
-		# 			fill_in 'Имя', with: Faker::Lorem.word.capitalize
-		# 			fill_in 'Описание', with: Faker::Lorem.paragraph
-		# 		}
+		describe 'работа формы,' do
+			describe 'www,' do
+				before {
+					fill_in 'Имя', with: Faker::Lorem.word.capitalize
+					fill_in 'Описание', with: Faker::Lorem.paragraph
+				}
 
-		# 		describe 'страница с новой категорией,' do
-		# 			before { click_button create_button }
-		# 			it_should_behave_like 'просмотр категории' do
-		# 				let(:the_cat) { Category.all.last }
-		# 			end
-		# 		end
+				describe 'страница с новой категорией,' do
+					before { click_button create_button }
+					it_should_behave_like 'flash-сообщение', 'success', text:"Категория создана"
+					# it_should_behave_like 'просмотр категории' do
+					# 	let(:the_cat) { Category.all.last }
+					# end
+				end
 
-		# 		describe 'наполнение БД,' do
-		# 			specify{ expect(click_button create_button).to change(Category,:count).by(1) }
-		# 		end
+				# describe 'наполнение БД,' do
+				# 	specify{ expect(click_button create_button).to change(Category,:count).by(1) }
+				# end
 
-		# 		# it 'наполнение БД,' do
-		# 		# 	expect(click_button create_button).to change(Category,:count).by(1)
-		# 		# end
-		# 	end
-		# end
+				# it 'наполнение БД,' do
+				# 	expect(click_button create_button).to change(Category,:count).by(1)
+				# end
+			end
+		end
 	end
 
 	describe 'Просмотр,' do
@@ -141,6 +148,6 @@ describe 'Категории,' do
 	# 	# end
 	# end
 
-	# describe 'Удаление,' do
+	# describe 'Разрушение,' do
 	# end
 end
