@@ -19,7 +19,17 @@ describe 'Категории,' do
 			let(:title) { 'Категории' }
 			let(:heading) { title }
 		end
+		it { should_not have_link('Новая',href:new_category_path) }
+
 		pending 'элементы списка'
+		
+		describe 'кнопка создания категории,' do
+			before { 
+				sign_in user
+				visit categories_path
+			}
+			it { should have_link('Новая',href:new_category_path) }
+		end
 	end
 
 	shared_examples_for 'форма категории' do
@@ -64,43 +74,43 @@ describe 'Категории,' do
 		it_should_behave_like 'список_категорий'
 	end
 	
-	# pending 'Создание,' do
-	# 	before { sign_in user }
+	describe 'Создание,' do
+		before { sign_in user }
 
-	# 	describe 'форма,' do
-	# 		before { visit new_category_path }
-	# 		it_should_behave_like 'страница с названием' do
-	# 			let(:title) { 'Новая категория' }
-	# 			let(:heading) { title }
-	# 		end
-	# 		it_should_behave_like 'форма категории'
-	# 		it_should_behave_like 'кнопка', value: create_button
-	# 	end
+		describe 'форма,' do
+			before { visit new_category_path }
+			it_should_behave_like 'страница с названием' do
+				let(:title) { 'Новая категория' }
+				let(:heading) { title }
+			end
+			it_should_behave_like 'форма категории'
+			it { should have_link 'Новая', href: create_button }
+		end
 
-	# 	describe 'работа формы,' do
-	# 		describe 'www,' do
-	# 			before {
-	# 				fill_in 'Имя', with: Faker::Lorem.word.capitalize
-	# 				fill_in 'Описание', with: Faker::Lorem.paragraph
-	# 			}
+		# describe 'работа формы,' do
+		# 	describe 'www,' do
+		# 		before {
+		# 			fill_in 'Имя', with: Faker::Lorem.word.capitalize
+		# 			fill_in 'Описание', with: Faker::Lorem.paragraph
+		# 		}
 
-	# 			describe 'страница с новой категорией,' do
-	# 				before { click_button create_button }
-	# 				it_should_behave_like 'просмотр категории' do
-	# 					let(:the_cat) { Category.all.last }
-	# 				end
-	# 			end
+		# 		describe 'страница с новой категорией,' do
+		# 			before { click_button create_button }
+		# 			it_should_behave_like 'просмотр категории' do
+		# 				let(:the_cat) { Category.all.last }
+		# 			end
+		# 		end
 
-	# 			describe 'наполнение БД,' do
-	# 				specify{ expect(click_button create_button).to change(Category,:count).by(1) }
-	# 			end
+		# 		describe 'наполнение БД,' do
+		# 			specify{ expect(click_button create_button).to change(Category,:count).by(1) }
+		# 		end
 
-	# 			# it 'наполнение БД,' do
-	# 			# 	expect(click_button create_button).to change(Category,:count).by(1)
-	# 			# end
-	# 		end
-	# 	end
-	# end
+		# 		# it 'наполнение БД,' do
+		# 		# 	expect(click_button create_button).to change(Category,:count).by(1)
+		# 		# end
+		# 	end
+		# end
+	end
 
 	describe 'Просмотр,' do
 		before { visit category_path(cat) }
