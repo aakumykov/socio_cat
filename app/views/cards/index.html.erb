@@ -6,7 +6,7 @@
 <div class='span8 offset2'>
 	<%= render 'card_button_new' %>
 
-	<% @all_cards.each do |card| %>
+	<% @list.each do |card| %>
 	<%= render 'card_display', card: card, editable: false %>
 	<% end %>
 </div>

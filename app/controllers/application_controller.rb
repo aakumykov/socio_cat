@@ -4,8 +4,29 @@ class ApplicationController < ActionController::Base
 	protect_from_forgery with: :exception
 	include SessionsHelper
 
+	def index
+		@list = the_model.all.order('created_at DESC')
+	end
+
+	def new
+		@obj = the_model.new
+	end
+
+	def show
+		@obj = the_model.find_by(id: params[:id])
+	end
+
+	def edit
+		@obj = the_model.find_by(id: params[:id])
+	end
+
+	
 	# Реализация предфильтров
 	private
+		def the_model
+			controller_name.classify.constantize
+		end
+
 		def reject_nil_target
 			the_model = controller_name.classify.constantize
 			if the_model.find_by(id: params[:id]).nil?

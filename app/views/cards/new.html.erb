@@ -3,7 +3,7 @@
 <h1 class='page_title'><%= yield(:title) %></h1>
 
 <div class='card_edit span8 offset2'>
-    <%= form_for(@card) do |f| %>
+    <%= form_for(@obj) do |f| %>
     	<%= render 'shared/error_messages.html.erb', object:f.object %>
     	<%= render 'card_edit', f:f, mode: 'new', button_text: 'Создать' %>
     <% end %>

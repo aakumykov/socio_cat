@@ -8,7 +8,6 @@ class CategoriesController < ApplicationController
 	before_action :admin_users, only: [:destroy, :block]
 
 	def index
-		@all_categories = the_model.all.order('created_at DESC')
 	end
 
 	def show
@@ -45,9 +44,7 @@ class CategoriesController < ApplicationController
 
 	private
 
-		def the_model
-			controller_name.classify.constantize
-		end
+
 
 		def the_target
 			the_model.find_by(id: params[:id])

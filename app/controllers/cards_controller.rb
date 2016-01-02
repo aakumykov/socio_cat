@@ -5,15 +5,6 @@ class CardsController < ApplicationController
 	before_action :editor_users, only: [:edit, :update]
 	before_action :admin_users, only: [:destroy, :block]
 	
-	def index
-		#@all_cards = Card.all.order('created_at DESC')
-		@all_cards = controller_name.classify.constantize.all.order('created_at DESC')
-	end
-
-	def new
-		@card = Card.new
-	end
-
 	def create
 		@card = current_user.cards.new(user_params)
 		if @card.save
@@ -23,14 +14,6 @@ class CardsController < ApplicationController
 			flash.now[:error] = 'ОШИБКА, карточка не создана'
 			render 'new'
 		end
-	end
-
-	def show
-		@card = Card.find_by(id: params[:id])
-	end
-
-	def edit
-		@card = Card.find_by(id: params[:id])
 	end
 
 	def update
