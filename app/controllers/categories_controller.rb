@@ -8,6 +8,14 @@ class CategoriesController < ApplicationController
 	before_action :admin_users, only: [:destroy, :block]
 
 	def create
+		@ctg = Category.new(user_params)
+		if @ctg.save
+			flash[:success] = "Категория «#{@ctg.name}» создана"
+			redirect_to category_path(@ctg)
+		else
+			flash.now[:error] = "Ошибка создания категории"
+			render :new
+		end
 	end
 
 	private
