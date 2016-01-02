@@ -185,6 +185,7 @@ describe 'Стриницы карточек,' do
 		it_should_behave_like 'просмотр_карточки' do
 			let(:the_card) { card }
 		end
+		pending 'кнопка удаления'
 	end
 
 	describe 'создание,' do
