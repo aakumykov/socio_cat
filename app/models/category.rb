@@ -5,7 +5,7 @@ class Category < ActiveRecord::Base
 	# проверки
 	validates :name, {
 		presence: true,
-		length: { minimum: 2, maximum: 24 },
+		length: { minimum: 2, maximum: 32 },
 		uniqueness: { case_sensitive: false },
 	}
 
