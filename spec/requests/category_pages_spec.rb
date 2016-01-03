@@ -145,26 +145,27 @@ describe 'Категории,' do
 		# end
 	end
 
-	pending 'Изменение,' do
-	 	before { www_user }
+	describe 'Изменение,' do
+	 	before {
+	 		www_user
+	 		visit edit_category_path(cat)
+	 	}
 
 		describe 'форма,' do
-		 	before { visit edit_category_path(cat) }
 		 	it_should_behave_like 'форма_категории'
-			it { should have_selector(:xpath,"//input[@type='submit' and @value='#{save_button}']") }
+		 	it{ should have_button(save_button) }
 		 	it { should have_link(cancel_button,href:category_path(cat)) }
 		end
 
-		describe 'работа формы,' do
-			context 'с верными данными,' do
-				before {
-					fill_in 'Имя', with: new_cat.name
-					fill_in 'Описание', with: new_cat.description
-					click_button save_button
-				}
-			end
-
-		end
+		# describe 'работа формы,' do
+		# 	context 'с верными данными,' do
+		# 		before {
+		# 			fill_in 'Имя', with: new_cat.name
+		# 			fill_in 'Описание', with: new_cat.description
+		# 			click_button save_button
+		# 		}
+		# 	end
+		# end
 	end
 
 	# describe 'Разрушение,' do
