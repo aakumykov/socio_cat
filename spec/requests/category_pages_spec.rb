@@ -38,11 +38,6 @@ describe 'Категории,' do
 		end
 	end
 
-	shared_examples_for 'форма_категории' do	
-		it { should have_field('Имя') }
-		it { should have_field('Описание') }
-	end
-
 	shared_examples_for 'просмотр_категории' do
 		it_should_behave_like 'страница с названием' do
 			let(:title) { "Категория «#{the_cat.name}»" }
@@ -68,6 +63,21 @@ describe 'Категории,' do
 			}
 			it { should have_link(delete_button, href:category_path(the_cat.id)) }
 		end
+	end
+
+	shared_examples_for 'редактирование_категории' do
+		it_should_behave_like 'страница с названием' do
+			let(:title) { 'Изменение категории' }
+			let(:heading) { title }
+		end
+		it_should_behave_like 'форма_категории'
+		it{ should have_button(save_button) }
+		it { should have_link(cancel_button,href:category_path(cat)) }
+	end
+
+	shared_examples_for 'форма_категории' do	
+		it { should have_field('Имя') }
+		it { should have_field('Описание') }
 	end
 
 
@@ -131,42 +141,70 @@ describe 'Категории,' do
 				end
 			end
 		end
-
-		# describe 'через http-запрос,' do
-		# 	before { 
-		# 		console_user 
-		# 		post categories_path, new_cat_data
-		# 	}
-		# 	specify{ expect(response).to redirect_to(category_path(Category.last.id)) }
-		# 	specify{ expect(response).to change(Category,:count).by(1) }
-		# 	specify{ expect(response).to render_template(:show) }
-		# 	specify{ expect(Category.last.name).to eq new_cat.name }
-		# 	specify{ expect(Category.last.description).to eq new_cat.description }
-		# end
 	end
 
-	describe 'Изменение,' do
-	 	before {
-	 		www_user
-	 		visit edit_category_path(cat)
-	 	}
+	# describe 'Изменение,' do
+	#  	before {
+	#  		www_user
+	#  		visit edit_category_path(cat)
+	#  	}
 
-		describe 'форма,' do
-		 	it_should_behave_like 'форма_категории'
-		 	it{ should have_button(save_button) }
-		 	it { should have_link(cancel_button,href:category_path(cat)) }
+	# 	describe 'форма,' do
+	# 	 	it_should_behave_like 'редактирование_категории'
+	# 	end
+
+	# 	describe 'работа формы,' do
+	# 		context 'с верными данными,' do
+	# 			before {
+	# 				fill_in 'Имя', with: new_cat.name
+	# 				fill_in 'Описание', with: new_cat.description
+	# 				click_button save_button
+	# 			}
+	# 			it_should_behave_like 'flash-сообщение', 'success', 'Изменения сохранены'
+	# 			specify{ expect(cat.reload.name).to eq(new_cat.name) }
+	# 			specify{ expect(cat.reload.description).to eq(new_cat.description) }
+	# 		end
+
+	# 		context 'с некорректными данными,' do
+	# 			before { click_button save_button }
+				
+	# 			specify{ expect(cat.reload.name).to eq(cat.name) }
+	# 			specify{ expect(cat.reload.description).to eq(cat.description) }
+
+	# 			it_should_behave_like 'flash-сообщение', 'error', 'Изменения отклонены'
+	# 			it_should_behave_like 'редактирование_категории'
+	# 		end
+	# 	end
+	# end
+
+	describe 'Изменение (http),' do
+		before { console_user }
+
+		context 'корректными данными,' do
+			before { patch category_path(cat), new_cat_data }
+			
+			specify{ expect(cat.reload.name).to eq new_cat.name }
+			specify{ expect(cat.reload.description).to eq new_cat.description}
+			
+			specify{ expect(response).to redirect_to category_path(cat) }
 		end
 
-		# describe 'работа формы,' do
-		# 	context 'с верными данными,' do
-		# 		before {
-		# 			fill_in 'Имя', with: new_cat.name
-		# 			fill_in 'Описание', with: new_cat.description
-		# 			click_button save_button
-		# 		}
-		# 	end
-		# end
+		context 'некорректными данными,' do
+			let(:bad_cat_data) {
+				{ category: {
+					name: ' ',
+					description: ' ',
+				}}
+			}
+			before { patch category_path(cat), bad_cat_data }
+			
+			specify{ expect(cat.reload.name).to eq cat.name }
+			specify{ expect(cat.reload.description).to eq cat.description}
+
+			specify{ expect(response).to render_template(:edit) }
+		end
 	end
+
 
 	# describe 'Разрушение,' do
 	# end
