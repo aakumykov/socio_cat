@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'shared/pages_specs'
+require 'shared/pages_spec'
 
 describe 'Страницы пользователя,' do
 
@@ -101,7 +101,7 @@ describe 'Страницы пользователя,' do
 
 			context 'вошедший пользователь,' do
 				before {
-					sign_in user
+					www_user
 					visit register_path
 				}
 				it_should_behave_like 'flash-сообщение', 'error', 'Вы уже зарегистрированы'
@@ -126,7 +126,7 @@ describe 'Страницы пользователя,' do
 
 			context 'вошедший пользователь,' do
 				before { 
-					sign_in user
+					www_user
 					visit user_path(user) 
 				}
 				it_should_behave_like 'страница_пользователя', 'владелец' do
@@ -151,7 +151,7 @@ describe 'Страницы пользователя,' do
 
 			context 'владелец,' do
 				before { 
-					sign_in user
+					www_user
 					visit edit_user_path(user)
 				}
 				it_should_behave_like 'страница_редактирования' do
@@ -161,7 +161,7 @@ describe 'Страницы пользователя,' do
 
 			context 'администратор,' do
 				before { 
-					sign_in admin 
+					www_admin 
 					visit edit_user_path(user)
 				}
 				it_should_behave_like 'страница_редактирования' do
@@ -185,7 +185,7 @@ describe 'Страницы пользователя,' do
 			end			
 
 			describe 'админ,' do
-				before { sign_in admin, no_capybara: true }
+				before { www_admin, no_capybara: true }
 				specify{ expect{ delete user_path(user) }.to change(User,:count).by(-1) }
 			end
 		end
@@ -193,7 +193,7 @@ describe 'Страницы пользователя,' do
 		describe 'reject_nil_target(),' do
 			# отклоняет действия над несуществующим пользователем
 
-			before { sign_in user  }
+			before { www_user  }
 
 			context 'объекта не существует' do
 				before { visit user_path(wrong_id) }
@@ -245,7 +245,7 @@ describe 'Страницы пользователя,' do
 	# #index
 	describe 'список пользователей,' do
 		before { 
-			sign_in user
+			www_user
 			visit users_path
 		}
 		it_should_behave_like 'список_пользователей'
@@ -255,7 +255,7 @@ describe 'Страницы пользователя,' do
 	describe 'просмотр и редактирование пользователя,' do
 		describe 'просмотр,' do
 			before { 
-				sign_in user
+				www_user
 				visit user_path(user) 
 			}
 			it_should_behave_like 'страница_пользователя', 'владелец' do
@@ -302,7 +302,7 @@ describe 'Страницы пользователя,' do
 		before {
 			user.save!
 			other_user.save!
-			sign_in admin
+			www_admin
 			visit user_path(user)
 		}
 
@@ -327,7 +327,7 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'удаление админом самого себя,' do
-		before { sign_in admin, no_capybara: true }
+		before { www_admin, no_capybara: true }
 		
 		specify{ expect{ delete user_path(admin) }.not_to change(User,:count) }
 
@@ -350,7 +350,7 @@ describe 'Страницы пользователя,' do
 			}}
 		}
 		before { 
-			sign_in user 
+			www_user 
 			patch user_path(user), user_params
 		}
 		specify{ expect(user.reload).not_to be_admin }

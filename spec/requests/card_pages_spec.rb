@@ -1,5 +1,5 @@
 require 'spec_helper'
-require 'shared/pages_specs'
+require 'shared/pages_spec'
 
 describe 'Стриницы карточек,' do
 
@@ -16,15 +16,7 @@ describe 'Стриницы карточек,' do
 	let(:change_button) { 'Изменить' }
 	let(:save_button) { 'Сохранить' }
 	let(:cancel_button) { 'Отмена' }
-
-	def console_user
-		sign_in user, no_capybara: true
-	end
 	
-	def console_admin
-		sign_in admin, no_capybara: true
-	end
-
 
 	subject { page }
 
@@ -60,7 +52,7 @@ describe 'Стриницы карточек,' do
 		
 		context 'зарегистрированный пользователь' do
 			before { 
-				sign_in user 
+				www_user 
 				visit cards_path
 			}
 			it { should have_link('Новая', new_card_path) }
@@ -113,7 +105,7 @@ describe 'Стриницы карточек,' do
 
 			context 'пользователь,' do
 				before { 
-					sign_in user, no_capybara:true
+					www_user, no_capybara:true
 					get new_card_path
 				}
 				specify{ expect(response).to render_template(:new) }
@@ -139,7 +131,7 @@ describe 'Стриницы карточек,' do
 
 			context 'автор,' do
 				before {
-					sign_in user, no_capybara: true
+					www_user, no_capybara: true
 					get edit_card_path(card)
 				}
 				specify{ expect(response).to render_template(:edit) }
@@ -147,7 +139,7 @@ describe 'Стриницы карточек,' do
 
 			context 'администратор,' do
 				before {
-					sign_in admin, no_capybara: true
+					www_admin, no_capybara: true
 					get edit_card_path(card)
 				}
 				specify{ expect(response).to render_template(:edit) }
@@ -208,7 +200,7 @@ describe 'Стриницы карточек,' do
 
 		describe 'www,' do
 			before { 
-				sign_in user 
+				www_user 
 				visit new_card_path
 			}
 

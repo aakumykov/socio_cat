@@ -6,11 +6,10 @@ class CategoriesController < ApplicationController
 	before_action :admin_users, only: [:destroy, :block]
 
 	def create
-		@ctg = Category.new(user_params)
-		if @ctg.save
-			#flash[:success] = "Категория «#{@ctg.name}» создана"
+		@obj = Category.new(user_params)
+		if @obj.save
 			flash[:success] = "Категория создана"
-			redirect_to category_path(@ctg)
+			redirect_to category_path(@obj)
 		else
 			flash.now[:error] = "Ошибка создания категории"
 			render :new
@@ -27,11 +26,11 @@ class CategoriesController < ApplicationController
 		end
 
 		def editor_users
-			@ctg = Category.find_by(id: params[:id])
+			@obj = Category.find_by(id: params[:id])
 
-			if (current_user != @ctg.user) && (not current_user.admin?)
+			if (current_user != @obj.user) && (not current_user.admin?)
 				flash[:error] = 'Редактирование запрещено'
-				redirect_to card_path(@ctg)
+				redirect_to card_path(@obj)
 			end
 		end
 end
