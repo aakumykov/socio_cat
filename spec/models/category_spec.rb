@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe Category do
+describe 'Категория' do
 	let(:cat) { 
 		Category.new(
 			name: 'Категория 1',
@@ -48,4 +48,6 @@ describe Category do
 			it { should_not be_valid }
 		end
 	end
+
+	pending 'Очистка пробелов на концах'
 end
