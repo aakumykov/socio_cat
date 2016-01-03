@@ -17,7 +17,7 @@
 				'Удалить', 
 				category_path(@obj.id), 
 				method: :delete, 
-				data: {confirm:"Удалить категорию\n\n«#{@obj.name}»"},
+				data: {confirm:"Удалить категорию\n\n«#{@obj.name}» ?"},
 				class: 'btn btn-danger pull-right',
 			) if (signed_in? && current_user.admin?)
 		%>

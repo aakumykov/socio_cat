@@ -136,46 +136,12 @@ describe 'Категории,' do
 
 					describe 'уведомление об ошибке,' do
 						before { click_button create_button }
-						it_should_behave_like 'flash-сообщение', 'error', "Ошибка создания категории"
+						it_should_behave_like 'flash-сообщение', 'error'#, "Ошибка создания категории"
 					end
 				end
 			end
 		end
 	end
-
-	# describe 'Изменение,' do
-	#  	before {
-	#  		www_user
-	#  		visit edit_category_path(cat)
-	#  	}
-
-	# 	describe 'форма,' do
-	# 	 	it_should_behave_like 'редактирование_категории'
-	# 	end
-
-	# 	describe 'работа формы,' do
-	# 		context 'с верными данными,' do
-	# 			before {
-	# 				fill_in 'Имя', with: new_cat.name
-	# 				fill_in 'Описание', with: new_cat.description
-	# 				click_button save_button
-	# 			}
-	# 			it_should_behave_like 'flash-сообщение', 'success', 'Изменения сохранены'
-	# 			specify{ expect(cat.reload.name).to eq(new_cat.name) }
-	# 			specify{ expect(cat.reload.description).to eq(new_cat.description) }
-	# 		end
-
-	# 		context 'с некорректными данными,' do
-	# 			before { click_button save_button }
-				
-	# 			specify{ expect(cat.reload.name).to eq(cat.name) }
-	# 			specify{ expect(cat.reload.description).to eq(cat.description) }
-
-	# 			it_should_behave_like 'flash-сообщение', 'error', 'Изменения отклонены'
-	# 			it_should_behave_like 'редактирование_категории'
-	# 		end
-	# 	end
-	# end
 
 	describe 'Изменение (http),' do
 		before { console_user }
@@ -205,7 +171,15 @@ describe 'Категории,' do
 		end
 	end
 
+	describe 'Разрушение,' do
+		before { 
+			console_admin 
+			delete category_path(cat)
+		}
 
-	# describe 'Разрушение,' do
-	# end
+		specify{ expect(response).to redirect_to categories_path }
+		specify{ expect(Category.find_by(name:cat.name)).to be_nil }
+		# не работает
+		#specify{ expect{ delete category_path(cat) }.to change(Category,:count).by(-1) }
+	end
 end
