@@ -5,11 +5,18 @@ describe 'Категории,' do
 	let(:admin) { FactoryGirl.create(:admin) }
 
 	let(:cat) { FactoryGirl.create(:category) }
-	let(:other_cat) { FactoryGirl.create(:category) }
+	let(:new_cat) { FactoryGirl.build(:category) }
+	let(:new_cat_data) {{
+		category: {
+			name: new_cat.name,
+			description: new_cat.description,
+	}}}
 
 	let(:create_button) { 'Создать' }
 	let(:edit_button) { 'Изменить' }
 	let(:save_button) { 'Сохранить' }
+	let(:delete_button) { 'Удалить' }
+	let(:cancel_button) { 'Отмена' }
 
 	subject { page }
 
@@ -42,16 +49,16 @@ describe 'Категории,' do
 			let(:heading) { title }
 		end
 		it { should have_content(the_cat.description) }
-		it { should_not have_link('Изменить',href:edit_category_path(the_cat.id)) }
-		it { should_not have_link('Удалить',href:category_path(the_cat.id)) }
+		it { should_not have_link(edit_button,href:edit_category_path(the_cat.id)) }
+		it { should_not have_link(delete_button,href:category_path(the_cat.id)) }
 
 		describe 'кнопка изменения,' do
 			before { 
 				www_user 
 				visit category_path(cat)
 			}
-			it { should have_link('Изменить', href:edit_category_path(the_cat.id)) }
-			it { should_not have_link('Удалить') }
+			it { should have_link(edit_button, href:edit_category_path(the_cat.id)) }
+			it { should_not have_link(delete_button) }
 		end
 
 		describe 'кнопка удаления,' do
@@ -59,10 +66,9 @@ describe 'Категории,' do
 				www_admin 
 				visit category_path(cat)
 			}
-			it { should have_link('Удалить', href:category_path(the_cat.id)) }
+			it { should have_link(delete_button, href:category_path(the_cat.id)) }
 		end
 	end
-
 
 
 	describe 'Список,' do
@@ -78,14 +84,6 @@ describe 'Категории,' do
 	end
 	
 	describe 'Созидание,' do
-		let(:new_cat) { FactoryGirl.build(:category) }
-		
-		let(:new_cat_data) {{
-			category: {
-				name: new_cat.name,
-				description: new_cat.description,
-		}}}
-
 		describe 'www,' do
 			before {
 				www_user
@@ -147,29 +145,27 @@ describe 'Категории,' do
 		# end
 	end
 
+	pending 'Изменение,' do
+	 	before { www_user }
 
+		describe 'форма,' do
+		 	before { visit edit_category_path(cat) }
+		 	it_should_behave_like 'форма_категории'
+			it { should have_selector(:xpath,"//input[@type='submit' and @value='#{save_button}']") }
+		 	it { should have_link(cancel_button,href:category_path(cat)) }
+		end
 
-	# describe 'Изменение,' do
-	# 	# before { www_user }
+		describe 'работа формы,' do
+			context 'с верными данными,' do
+				before {
+					fill_in 'Имя', with: new_cat.name
+					fill_in 'Описание', with: new_cat.description
+					click_button save_button
+				}
+			end
 
-	# 	# describe 'форма,' do
-	# 	# 	before { visit edit_category_path(cat) }
-	# 	# 	it_should_behave_like 'форма_категории'
-	# 	# 	it_should_behave_like 'кнопка', value: save_button
-	# 	# 	it { should have_link('Отмена',href:category_path(cat)) }
-	# 	# end
-
-	# 	# describe 'работа формы,' do
-	# 	# 	before {
-	# 	# 		let(:new_cat) = Category.new(
-	# 	# 			name: Faker::Lorem.word.capitalize,
-	# 	# 			description: Faker::Lorem.paragraph,
-	# 	# 		)
-	# 	# 		fill_in 'Имя', with: new_cat.name
-	# 	# 		fill_in 'Описание', with: new_cat.description
-	# 	# 	}
-	# 	# end
-	# end
+		end
+	end
 
 	# describe 'Разрушение,' do
 	# end
