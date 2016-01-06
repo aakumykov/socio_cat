@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'shared/pages_spec'
 
 describe 'Статические welcome-страницы,' do
 	subject { page }

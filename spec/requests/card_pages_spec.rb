@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'shared/pages_spec'
 
 describe 'Стриницы карточек,' do
 

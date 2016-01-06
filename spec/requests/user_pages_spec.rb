@@ -1,5 +1,4 @@
 require 'spec_helper'
-require 'shared/pages_spec'
 
 describe 'Страницы пользователя,' do
 
@@ -185,7 +184,7 @@ describe 'Страницы пользователя,' do
 			end			
 
 			describe 'админ,' do
-				before { www_admin, no_capybara: true }
+				before { console_admin }
 				specify{ expect{ delete user_path(user) }.to change(User,:count).by(-1) }
 			end
 		end
@@ -327,7 +326,7 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'удаление админом самого себя,' do
-		before { www_admin, no_capybara: true }
+		before { console_admin }
 		
 		specify{ expect{ delete user_path(admin) }.not_to change(User,:count) }
 
