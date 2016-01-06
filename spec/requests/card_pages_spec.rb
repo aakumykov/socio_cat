@@ -105,7 +105,7 @@ describe 'Стриницы карточек,' do
 
 			context 'пользователь,' do
 				before { 
-					www_user, no_capybara:true
+					console_user
 					get new_card_path
 				}
 				specify{ expect(response).to render_template(:new) }
@@ -131,7 +131,7 @@ describe 'Стриницы карточек,' do
 
 			context 'автор,' do
 				before {
-					www_user, no_capybara: true
+					console_user
 					get edit_card_path(card)
 				}
 				specify{ expect(response).to render_template(:edit) }
@@ -139,7 +139,7 @@ describe 'Стриницы карточек,' do
 
 			context 'администратор,' do
 				before {
-					www_admin, no_capybara: true
+					console_admin
 					get edit_card_path(card)
 				}
 				specify{ expect(response).to render_template(:edit) }
