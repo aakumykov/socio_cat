@@ -8,7 +8,7 @@ class CategoriesController < ApplicationController
 	def create
 		@obj = Category.new(user_params)
 		if @obj.save
-			flash[:success] = "Категория создана"
+			flash[:success] = "Раздел создана"
 			redirect_to category_path(@obj)
 		else
 			render :new

@@ -1,10 +1,10 @@
 require 'spec_helper'
 
-describe 'Категория' do
+describe 'Раздел' do
 	let(:cat) { 
 		Category.new(
-			name: 'Категория 1',
-			description: 'Описание «Категории 1»',
+			name: 'Раздел 1',
+			description: 'Описание «Разделы 1»',
 		)
 	}
 

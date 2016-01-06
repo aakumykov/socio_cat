@@ -1,4 +1,4 @@
-<% provide(:title,"Категория «#{@obj.name}»") %>
+<% provide(:title,"Раздел «#{@obj.name}»") %>
 
 <h1 class='page_title'><%= yield(:title) %></h1>
 
@@ -17,7 +17,7 @@
 				'Удалить', 
 				category_path(@obj.id), 
 				method: :delete, 
-				data: {confirm:"Удалить категорию\n\n«#{@obj.name}» ?"},
+				data: {confirm:"Удалить раздел\n\n«#{@obj.name}» ?"},
 				class: 'btn btn-danger pull-right',
 			) if (signed_in? && current_user.admin?)
 		%>

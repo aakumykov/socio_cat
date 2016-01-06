@@ -1,11 +1,11 @@
-<% provide(:title,'Категории') %>
+<% provide(:title,'Разделы') %>
 
 <h1 class='page_title'><%= yield(:title) %></h1>
 
 
 <div class='span8 offset2'>
 	<div class='row'>
-		<%= link_to 'Новая', new_category_path, class:'btn btn-warning pull-right' if signed_in? %>
+		<%= link_to 'Новый', new_category_path, class:'btn btn-warning pull-right' if signed_in? %>
 	</div>
 	<ul>
 		<% @list.each do |ctg| %>
