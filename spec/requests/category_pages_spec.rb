@@ -143,6 +143,8 @@ describe 'Разделы,' do
 		end
 	end
 
+	pending ':edit, :update, :destroy --> :admin_users'
+
 	describe 'Изменение (http),' do
 		before { console_user }
 

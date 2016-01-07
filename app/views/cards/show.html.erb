@@ -4,3 +4,9 @@
 
 <%= render 'card_button_new' %>
 <%= render 'card_display', card: @obj, editable: true %>
+
+<%= form_for @obj, {action:'categorize'} do |f| %>
+	<%= f.collection_select(:user_id, User.all, :id, :name) %>
+	<%= f.submit 'Обновить' %>
+<% end %>
+

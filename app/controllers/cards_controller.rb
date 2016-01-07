@@ -16,6 +16,10 @@ class CardsController < ApplicationController
 		end
 	end
 
+	def categorize
+
+	end
+
 	private	
 
 		def user_params
