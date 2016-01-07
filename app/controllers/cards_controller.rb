@@ -1,8 +1,8 @@
 class CardsController < ApplicationController
 
-	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
+	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy, :categorize]
 	before_action :signed_in_users, only: [:new, :create, :edit, :update]
-	before_action :editor_users, only: [:edit, :update]
+	before_action :editor_users, only: [:edit, :update, :categorize]
 	before_action :admin_users, only: [:destroy, :block]
 	
 	def create
@@ -17,7 +17,21 @@ class CardsController < ApplicationController
 	end
 
 	def categorize
+		# @card устанавливается в фильтре editor_users
+		cat_list = []
+		category_params.each do |id|
+			cat_list << Category.find_by(id: id)
+		end
+		cat_list.compact!
 
+		if cat_list.blank?
+			flash[:error] = 'Список категорий пуст'
+		else
+			@card.categories << cat_list
+			flash[:success] = "Категории для «#{@card.title}» установлены"
+		end
+		
+		redirect_to card_path
 	end
 
 	private	
@@ -27,6 +41,10 @@ class CardsController < ApplicationController
 				:title,
 				:content,
 			)
+		end
+
+		def category_params
+			params.require(:categories)
 		end
 
 		def editor_users

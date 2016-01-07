@@ -24,8 +24,8 @@ SocioCat::Application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
   resources :categories
   resources :cards do
-    collection do
-      get 'categorize'
+    member do
+      post 'categorize'
     end
   end
 

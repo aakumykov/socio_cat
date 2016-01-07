@@ -5,8 +5,17 @@
 <%= render 'card_button_new' %>
 <%= render 'card_display', card: @obj, editable: true %>
 
-<%= form_for @obj, {action:'categorize'} do |f| %>
-	<%= f.collection_select(:user_id, User.all, :id, :name) %>
-	<%= f.submit 'Обновить' %>
+<%= form_tag(categorize_card_path, method:'POST', class:'form-inline') do %>
+	<%= label_tag(:categories,'Категория') %>
+	<%= select_tag(
+		:categories,
+		options_from_collection_for_select(Category.all,:id,:name),
+		{
+			multiple: true,
+			required: true,
+			size: Category.count,
+		}
+	) %>
+	<%= submit_tag('Григорей') %>
 <% end %>
 
