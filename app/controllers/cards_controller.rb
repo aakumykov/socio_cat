@@ -18,19 +18,15 @@ class CardsController < ApplicationController
 
 	def categorize
 		# @card устанавливается в фильтре editor_users
-		cat_list = []
-		category_params.each do |id|
-			cat_list << Category.find_by(id: id)
-		end
-		cat_list.compact!
+		old_cats = Category.where(id: @card.categories.pluck(:id))
+		new_cats = old_cats.concat(Category.where(id: category_params)).uniq
 
-		if cat_list.blank?
+		if new_cats.blank?
 			flash[:error] = 'Список категорий пуст'
 		else
-			@card.categories << cat_list
+			@card.categories=new_cats
 			flash[:success] = "Категории для «#{@card.title}» установлены"
 		end
-		
 		redirect_to card_path
 	end
 
