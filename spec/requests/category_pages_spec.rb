@@ -47,20 +47,21 @@ describe 'Разделы,' do
 		it { should_not have_link(edit_button,href:edit_category_path(the_cat.id)) }
 		it { should_not have_link(delete_button,href:category_path(the_cat.id)) }
 
-		describe 'кнопка изменения,' do
+		describe 'пользователем,' do
 			before { 
-				www_user 
+				www_user
 				visit category_path(cat)
 			}
-			it { should have_link(edit_button, href:edit_category_path(the_cat.id)) }
-			it { should_not have_link(delete_button) }
+			it { should_not have_link(edit_button,href:edit_category_path(the_cat.id)) }
+			it { should_not have_link(delete_button,href:category_path(the_cat.id)) }
 		end
 
-		describe 'кнопка удаления,' do
+		describe 'администратором,' do
 			before { 
 				www_admin 
 				visit category_path(cat)
 			}
+			it { should have_link(edit_button, href:edit_category_path(the_cat.id)) }
 			it { should have_link(delete_button, href:category_path(the_cat.id)) }
 		end
 	end

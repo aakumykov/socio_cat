@@ -10,7 +10,7 @@
 				'Изменить', 
 				edit_category_path(@obj.id), 
 				class:'btn',
-			) if signed_in? 
+			) if (signed_in? && current_user.admin?)
 		%>
 		<%= 
 			link_to(
