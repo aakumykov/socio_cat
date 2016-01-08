@@ -56,8 +56,8 @@ describe 'Стриницы карточек,' do
 				visit card_path(card)
 			}
 			
-			it 'слово "Категории:",' do
-				expect(page).to have_content('Категории:')
+			it 'заголовок области,' do
+				expect(page).to have_link('Входит в разделы:',href:categories_path)
 			end
 
 			it 'категория 1' do
