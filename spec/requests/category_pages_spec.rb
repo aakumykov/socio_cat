@@ -47,6 +47,27 @@ describe 'Разделы,' do
 		it { should_not have_link(edit_button,href:edit_category_path(the_cat.id)) }
 		it { should_not have_link(delete_button,href:category_path(the_cat.id)) }
 
+		describe 'список карточек,' do
+			let(:all_cards) {[
+					FactoryGirl.create(:card, user:user),
+					FactoryGirl.create(:card, user:user),
+				]}
+			
+			before {
+				cat.cards = all_cards
+				visit category_path(cat)
+			}
+
+			it 'заголовок области' do
+				expect(page).to have_content('Карточки в разделе:')
+			end
+
+			describe 'заголовки всех карточек,' do
+				it { should have_link(all_cards.first.title, card_path(all_cards.first)) }
+				it { should have_link(all_cards.last.title, card_path(all_cards.last)) }
+			end
+		end
+
 		describe 'пользователем,' do
 			before { 
 				www_user
