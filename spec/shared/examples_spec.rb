@@ -20,7 +20,7 @@ end
 
 shared_examples_for 'главная_страница' do
 	it_should_behave_like 'страница с названием' do
-		let(:title) { 'Соционический каталог' }
+		let(:title) { 'начало' }
 		let(:heading) { 'Добро пожаловать' }
 	end
 end
