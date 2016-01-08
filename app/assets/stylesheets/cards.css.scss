@@ -4,7 +4,7 @@
 $card_title: #ececec;
 
 .card {
-	margin-bottom: 30px;
+	margin-bottom: 10px;
 	border: 1px outset gray;
 	border-radius: 9px;
 	padding: 6px 11px;
@@ -29,5 +29,15 @@ $card_title: #ececec;
 	.buttons_container {
 		margin-left: 9px;
 		A { margin-bottom: 3px; }
+	}
+}
+
+.card_categories {
+	width: 50%;
+	margin: 0px auto 20px;
+	padding: 6px 16px;
+
+	A {
+		margin: auto 2px;
 	}
 }

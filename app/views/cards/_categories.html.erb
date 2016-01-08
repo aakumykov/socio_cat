@@ -1,0 +1,5 @@
+<div class='card_categories'>
+	<% card.categories.each do |c| %>
+		<%= link_to c.name, category_path(c), class:'label' %>
+	<% end %>
+</div>

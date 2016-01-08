@@ -4,9 +4,10 @@
 	</legend>
 	<div class='btn-group btn-group-vertical pull-right buttons_container'>
 		<% if true==editable %>
-		<%= link_to 'Изменить', edit_card_path(card), class:'btn btn-info btn-small pull-right' %>
-		<%= link_to 'Удалить', card, method: :delete, data: { confirm: "Удалить карточку?\n\n«#{card.title}»" }, class:'btn btn-danger btn-small pull-right' %>
+			<%= link_to 'Изменить', edit_card_path(card), class:'btn btn-info btn-small pull-right' %>
+			<%= link_to 'Удалить', card, method: :delete, data: { confirm: "Удалить карточку?\n\n«#{card.title}»" }, class:'btn btn-danger btn-small pull-right' %>
 		<% end %>
 	</div>
 	<div class='card_content'><%= card.content %></div>
 </fieldset>
+<%= render 'categories', card:card if editable %>

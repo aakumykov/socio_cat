@@ -2,9 +2,9 @@
 
 <h1 class='page_title'><%= yield(:title) %></h1>
 
-<div class='card_edit span8 offset2'>
+<div class='edit span8 offset2'>
     <%= form_for(@obj) do |f| %>
     	<%= render 'shared/error_messages.html.erb', object:f.object %>
-    	<%= render 'card_edit', f:f, mode: 'edit', button_text: 'Сохранить' %>
+    	<%= render 'edit', f:f, mode: 'edit', button_text: 'Сохранить' %>
     <% end %>
 </div>
