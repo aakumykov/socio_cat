@@ -263,4 +263,23 @@ describe 'Стриницы карточек,' do
 			specify{ expect(response).to redirect_to(cards_path) }
 		end
 	end
+
+	describe 'категорзация http,' do
+		let!(:cat1) { FactoryGirl.create(:category) }
+		let!(:cat2) { FactoryGirl.create(:category) }
+
+		before { 
+			console_user
+			post categorize_card_path(card), { categories: [cat1.id, cat2.id] }
+		}
+
+		it 'категории карточки должны включать новые категории,' do
+			expect(card.categories).to include(cat1)
+			expect(card.categories).to include(cat2)
+		end
+
+		specify 'перенаправление на страницу карточки,' do
+			expect(response).to redirect_to(card_path(card))
+		end
+	end
 end
