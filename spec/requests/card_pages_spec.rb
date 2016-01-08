@@ -102,6 +102,9 @@ describe 'Стриницы карточек,' do
 		it { should have_field('Содержимое') }
 		it { should have_link(cancel_button) }
 		it { should have_xpath("//input[@type='submit' and @value='#{create_button}']") }
+
+		it { should have_content('Категория:') }
+		it { should have_field('Категория')}
 	end
 
 
