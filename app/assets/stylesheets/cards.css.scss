@@ -33,9 +33,16 @@ $card_title: #ececec;
 }
 
 .card_categories {
-	width: 50%;
+	width: 80%;
 	margin: 0px auto 20px;
 	padding: 6px 16px;
+
+	.title {
+		float: left;
+		background-color: palegreen;
+		padding-right: 8px;
+		margin-right: 4px;
+	}
 
 	A {
 		margin: auto 2px;

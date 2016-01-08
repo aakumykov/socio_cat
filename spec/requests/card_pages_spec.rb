@@ -11,6 +11,9 @@ describe 'Стриницы карточек,' do
 
 	let(:wrong_id) { Card.maximum(:id)+1 }
 
+	let(:category) { FactoryGirl.create(:category) }
+	let(:other_category) { FactoryGirl.create(:category) }
+
 	let(:create_button) { 'Создать' }
 	let(:change_button) { 'Изменить' }
 	let(:save_button) { 'Сохранить' }
@@ -44,6 +47,27 @@ describe 'Стриницы карточек,' do
 		it { should have_content(the_card.title) }
 		it { should have_content(the_card.content) }
 		it { should have_content("от #{the_card.user.name}") }
+
+		describe 'категории,' do
+			let(:all_cats) { [category, other_category] }
+			
+			before { 
+				card.categories = all_cats 
+				visit card_path(card)
+			}
+			
+			it 'слово "Категории:",' do
+				expect(page).to have_content('Категории:')
+			end
+
+			it 'категория 1' do
+				expect(page).to have_link(all_cats.first.name, category_path(all_cats.first))
+			end
+			
+			it 'категория 2' do
+				expect(page).to have_link(all_cats.last.name, category_path(all_cats.last))
+			end
+		end
 	end
 
 	shared_examples_for 'кнопки_удобства' do
@@ -166,6 +190,7 @@ describe 'Стриницы карточек,' do
 		end
 	end
 
+
 	describe 'список,' do
 		before { visit cards_path }
 		it_should_behave_like 'список_карточек'
@@ -177,6 +202,7 @@ describe 'Стриницы карточек,' do
 			let(:the_card) { card }
 		end
 		pending 'кнопка удаления'
+		pending 'защита категорзации'
 	end
 
 	describe 'создание,' do
@@ -265,17 +291,14 @@ describe 'Стриницы карточек,' do
 	end
 
 	describe 'категорзация http,' do
-		let!(:cat1) { FactoryGirl.create(:category) }
-		let!(:cat2) { FactoryGirl.create(:category) }
-
 		before { 
 			console_user
-			post categorize_card_path(card), { categories: [cat1.id, cat2.id] }
+			post categorize_card_path(card), { categories: [category.id, other_category.id] }
 		}
 
 		it 'категории карточки должны включать новые категории,' do
-			expect(card.categories).to include(cat1)
-			expect(card.categories).to include(cat2)
+			expect(card.categories).to include(category)
+			expect(card.categories).to include(other_category)
 		end
 
 		specify 'перенаправление на страницу карточки,' do
