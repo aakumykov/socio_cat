@@ -1,11 +1,11 @@
 <div class='span4 pull-left'>
 	<div>
 		<%= f.label :title, 'Название' %>
-		<%= f.text_field :title, class: 'edit_field' %>
+		<%= f.text_field :title, placeholder:'...', class: 'edit_field' %>
 	</div>
 	<div>
 		<%= f.label :content, 'Содержимое' %>
-		<%= f.text_area :content, class: 'edit_area' %>
+		<%= f.text_area :content, placeholder:'...', class: 'edit_area' %>
 	</div>
 </div>
 <div class='span4 pull-right'>
@@ -16,9 +16,15 @@
 			options_from_collection_for_select(
 				Category.all.order('created_at DESC'),
 				:id,
-				:name
+				:name,
+				''
 			),
-			{style:'width:100%'}
+			{
+				include_blank: true,
+				multiple: true,
+				size: 5,
+				style:'width:100%',
+			}
 		) %>
 	</div>
 	<div>

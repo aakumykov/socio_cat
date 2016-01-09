@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Стриницы карточек,' do
+describe 'Карточки,' do
 
 	let(:user) { FactoryGirl.create(:user) }
 	let(:other_user) { FactoryGirl.create(:user) }
@@ -209,6 +209,8 @@ describe 'Стриницы карточек,' do
 	end
 
 	describe 'создание,' do
+
+		pending 'раз-категоризация кардочки'
 
 		let(:card_params) {
 			{ card: {
