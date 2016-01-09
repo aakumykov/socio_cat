@@ -294,6 +294,8 @@ describe 'Карточки,' do
 	end
 
 	describe 'изменение,' do
+		pending 'категории'
+
 		let(:new_title) {card.title + ' ' + Faker::Lorem.word}
 		let(:new_content) {Faker::Lorem.paragraph}
 
