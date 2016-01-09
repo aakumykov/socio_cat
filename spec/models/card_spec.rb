@@ -79,5 +79,7 @@ describe 'Карточка,' do
 			specify{ expect(user.reload.id).to eq user.id }
 			specify{ expect(user.reload).to eq user }
 		end
+
+		pending 'удаление карточки не ведёт к удалению категории'
 	end
 end
