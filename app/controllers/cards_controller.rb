@@ -19,6 +19,13 @@ class CardsController < ApplicationController
 		end
 	end
 
+	def update
+		card = Card.find_by(id: params[:id])
+		card.cat_ids = category_params
+		puts "=====> #update, card.cat_ids: #{card.cat_ids}"
+		super(card)
+	end
+
 	# def categorize
 	# 	# @card устанавливается в фильтре editor_users
 	# 	old_cats = Category.where(id: @card.categories.pluck(:id))
@@ -43,8 +50,10 @@ class CardsController < ApplicationController
 		end
 
 		def category_params
-			params[:categories] ||= [nil]
-			list = params.require(:categories).reject { |item| item.to_s.empty? }
+			the_params = params.require(:categories)
+			the_params ||= [nil]
+			the_params = [the_params] if not the_params.is_a?(Array)
+			list = the_params.reject { |item| item.to_s.empty? }
 			list.empty? ? nil : list
 		end
 
