@@ -1,11 +1,32 @@
-<div class='row'>
-	<%= f.label :title, 'Название' %>
-	<%= f.text_field :title, class: 'edit_field' %>
-
-	<%= f.label :content, 'Содержимое' %>
-	<%= f.text_area :content, class: 'edit_area' %>
+<div class='span4 pull-left'>
+	<div>
+		<%= f.label :title, 'Название' %>
+		<%= f.text_field :title, class: 'edit_field' %>
+	</div>
+	<div>
+		<%= f.label :content, 'Содержимое' %>
+		<%= f.text_area :content, class: 'edit_area' %>
+	</div>
 </div>
-<div class='bottom_buttons_holder'>
+<div class='span4 pull-right'>
+	<div>
+		<%= f.label :category, 'Категория' %>
+		<%= select_tag(
+			'categories',
+			options_from_collection_for_select(
+				Category.all,
+				:id,
+				:name
+			),
+			{style:'width:100%'}
+		) %>
+	</div>
+	<div>
+		<%= label_tag(:attachments, 'Вложения') %>
+		<%= text_area_tag(:attachments, nil, {disabled:true,style:'width:100%'}) %>
+	</div>
+</div>
+<div class='span10'>
 	<% cancel_path = ('edit'==mode) ? card_path(@card) : cards_path %>
 	<%= link_to 'Отмена', cancel_path, class: 'btn' %>
 	<%= f.submit button_text, class: 'btn btn-primary pull-right' %>

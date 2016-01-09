@@ -4,18 +4,3 @@
 
 <%= render 'button_new' %>
 <%= render 'display', card: @obj, editable: true %>
-
-<%= form_tag(categorize_card_path, method:'POST', class:'form-inline') do %>
-	<%= label_tag(:categories,'Категория') %>
-	<%= select_tag(
-		:categories,
-		options_from_collection_for_select(Category.all,:id,:name),
-		{
-			multiple: true,
-			required: true,
-			size: Category.count,
-		}
-	) %>
-	<%= submit_tag('Григорей') %>
-<% end %>
-
