@@ -9,7 +9,7 @@ class CardsController < ApplicationController
 		@obj = current_user.cards.new(user_params)
 		
 		@obj.cat_ids = category_params
-		puts "====== #{controller_name}#create =====> @obj.cat_ids: #{@obj.cat_ids}/#{@obj.cat_ids.class}"
+		#puts "====== #{controller_name}#create =====> @obj.cat_ids: #{@obj.cat_ids}/#{@obj.cat_ids.class}"
 
 		if @obj.save
 			flash[:success] = "Карточка создана"
@@ -74,7 +74,7 @@ class CardsController < ApplicationController
 
 			# если в результате список схлопнулся
 			the_params = nil if the_params.to_s.empty?
-			puts "====== category_params ======> final: #{the_params}(#{the_params.class})"
+			#puts "====== category_params ======> final: #{the_params}(#{the_params.class})"
 
 			return the_params
 		end

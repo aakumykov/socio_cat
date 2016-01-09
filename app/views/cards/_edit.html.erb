@@ -25,9 +25,9 @@ end
 	</div>
 	<div class='span4 pull-right'>
 		<div>
-			<%= f.label :category, cat_label %>
+			<%= label_tag 'category', cat_label %>
 			<%= select_tag(
-				'categories',
+				'category',
 				options_from_collection_for_select(
 					Category.all.order('created_at DESC'),
 					:id,
@@ -35,9 +35,9 @@ end
 					#selected_cats
 				),
 				{
-					include_blank: false,
-					multiple: true,
-					size: 5,
+					include_blank: true,
+					multiple: false,
+					size: 1,
 					style:'width:100%',
 				}
 			) %>
