@@ -41,14 +41,6 @@ ActiveRecord::Schema.define(version: 20160106173046) do
 
   add_index "categories", ["name"], name: "index_categories_on_name", unique: true
 
-  create_table "comments", force: true do |t|
-    t.text     "content"
-    t.integer  "card_id"
-    t.datetime "created_at"
-    t.datetime "updated_at"
-    t.integer  "user_id"
-  end
-
   create_table "users", force: true do |t|
     t.text     "name"
     t.text     "email"

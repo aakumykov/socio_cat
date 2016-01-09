@@ -116,6 +116,8 @@ describe 'Разделы,' do
 	end
 	
 	describe 'Созидание,' do
+		pending 'только для админа'
+		
 		describe 'www,' do
 			before {
 				www_user

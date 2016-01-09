@@ -7,7 +7,9 @@ class CardsController < ApplicationController
 	
 	def create
 		@card = current_user.cards.new(user_params)
-		@card.categorize
+		
+		@card.new_cat_ids = category_params
+
 		if @card.save
 			flash[:success] = "Карточка создана"
 			redirect_to card_path(@card)
