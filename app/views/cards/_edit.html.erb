@@ -48,8 +48,8 @@ end
 		</div>
 	</div>
 	<div class='span10'>
-		<%= link_to 'Отмена', cancel_path, class: 'btn' %>
-		<%= f.submit button_text, class: 'btn btn-primary pull-right' %>
+		<%= f.submit button_text, class: 'btn btn-primary pull-left' %>
+		<%= link_to 'Отмена', cancel_path, class: 'btn pull-right' %>
 	</div>
 </div>
 <%= render 'categories', card: @obj %>

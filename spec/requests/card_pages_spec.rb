@@ -18,7 +18,7 @@ describe 'Карточки,' do
 	let(:change_button) { 'Изменить' }
 	let(:save_button) { 'Сохранить' }
 	let(:cancel_button) { 'Отмена' }
-	
+	let(:delete_button) { 'Удалить'}
 
 	subject { page }
 
@@ -48,6 +48,39 @@ describe 'Карточки,' do
 		it { should have_content(the_card.content) }
 		it { should have_content("от #{the_card.user.name}") }
 
+		it { should_not have_link('Изменить',href: edit_card_path(card)) }
+		it { should_not have_link('Удалить',href: card_path(card)) }
+
+		describe 'кнопки управления,'do
+			describe 'другой пользователь,' do
+				before { 
+					sign_in other_user 
+					visit card_path(card)
+				}
+				it { should_not have_link('Изменить',href: edit_card_path(card)) }
+				it { should_not have_link('Удалить',href: card_path(card)) }
+			end
+
+			describe 'автор,' do
+				before { 
+					www_user 
+					visit card_path(card)
+				}
+				it { should have_link('Изменить',href: edit_card_path(card)) }
+				it { should_not have_link('Удалить',href: card_path(card)) }
+			end
+
+			describe 'администратор,' do
+				before { 
+					www_admin 
+					visit card_path(card)
+				}
+				it { should have_link('Изменить',href: edit_card_path(card)) }
+				it { should have_link('Удалить',href: card_path(card)) }
+				it { should have_xpath("//a[@data-method='delete' and text()='#{delete_button}' and @href='#{card_path(card)}']")}
+			end
+		end
+
 		describe 'категории,' do
 			let(:all_cats) { [category, other_category] }
 			
@@ -57,7 +90,7 @@ describe 'Карточки,' do
 			}
 			
 			it 'заголовок области,' do
-				expect(page).to have_link('Входит в разделы:',href:categories_path)
+				expect(page).to have_content('Категория:')
 			end
 
 			it 'категория 1' do
@@ -204,8 +237,6 @@ describe 'Карточки,' do
 		it_should_behave_like 'просмотр_карточки' do
 			let(:the_card) { card }
 		end
-		pending 'кнопка удаления'
-		pending 'защита категорзации'
 	end
 
 	describe 'создание,' do
@@ -295,19 +326,19 @@ describe 'Карточки,' do
 		end
 	end
 
-	describe 'категорзация http,' do
-		before { 
-			console_user
-			post categorize_card_path(card), { categories: [category.id, other_category.id] }
-		}
+	# describe 'категорзация http,' do
+	# 	before { 
+	# 		console_user
+	# 		post categorize_card_path(card), { categories: [category.id, other_category.id] }
+	# 	}
 
-		it 'категории карточки должны включать новые категории,' do
-			expect(card.categories).to include(category)
-			expect(card.categories).to include(other_category)
-		end
+	# 	it 'категории карточки должны включать новые категории,' do
+	# 		expect(card.categories).to include(category)
+	# 		expect(card.categories).to include(other_category)
+	# 	end
 
-		specify 'перенаправление на страницу карточки,' do
-			expect(response).to redirect_to(card_path(card))
-		end
-	end
+	# 	specify 'перенаправление на страницу карточки,' do
+	# 		expect(response).to redirect_to(card_path(card))
+	# 	end
+	# end
 end
