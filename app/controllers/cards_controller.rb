@@ -8,7 +8,8 @@ class CardsController < ApplicationController
 	def create
 		@card = current_user.cards.new(user_params)
 		
-		@card.new_cat_ids = category_params
+		@card.cat_ids = category_params
+		@card.cat_ids = nil if @card.cat_ids.compact.empty?
 
 		if @card.save
 			flash[:success] = "Карточка создана"
@@ -19,19 +20,19 @@ class CardsController < ApplicationController
 		end
 	end
 
-	def categorize
-		# @card устанавливается в фильтре editor_users
-		old_cats = Category.where(id: @card.categories.pluck(:id))
-		new_cats = old_cats.concat(Category.where(id: category_params)).uniq
+	# def categorize
+	# 	# @card устанавливается в фильтре editor_users
+	# 	old_cats = Category.where(id: @card.categories.pluck(:id))
+	# 	new_cats = old_cats.concat(Category.where(id: category_params)).uniq
 
-		if new_cats.blank?
-			flash[:error] = 'Список категорий пуст'
-		else
-			@card.categories=new_cats
-			flash[:success] = "Категории для «#{@card.title}» установлены"
-		end
-		redirect_to card_path
-	end
+	# 	if new_cats.blank?
+	# 		flash[:error] = 'Список категорий пуст'
+	# 	else
+	# 		@card.categories=new_cats
+	# 		flash[:success] = "Категории для «#{@card.title}» установлены"
+	# 	end
+	# 	redirect_to card_path
+	# end
 
 	private	
 
@@ -43,7 +44,11 @@ class CardsController < ApplicationController
 		end
 
 		def category_params
-			params.require(:categories)
+			if params[:categories]
+				list = params.require(:categories).reject { |item| item.to_s.empty? }
+			else
+				nil
+			end
 		end
 
 		def editor_users

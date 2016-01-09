@@ -6,7 +6,7 @@ class Card < ActiveRecord::Base
 	has_and_belongs_to_many :categories
 	#validates_associated :categories
 
-	attr_accessor :new_cat_ids
+	attr_accessor :cat_ids
 	before_save :categorize
 
 
@@ -27,9 +27,9 @@ class Card < ActiveRecord::Base
 
 	private
 		def categorize
-			new_cats = Category.find(new_cat_ids)
-			old_cats = self.categories
-			all_cats = old_cats.concat(new_cats).uniq
-			#@card.categories=all_cats
+			if !cat_ids.nil?
+				new_cats = Category.find(cat_ids)
+				self.categories.concat(new_cats).uniq!
+			end
 		end
 end
