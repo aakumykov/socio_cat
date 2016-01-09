@@ -28,8 +28,14 @@ class Card < ActiveRecord::Base
 	private
 		def categorize
 			if !cat_ids.nil?
-				new_cats = Category.find(cat_ids)
-				self.categories.concat(new_cats).uniq!
+				current_cat_ids = Category.where(id:cat_ids).pluck(:id)
+				puts "==========> current_cat_ids: #{current_cat_ids}"
+
+				all_cat_ids = cat_ids.concat(current_cat_ids).map!{|i| i.to_i}.uniq!
+				puts "==========> all_cat_ids: #{all_cat_ids}"
+
+				new_cats = Category.find(all_cat_ids)
+				self.categories.concat(new_cats)
 			end
 		end
 end

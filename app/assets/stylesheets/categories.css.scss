@@ -2,9 +2,16 @@
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
 .description {
-	margin: 12px 0px 36px;
+	margin: 12px 0px 20px;
 }
+
 .category_members {
+	margin-top:20px;
+
+	.title {
+		margin-bottom: 6px;
+	}
+	
 	UL {
 		list-style-type: none;
 	}

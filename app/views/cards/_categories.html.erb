@@ -1,4 +1,4 @@
-<div class='card_categories'>
+<div class='row card_categories'>
 	<%= link_to 'Входит в разделы:', categories_path, class:'title' %>
 	<% card.categories.each do |c| %>
 		<%= link_to c.name, category_path(c), class:'label' %>
