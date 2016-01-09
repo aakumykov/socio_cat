@@ -1,9 +1,9 @@
 <%
 if 'edit'==mode 
-	cancel_path = card_path(@card)
-	selected_cats = @card.categories.pluck(:id)
+	cancel_path = card_path(@obj)
+	selected_cats = @obj.categories.pluck(:id)
 	button_text = 'Сохранить'
-	cat_label = 'Добавить категорию'
+	cat_label = 'Категория'
 else
 	cancel_path = cards_path
 	selected_cats = nil
@@ -25,7 +25,7 @@ end
 	</div>
 	<div class='span4 pull-right'>
 		<div>
-			<%= f.label :category, cat_label %>
+			<%= label_tag 'categories', cat_label %>
 			<%= select_tag(
 				'categories',
 				options_from_collection_for_select(
@@ -35,9 +35,9 @@ end
 					#selected_cats
 				),
 				{
-					include_blank: false,
+					include_blank: true,
 					multiple: true,
-					size: 5,
+					size: 10,
 					style:'width:100%',
 				}
 			) %>

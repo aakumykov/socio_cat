@@ -51,23 +51,23 @@ class CardsController < ApplicationController
 		end
 
 		def category_params
-			#puts "====== category_params ======> params[:categories]: #{params[:categories]}(#{params[:categories].class})"
+			puts "====== category_params ======> params[:categories]: #{params[:categories]}(#{params[:categories].class})"
 
 			if params[:categories].is_a?(Array)
 				the_params = params.require(:categories)
-				#puts "====== category_params ======> .require: #{the_params}(#{the_params.class})"
+				puts "====== category_params ======> .require: #{the_params}(#{the_params.class})"
 
 				the_params.reject! {|item| !item.is_a?(String)}
-				#puts "====== category_params ======> .reject! (1): #{the_params}(#{the_params.class})"
+				puts "====== category_params ======> .reject! (1): #{the_params}(#{the_params.class})"
 
 				the_params.reject! {|item| item.to_i.to_s != item}
-				#puts "====== category_params ======> .reject! (2): #{the_params}(#{the_params.class})"
+				puts "====== category_params ======> .reject! (2): #{the_params}(#{the_params.class})"
 				
 				the_params.map! {|item| item.to_s}
-				#puts "====== category_params ======> .map!: #{the_params}(#{the_params.class})"
+				puts "====== category_params ======> .map!: #{the_params}(#{the_params.class})"
 				
 				the_params.uniq!
-				#puts "====== category_params ======> .uniq!: #{the_params}(#{the_params.class})"
+				puts "====== category_params ======> .uniq!: #{the_params}(#{the_params.class})"
 			else
 				the_params = nil
 			end
