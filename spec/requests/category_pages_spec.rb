@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Разделы,' do
+describe 'Категории,' do
 	let(:user) { FactoryGirl.create(:user) }
 	let(:admin) { FactoryGirl.create(:admin) }
 
@@ -22,10 +22,10 @@ describe 'Разделы,' do
 
 	shared_examples_for 'список_разделов' do
 		it_should_behave_like 'страница с названием' do
-			let(:title) { 'Разделы' }
+			let(:title) { 'Категории' }
 			let(:heading) { title }
 		end
-		it { should_not have_link('Новый',href:new_category_path) }
+		it { should_not have_link('Новая',href:new_category_path) }
 
 		pending 'элементы списка'
 		
@@ -34,13 +34,13 @@ describe 'Разделы,' do
 				www_user
 				visit categories_path
 			}
-			it { should have_link('Новый',href:new_category_path) }
+			it { should have_link('Новая',href:new_category_path) }
 		end
 	end
 
 	shared_examples_for 'просмотр_раздела' do
 		it_should_behave_like 'страница с названием' do
-			let(:title) { "Раздел «#{the_cat.name}»" }
+			let(:title) { "Категория «#{the_cat.name}»" }
 			let(:heading) { title }
 		end
 		it { should have_content(the_cat.description) }
@@ -125,7 +125,7 @@ describe 'Разделы,' do
 			}
 			describe 'отображение формы,' do
 				it_should_behave_like 'страница с названием' do
-					let(:title) { 'Новый раздел' }
+					let(:title) { 'Новая раздел' }
 					let(:heading) { title }
 				end
 				it_should_behave_like 'форма_раздела'
@@ -151,7 +151,7 @@ describe 'Разделы,' do
 
 					describe 'уведомление об успехе,' do
 						before { click_button create_button }
-						it_should_behave_like 'flash-сообщение', 'success', 'Раздел создана'
+						it_should_behave_like 'flash-сообщение', 'success', 'Категория создана'
 					end
 				end
 
