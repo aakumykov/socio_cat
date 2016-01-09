@@ -242,6 +242,8 @@ describe 'Карточки,' do
 	describe 'создание,' do
 
 		pending 'раз-категоризация кардочки'
+		pending 'нет области категорий при создании'
+		pending 'кривые значения в категории'
 
 		let(:card_params) {
 			{ card: {

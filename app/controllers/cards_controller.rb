@@ -6,13 +6,14 @@ class CardsController < ApplicationController
 	before_action :admin_users, only: [:destroy, :block]
 	
 	def create
-		@card = current_user.cards.new(user_params)
+		@obj = current_user.cards.new(user_params)
 		
-		@card.cat_ids = category_params
+		@obj.cat_ids = category_params
+		puts "====== #{controller_name}#create =====> @obj.cat_ids: #{@obj.cat_ids}/#{@obj.cat_ids.class}"
 
-		if @card.save
+		if @obj.save
 			flash[:success] = "Карточка создана"
-			redirect_to card_path(@card)
+			redirect_to card_path(@obj)
 		else
 			flash.now[:error] = 'ОШИБКА, карточка не создана'
 			render 'new'
@@ -27,15 +28,15 @@ class CardsController < ApplicationController
 	end
 
 	# def categorize
-	# 	# @card устанавливается в фильтре editor_users
-	# 	old_cats = Category.where(id: @card.categories.pluck(:id))
+	# 	# @obj устанавливается в фильтре editor_users
+	# 	old_cats = Category.where(id: @obj.categories.pluck(:id))
 	# 	new_cats = old_cats.concat(Category.where(id: category_params)).uniq
 
 	# 	if new_cats.blank?
 	# 		flash[:error] = 'Список категорий пуст'
 	# 	else
-	# 		@card.categories=new_cats
-	# 		flash[:success] = "Категории для «#{@card.title}» установлены"
+	# 		@obj.categories=new_cats
+	# 		flash[:success] = "Категории для «#{@obj.title}» установлены"
 	# 	end
 	# 	redirect_to card_path
 	# end
@@ -50,19 +51,40 @@ class CardsController < ApplicationController
 		end
 
 		def category_params
-			the_params = params.require(:categories)
-			the_params ||= [nil]
-			the_params = [the_params] if not the_params.is_a?(Array)
-			list = the_params.reject { |item| item.to_s.empty? }
-			list.empty? ? nil : list
+			#puts "====== category_params ======> params[:categories]: #{params[:categories]}(#{params[:categories].class})"
+
+			if params[:categories].is_a?(Array)
+				the_params = params.require(:categories)
+				#puts "====== category_params ======> .require: #{the_params}(#{the_params.class})"
+
+				the_params.reject! {|item| !item.is_a?(String)}
+				#puts "====== category_params ======> .reject! (1): #{the_params}(#{the_params.class})"
+
+				the_params.reject! {|item| item.to_i.to_s != item}
+				#puts "====== category_params ======> .reject! (2): #{the_params}(#{the_params.class})"
+				
+				the_params.map! {|item| item.to_s}
+				#puts "====== category_params ======> .map!: #{the_params}(#{the_params.class})"
+				
+				the_params.uniq!
+				#puts "====== category_params ======> .uniq!: #{the_params}(#{the_params.class})"
+			else
+				the_params = nil
+			end
+
+			# если в результате список схлопнулся
+			the_params = nil if the_params.to_s.empty?
+			puts "====== category_params ======> final: #{the_params}(#{the_params.class})"
+
+			return the_params
 		end
 
 		def editor_users
-			@card = Card.find_by(id: params[:id])
+			@obj = Card.find_by(id: params[:id])
 
-			if (current_user != @card.user) && (not current_user.admin?)
+			if (current_user != @obj.user) && (not current_user.admin?)
 				flash[:error] = 'Редактирование запрещено'
-				redirect_to card_path(@card)
+				redirect_to card_path(@obj)
 			end
 		end
 end

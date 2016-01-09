@@ -35,9 +35,9 @@ end
 					#selected_cats
 				),
 				{
-					include_blank: true,
-					multiple: false,
-					size: 1,
+					include_blank: false,
+					multiple: true,
+					size: 5,
 					style:'width:100%',
 				}
 			) %>
@@ -48,8 +48,8 @@ end
 		</div>
 	</div>
 	<div class='span10'>
-		<%= f.submit button_text, class: 'btn btn-primary pull-left' %>
-		<%= link_to 'Отмена', cancel_path, class: 'btn pull-right' %>
+		<%= link_to 'Отмена', cancel_path, class: 'btn pull-left' %>
+		<%= f.submit button_text, class: 'btn btn-primary pull-right' %>
 	</div>
 </div>
 <%= render 'categories', card: @obj %>
