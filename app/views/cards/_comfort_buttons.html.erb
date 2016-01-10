@@ -1,0 +1,6 @@
+<div class='row comfort_buttons'>
+	<div class='btn-group pull-right'>
+		<%= link_to 'Список', cards_path, class: 'btn btn-primary btn-primary pull-left', title: 'Список карточек' %>
+		<%= link_to('Новая', new_card_path, class: 'btn btn-success pull-left', title: 'Создать новую карточку') if signed_in? %>
+	</div>
+</div>

@@ -25,16 +25,29 @@ describe 'Категории,' do
 			let(:title) { 'Категории' }
 			let(:heading) { title }
 		end
-		it { should_not have_link('Новая',href:new_category_path) }
-
-		pending 'элементы списка'
 		
-		describe 'кнопка создания раздела,' do
-			before { 
-				www_user
-				visit categories_path
-			}
-			it { should have_link('Новая',href:new_category_path) }
+		pending 'элементы списка'
+
+		describe 'кнопка создания,' do
+			it 'нет у гостя' do
+				expect(page).not_to have_link('Новая',href:new_category_path)
+			end
+
+			describe 'нет у пользователя,' do
+				before { 
+					www_user
+					visit categories_path
+				}
+				it { should_not have_link('Новая',href:new_category_path) }
+			end
+
+			describe 'есть у админа,' do
+				before { 
+					www_user
+					visit categories_path
+				}
+				it { should have_link('Новая',href:new_category_path) }
+			end
 		end
 	end
 
@@ -116,8 +129,10 @@ describe 'Категории,' do
 	end
 	
 	describe 'Созидание,' do
-		pending 'только для админа'
-		
+		# Этот тест дублирует функционал тестов предфильтров,
+		# но обеспечивает надёжность, одновременно снижая её,
+		# за счёт усложнения кода.
+		# Нужно ли это?
 		describe 'запрещено пользователю,' do
 			let(:category_params) {
 				{ category: {
@@ -136,12 +151,12 @@ describe 'Категории,' do
 			specify{ expect(response).to redirect_to(categories_path) }
 		end
 
-
-		describe 'www,' do
+		describe 'разрешено админу,' do
 			before {
-				www_user
+				www_admin
 				visit new_category_path
 			}
+			
 			describe 'отображение формы,' do
 				it_should_behave_like 'страница с названием' do
 					let(:title) { 'Новая раздел' }
@@ -186,10 +201,8 @@ describe 'Категории,' do
 		end
 	end
 
-	pending ':edit, :update, :destroy --> :admin_users'
-
 	describe 'Изменение (http),' do
-		before { console_user }
+		before { console_admin }
 
 		context 'корректными данными,' do
 			before { patch category_path(cat), new_cat_data }

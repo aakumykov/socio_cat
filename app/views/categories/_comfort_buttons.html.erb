@@ -1,0 +1,10 @@
+<div class='row comfort_buttons'>
+	<div class='btn-group pull-right'>
+		<%= link_to 'Список', categories_path, class:'btn btn-primary pull-left' %>
+		<% if signed_in? %>
+			<% if current_user.admin? %>
+				<%= link_to 'Новая', new_category_path, class:'btn btn-warning pull-left' %>
+			<% end %>
+		<% end %>
+	</div>
+</div>

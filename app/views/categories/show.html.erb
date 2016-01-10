@@ -3,7 +3,10 @@
 <h1 class='page_title'><%= yield(:title) %></h1>
 
 <div class='span8 offset2'>
+	<%= render 'comfort_buttons' %>
+	
 	<div class='row description'><%= @obj.description %></div>
+	
 	<div class='row'>
 		<%= 
 			link_to(
@@ -22,6 +25,7 @@
 			) if (signed_in? && current_user.admin?)
 		%>
 	</div>
+	
 	<div class='category_members'>
 		<div class='title'>Карточки в разделе:</div>
 		<ul>
