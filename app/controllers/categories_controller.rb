@@ -1,9 +1,9 @@
 class CategoriesController < ApplicationController
 
 	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
-	before_action :signed_in_users, only: [:new, :update]
-	#before_action :editor_users, only: [:edit, :update]
-	before_action :admin_users, only: [:create, :edit, :destroy, :block]
+	#before_action :signed_in_users, only: []
+	#before_action :editor_users, only: []
+	before_action :admin_users, only: [:new, :create, :edit, :update, :destroy, :block]
 
 	def create
 		@obj = Category.new(user_params)

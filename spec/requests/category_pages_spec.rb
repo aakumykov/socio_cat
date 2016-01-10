@@ -12,6 +12,8 @@ describe 'Категории,' do
 			description: new_cat.description,
 	}}}
 
+	let(:list_button) { 'Список' }
+	let(:new_button) { 'Новая' }
 	let(:create_button) { 'Создать' }
 	let(:edit_button) { 'Изменить' }
 	let(:save_button) { 'Сохранить' }
@@ -20,21 +22,54 @@ describe 'Категории,' do
 
 	subject { page }
 
+
+	shared_examples_for 'кнопка_списка' do |pisitive=true|
+		if pisitive.eql?(true)
+			it { should have_link(list_button,categories_path) }
+		else
+			it { should_not have_link(list_button,categories_path) }
+		end
+	end
+
+	shared_examples_for 'кнопка_новой' do |pisitive=true|
+		if pisitive.eql?(true)
+			it { should have_link(new_button,new_category_path) }
+		else
+			it { should_not have_link(new_button,new_category_path) }
+		end
+	end
+
+
 	shared_examples_for 'список_разделов' do
 		it_should_behave_like 'страница с названием' do
 			let(:title) { 'Категории' }
 			let(:heading) { title }
 		end
-		it { should_not have_link('Новая',href:new_category_path) }
+		
+		it_should_behave_like 'кнопка_списка'
 
 		pending 'элементы списка'
-		
-		describe 'кнопка создания раздела,' do
-			before { 
-				www_user
-				visit categories_path
-			}
-			it { should have_link('Новая',href:new_category_path) }
+
+		describe 'кнопка создания,' do
+			describe 'нет у гостя' do
+				it_should_behave_like 'кнопка_новой', false
+			end
+
+			describe 'нет у пользователя,' do
+				before { 
+					www_user
+					visit categories_path
+				}
+				it_should_behave_like 'кнопка_новой', false
+			end
+
+			describe 'есть у админа,' do
+				before { 
+					www_admin
+					visit categories_path
+				}
+				it_should_behave_like 'кнопка_новой'
+			end
 		end
 	end
 
@@ -116,8 +151,10 @@ describe 'Категории,' do
 	end
 	
 	describe 'Созидание,' do
-		pending 'только для админа'
-		
+		# Этот тест дублирует функционал тестов предфильтров,
+		# но обеспечивает надёжность, одновременно снижая её,
+		# за счёт усложнения кода.
+		# Нужно ли это?
 		describe 'запрещено пользователю,' do
 			let(:category_params) {
 				{ category: {
@@ -136,12 +173,12 @@ describe 'Категории,' do
 			specify{ expect(response).to redirect_to(categories_path) }
 		end
 
-
-		describe 'www,' do
+		describe 'разрешено админу,' do
 			before {
-				www_user
+				www_admin
 				visit new_category_path
 			}
+			
 			describe 'отображение формы,' do
 				it_should_behave_like 'страница с названием' do
 					let(:title) { 'Новая раздел' }
@@ -186,10 +223,8 @@ describe 'Категории,' do
 		end
 	end
 
-	pending ':edit, :update, :destroy --> :admin_users'
-
 	describe 'Изменение (http),' do
-		before { console_user }
+		before { console_admin }
 
 		context 'корректными данными,' do
 			before { patch category_path(cat), new_cat_data }
