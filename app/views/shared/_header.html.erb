@@ -10,7 +10,7 @@
 
 <% if signed_in? %>
 	<%= link_to 'Выход', logout_path, method: :delete, class: 'btn pull-right btn-success' %>
-	<%= link_to 'Мой профиль', current_user, class: 'btn btn-info pull-right' %>
+	<%= link_to "Профиль [#{current_user.name}]", current_user, class: 'btn btn-info pull-right' %>
 <% else %>
 	<%= link_to 'Вход', login_path, class: 'btn pull-right btn-success' %>
 	<%= link_to 'Регистрация', new_user_path, class: 'btn pull-right' %>
