@@ -12,7 +12,7 @@ class Category < ActiveRecord::Base
 	has_and_belongs_to_many :cards
 
 	# фильтры
-	before_validation :remove_trailing_spaces
+	before_validation { |m| m.remove_trailing_spaces(:name,:description) }
 	
 	# проверки
 	validates :name, {

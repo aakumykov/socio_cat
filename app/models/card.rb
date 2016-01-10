@@ -9,7 +9,7 @@ class Card < ActiveRecord::Base
 	attr_accessor :cat_ids
 
 
-	before_validation :remove_trailing_spaces
+	before_validation { |m| m.remove_trailing_spaces(:title,:content) }
 	before_save :categorize
 
 
