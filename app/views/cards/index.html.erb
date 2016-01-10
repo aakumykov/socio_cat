@@ -4,9 +4,9 @@
 
 
 <div class='span8 offset2'>
-	<%= render 'card_button_new' %>
+	<%= render 'button_new' %>
 
 	<% @list.each do |card| %>
-	<%= render 'card_display', card: card, editable: false %>
+	<%= render 'display', card: card, editable: false %>
 	<% end %>
 </div>

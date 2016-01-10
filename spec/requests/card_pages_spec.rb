@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'Стриницы карточек,' do
+describe 'Карточки,' do
 
 	let(:user) { FactoryGirl.create(:user) }
 	let(:other_user) { FactoryGirl.create(:user) }
@@ -11,11 +11,14 @@ describe 'Стриницы карточек,' do
 
 	let(:wrong_id) { Card.maximum(:id)+1 }
 
+	let(:category) { FactoryGirl.create(:category) }
+	let(:other_category) { FactoryGirl.create(:category) }
+
 	let(:create_button) { 'Создать' }
 	let(:change_button) { 'Изменить' }
 	let(:save_button) { 'Сохранить' }
 	let(:cancel_button) { 'Отмена' }
-	
+	let(:delete_button) { 'Удалить'}
 
 	subject { page }
 
@@ -44,6 +47,60 @@ describe 'Стриницы карточек,' do
 		it { should have_content(the_card.title) }
 		it { should have_content(the_card.content) }
 		it { should have_content("от #{the_card.user.name}") }
+
+		it { should_not have_link('Изменить',href: edit_card_path(card)) }
+		it { should_not have_link('Удалить',href: card_path(card)) }
+
+		describe 'кнопки управления,'do
+			describe 'другой пользователь,' do
+				before { 
+					sign_in other_user 
+					visit card_path(card)
+				}
+				it { should_not have_link('Изменить',href: edit_card_path(card)) }
+				it { should_not have_link('Удалить',href: card_path(card)) }
+			end
+
+			describe 'автор,' do
+				before { 
+					www_user 
+					visit card_path(card)
+				}
+				it { should have_link('Изменить',href: edit_card_path(card)) }
+				it { should_not have_link('Удалить',href: card_path(card)) }
+			end
+
+			describe 'администратор,' do
+				before { 
+					www_admin 
+					visit card_path(card)
+				}
+				it { should have_link('Изменить',href: edit_card_path(card)) }
+				it { should have_link('Удалить',href: card_path(card)) }
+				it { should have_xpath("//a[@data-method='delete' and text()='#{delete_button}' and @href='#{card_path(card)}']")}
+			end
+		end
+
+		describe 'категории,' do
+			let(:all_cats) { [category, other_category] }
+			
+			before { 
+				card.categories = all_cats 
+				visit card_path(card)
+			}
+			
+			it 'заголовок области,' do
+				expect(page).to have_content('Категория:')
+			end
+
+			it 'категория 1' do
+				expect(page).to have_link(all_cats.first.name, category_path(all_cats.first))
+			end
+			
+			it 'категория 2' do
+				expect(page).to have_link(all_cats.last.name, category_path(all_cats.last))
+			end
+		end
 	end
 
 	shared_examples_for 'кнопки_удобства' do
@@ -78,6 +135,8 @@ describe 'Стриницы карточек,' do
 		it { should have_field('Содержимое') }
 		it { should have_link(cancel_button) }
 		it { should have_xpath("//input[@type='submit' and @value='#{create_button}']") }
+
+		it { should have_field('Категория')}
 	end
 
 
@@ -166,6 +225,7 @@ describe 'Стриницы карточек,' do
 		end
 	end
 
+
 	describe 'список,' do
 		before { visit cards_path }
 		it_should_behave_like 'список_карточек'
@@ -176,10 +236,14 @@ describe 'Стриницы карточек,' do
 		it_should_behave_like 'просмотр_карточки' do
 			let(:the_card) { card }
 		end
-		pending 'кнопка удаления'
 	end
 
 	describe 'создание,' do
+
+		pending 'категории при создании'
+		pending 'раз-категоризация кардочки'
+		pending 'нет области категорий при создании'
+		pending 'кривые значения в категории'
 
 		let(:card_params) {
 			{ card: {
@@ -230,6 +294,8 @@ describe 'Стриницы карточек,' do
 	end
 
 	describe 'изменение,' do
+		pending 'категории'
+
 		let(:new_title) {card.title + ' ' + Faker::Lorem.word}
 		let(:new_content) {Faker::Lorem.paragraph}
 
@@ -263,4 +329,20 @@ describe 'Стриницы карточек,' do
 			specify{ expect(response).to redirect_to(cards_path) }
 		end
 	end
+
+	# describe 'категорзация http,' do
+	# 	before { 
+	# 		console_user
+	# 		post categorize_card_path(card), { categories: [category.id, other_category.id] }
+	# 	}
+
+	# 	it 'категории карточки должны включать новые категории,' do
+	# 		expect(card.categories).to include(category)
+	# 		expect(card.categories).to include(other_category)
+	# 	end
+
+	# 	specify 'перенаправление на страницу карточки,' do
+	# 		expect(response).to redirect_to(card_path(card))
+	# 	end
+	# end
 end

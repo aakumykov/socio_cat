@@ -20,15 +20,20 @@ class ApplicationController < ActionController::Base
 		@obj = the_model.find_by(id: params[:id])
 	end
 
-	def update
-		@obj = the_model.find_by(id: params[:id])
+	def update(obj=nil)
+		if obj.nil?
+			@obj = the_model.find_by(id: params[:id])
+		else
+			@obj = obj
+		end
+
 		if @obj.update_attributes(user_params)
 			flash[:success] = 'Изменения сохранены'
 			redirect_to url_for(
-					controller: controller_name,
-					action: 'show',
-					id: @obj.id,
-				)
+				controller: controller_name,
+				action: 'show',
+				id: @obj.id,
+			)
 		else
 			flash.now[:error] = 'Изменения отклонены'
 			render :edit

@@ -20,7 +20,7 @@ end
 
 shared_examples_for 'главная_страница' do
 	it_should_behave_like 'страница с названием' do
-		let(:title) { 'Соционический каталог' }
+		let(:title) { 'начало' }
 		let(:heading) { 'Добро пожаловать' }
 	end
 end
@@ -51,6 +51,7 @@ end
 shared_examples_for 'все статические страницы' do
 	context 'гость,' do
 		it { should have_link('Главная страница', href: home_path) }
+		it { should have_link('Категории', href: categories_path) }
 		it { should have_link('Карточки', href: cards_path) }
 		it { should have_link('О проекте', href: about_path) }
 		it { should have_link('Помощь', href: help_path) }

@@ -10,16 +10,24 @@
 				'Изменить', 
 				edit_category_path(@obj.id), 
 				class:'btn',
-			) if signed_in? 
+			) if (signed_in? && current_user.admin?)
 		%>
 		<%= 
 			link_to(
 				'Удалить', 
 				category_path(@obj.id), 
 				method: :delete, 
-				data: {confirm:"Удалить категорию\n\n«#{@obj.name}» ?"},
+				data: {confirm:"Удалить раздел\n\n«#{@obj.name}» ?"},
 				class: 'btn btn-danger pull-right',
 			) if (signed_in? && current_user.admin?)
 		%>
+	</div>
+	<div class='category_members'>
+		<div class='title'>Карточки в разделе:</div>
+		<ul>
+		<% @obj.cards.each do |c| %>
+			<li><%= link_to c.title, card_path(c) %></li>
+		<% end %>
+		</ul>
 	</div>
 </div>

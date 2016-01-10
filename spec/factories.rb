@@ -19,7 +19,7 @@ FactoryGirl.define do
 	end
 
 	factory :category do
-		name { Faker::Lorem.word.capitalize }
+		name { Faker::Lorem.word.capitalize * 2 } # иначе бывает слишком коротким
 		description { Faker::Lorem.paragraph }
 		#user
 	end

@@ -11,12 +11,17 @@
 		<div class="row main_menu">
 			<%= render 'shared/header' %>
 		</div>
-		<%= render 'shared/flash.html.erb' %>		
+		<div class='row'>
+			<%= render 'shared/flash.html.erb' %>
+		</div>
 		<div class="row main_content">
 			<%= yield %>
 		</div>
 		<div class='row span10 offset1'>
 			<% if Rails.env.development? %>
+				http-параметры:<br>
+				<%= debug(params) %>
+				
 				REQUEST_URI:<br>
 				<%= debug(request.env['REQUEST_URI']) %>
 
@@ -26,9 +31,6 @@
 				cookies[:referer]:<br>
 				<%= debug(cookies[:referer]) %>
 
-				Params:<br>
-				<%= debug(params) %>
-				
 				Cookies:<br>
 				<%= debug(cookies[:referer]) %>
 			<% end %>

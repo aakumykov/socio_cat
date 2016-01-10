@@ -50,4 +50,13 @@ describe 'Категория' do
 	end
 
 	pending 'Очистка пробелов на концах'
+
+	pending 'связь с карточками,' do
+		# let(:card) { FactoryGirl.create(:card, category:) }
+		# before {
+		# 	cat.
+		# }
+
+		# it { should respond_to(:cards) }
+	end
 end

@@ -20,7 +20,7 @@ describe 'Категории,' do
 
 	subject { page }
 
-	shared_examples_for 'список_категорий' do
+	shared_examples_for 'список_разделов' do
 		it_should_behave_like 'страница с названием' do
 			let(:title) { 'Категории' }
 			let(:heading) { title }
@@ -29,7 +29,7 @@ describe 'Категории,' do
 
 		pending 'элементы списка'
 		
-		describe 'кнопка создания категории,' do
+		describe 'кнопка создания раздела,' do
 			before { 
 				www_user
 				visit categories_path
@@ -38,7 +38,7 @@ describe 'Категории,' do
 		end
 	end
 
-	shared_examples_for 'просмотр_категории' do
+	shared_examples_for 'просмотр_раздела' do
 		it_should_behave_like 'страница с названием' do
 			let(:title) { "Категория «#{the_cat.name}»" }
 			let(:heading) { title }
@@ -47,35 +47,57 @@ describe 'Категории,' do
 		it { should_not have_link(edit_button,href:edit_category_path(the_cat.id)) }
 		it { should_not have_link(delete_button,href:category_path(the_cat.id)) }
 
-		describe 'кнопка изменения,' do
-			before { 
-				www_user 
+		describe 'список карточек,' do
+			let(:all_cards) {[
+					FactoryGirl.create(:card, user:user),
+					FactoryGirl.create(:card, user:user),
+				]}
+			
+			before {
+				cat.cards = all_cards
 				visit category_path(cat)
 			}
-			it { should have_link(edit_button, href:edit_category_path(the_cat.id)) }
-			it { should_not have_link(delete_button) }
+
+			it 'заголовок области' do
+				expect(page).to have_content('Карточки в разделе:')
+			end
+
+			describe 'заголовки всех карточек,' do
+				it { should have_link(all_cards.first.title, card_path(all_cards.first)) }
+				it { should have_link(all_cards.last.title, card_path(all_cards.last)) }
+			end
 		end
 
-		describe 'кнопка удаления,' do
+		describe 'пользователем,' do
+			before { 
+				www_user
+				visit category_path(cat)
+			}
+			it { should_not have_link(edit_button,href:edit_category_path(the_cat.id)) }
+			it { should_not have_link(delete_button,href:category_path(the_cat.id)) }
+		end
+
+		describe 'администратором,' do
 			before { 
 				www_admin 
 				visit category_path(cat)
 			}
+			it { should have_link(edit_button, href:edit_category_path(the_cat.id)) }
 			it { should have_link(delete_button, href:category_path(the_cat.id)) }
 		end
 	end
 
-	shared_examples_for 'редактирование_категории' do
+	shared_examples_for 'редактирование_раздела' do
 		it_should_behave_like 'страница с названием' do
-			let(:title) { 'Изменение категории' }
+			let(:title) { 'Изменение раздела' }
 			let(:heading) { title }
 		end
-		it_should_behave_like 'форма_категории'
+		it_should_behave_like 'форма_раздела'
 		it{ should have_button(save_button) }
 		it { should have_link(cancel_button,href:category_path(cat)) }
 	end
 
-	shared_examples_for 'форма_категории' do	
+	shared_examples_for 'форма_раздела' do	
 		it { should have_field('Имя') }
 		it { should have_field('Описание') }
 	end
@@ -83,17 +105,19 @@ describe 'Категории,' do
 
 	describe 'Список,' do
 		before { visit categories_path }
-		it_should_behave_like 'список_категорий'
+		it_should_behave_like 'список_разделов'
 	end
 
 	describe 'Просмотр,' do
 		before { visit category_path(cat) }
-		it_should_behave_like 'просмотр_категории' do
+		it_should_behave_like 'просмотр_раздела' do
 			let(:the_cat) { cat }
 		end
 	end
 	
 	describe 'Созидание,' do
+		pending 'только для админа'
+		
 		describe 'www,' do
 			before {
 				www_user
@@ -101,10 +125,10 @@ describe 'Категории,' do
 			}
 			describe 'отображение формы,' do
 				it_should_behave_like 'страница с названием' do
-					let(:title) { 'Новая категория' }
+					let(:title) { 'Новая раздел' }
 					let(:heading) { title }
 				end
-				it_should_behave_like 'форма_категории'
+				it_should_behave_like 'форма_раздела'
 				it { should have_selector(:xpath,"//input[@type='submit' and @value='#{create_button}']") }
 				
 				pending 'Ищейка "конпка"'
@@ -136,12 +160,14 @@ describe 'Категории,' do
 
 					describe 'уведомление об ошибке,' do
 						before { click_button create_button }
-						it_should_behave_like 'flash-сообщение', 'error'#, "Ошибка создания категории"
+						it_should_behave_like 'flash-сообщение', 'error'#, "Ошибка создания раздела"
 					end
 				end
 			end
 		end
 	end
+
+	pending ':edit, :update, :destroy --> :admin_users'
 
 	describe 'Изменение (http),' do
 		before { console_user }

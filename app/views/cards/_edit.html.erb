@@ -1,0 +1,55 @@
+<%
+if 'edit'==mode 
+	cancel_path = card_path(@obj)
+	selected_cats = @obj.categories.pluck(:id)
+	button_text = 'Сохранить'
+	cat_label = 'Категория'
+else
+	cancel_path = cards_path
+	selected_cats = nil
+	button_text = 'Создать'
+	cat_label = 'Категория'
+end
+%>
+
+<div class='row'>
+	<div class='span4 pull-left'>
+		<div>
+			<%= f.label :title, 'Название' %>
+			<%= f.text_field :title, placeholder:'...', class: 'edit_field' %>
+		</div>
+		<div>
+			<%= f.label :content, 'Содержимое' %>
+			<%= f.text_area :content, placeholder:'...', class: 'edit_area' %>
+		</div>
+	</div>
+	<div class='span4 pull-right'>
+		<div>
+			<%= label_tag 'categories', cat_label %>
+			<%= select_tag(
+				'categories',
+				options_from_collection_for_select(
+					Category.all.order('created_at DESC'),
+					:id,
+					:name,
+					#selected_cats
+				),
+				{
+					include_blank: true,
+					multiple: true,
+					size: 10,
+					style:'width:100%',
+				}
+			) %>
+		</div>
+		<div>
+			<%= label_tag(:attachments, 'Вложения') %>
+			<%= text_area_tag(:attachments, nil, {disabled:true,style:'width:100%'}) %>
+		</div>
+	</div>
+	<div class='span10'>
+		<%= link_to 'Отмена', cancel_path, class: 'btn pull-left' %>
+		<%= f.submit button_text, class: 'btn btn-primary pull-right' %>
+	</div>
+</div>
+<%= render 'categories', card: @obj %>

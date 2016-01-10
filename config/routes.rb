@@ -21,9 +21,13 @@ SocioCat::Application.routes.draw do
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   resources :users
-  resources :categories
-  resources :cards
   resources :sessions, only: [:new, :create, :destroy]
+  resources :categories
+  resources :cards do
+    member do
+      post 'categorize'
+    end
+  end
 
   # Example resource route with options:
   #   resources :products do

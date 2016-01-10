@@ -3,7 +3,7 @@ require 'spec_helper'
 describe ApplicationHelper do
 
 	describe 'full_title' do
-		let(:base_title) {'SocioCat: '}
+		let(:base_title) {'☯ Соционический каталог: '}
 		let(:title) {'раздел одну'}
 
 		it 'должен включать базовый заголовок' do

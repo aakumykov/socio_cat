@@ -1,0 +1,6 @@
+<div class='row card_categories'>
+	<div class='title'>Категория:</div>
+	<% card.categories.each do |c| %>
+		<%= link_to c.name, category_path(c), class:'label' %>
+	<% end %>
+</div>

@@ -2,5 +2,6 @@
 
 <h1 class='page_title'><%= yield(:title) %></h1>
 
-<%= render 'card_button_new' %>
-<%= render 'card_display', card: @obj, editable: true %>
+<%= render 'button_new' %>
+<%= render 'display', card: @obj, editable: true %>
+<%= render 'categories', card: @obj %>
