@@ -2,7 +2,7 @@ module ActiveRecordTrimSpaces
 	extend ActiveSupport::Concern
 
 	protected
-		def rts
+		def remove_trailing_spaces
 			self.attributes.each_pair {|k,v|
 				self.assign_attributes(k => v.strip) if v.is_a?(String)
 			}
