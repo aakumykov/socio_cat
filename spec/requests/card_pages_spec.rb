@@ -104,7 +104,7 @@ describe 'Карточки,' do
 	end
 
 	shared_examples_for 'кнопки_удобства' do
-		it { should have_link('Все карточки', cards_path) }
+		it { should have_link('Список', cards_path) }
 		
 		context 'зарегистрированный пользователь' do
 			before { 
