@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
 
 	has_many :cards, inverse_of: :user
 
+	before_validation :rts
 	before_create :create_remember_token
 	before_save { email.downcase! }
 

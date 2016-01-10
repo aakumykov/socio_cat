@@ -7,6 +7,9 @@ class Card < ActiveRecord::Base
 	#validates_associated :categories
 
 	attr_accessor :cat_ids
+	
+
+	before_validation :rts
 	before_save :categorize
 
 

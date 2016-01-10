@@ -262,21 +262,4 @@ describe 'Категории,' do
 		# не работает
 		#specify{ expect{ delete category_path(cat) }.to change(Category,:count).by(-1) }
 	end
-
-	describe 'удаление концевых пробелов,' do
-		let(:name) { Faker::Lorem.word }
-		let(:description) { Faker::Lorem.paragraph }
-		
-		before {
-			www_admin
-			cat.name = " "*5 + name + "\t"*6
-			cat.description = " "*5 + description + "\t"*6
-			cat.save!
-		}
-
-		specify{ 
-			expect(cat.reload.name).to eq name 
-			expect(cat.reload.description).to eq description
-		}
-	end
 end
