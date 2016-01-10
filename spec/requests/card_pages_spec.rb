@@ -115,7 +115,22 @@ describe 'Карточки,' do
 		end
 	end
 
-	shared_examples_for 'редактирование_карточки' do
+	shared_examples_for 'страница_создания_карточки' do
+		it_should_behave_like 'страница с названием' do
+			let(:title) { 'Создание карточки' }
+			let(:heading) { title }
+		end
+		it { should have_field('Название') }
+		it { should have_field('Содержимое') }
+		it { should have_link(cancel_button, cards_path) }
+		it { should have_xpath("//input[@type='submit' and @value='#{create_button}']") }
+
+		it { should have_field('Категория')}
+
+		it { should_not have_selector(:xpath,"//div[text()='Категория:']")}
+	end
+
+	shared_examples_for 'страница_изменения_карточки' do
 		it_should_behave_like 'страница с названием' do
 			let(:title) { 'Редактирование карточки' }
 			let(:heading) { title }
@@ -124,21 +139,12 @@ describe 'Карточки,' do
 		it { should have_field('Содержимое', with: the_card.content) }
 		it { should have_link(cancel_button, href: card_path(the_card.id)) }
 		it { should have_xpath("//input[@type='submit' and @value='#{save_button}']") }
-	end
-	
-	shared_examples_for 'создание_карточки' do
-		it_should_behave_like 'страница с названием' do
-			let(:title) { 'Создание карточки' }
-			let(:heading) { title }
-		end
-		it { should have_field('Название') }
-		it { should have_field('Содержимое') }
-		it { should have_link(cancel_button) }
-		it { should have_xpath("//input[@type='submit' and @value='#{create_button}']") }
 
 		it { should have_field('Категория')}
-	end
 
+		it { should_not have_selector(:xpath,"//div[text()='Категория:']")}
+	end
+	
 
 	describe 'предфильтры,' do
 		
@@ -268,7 +274,7 @@ describe 'Карточки,' do
 			}
 
 			describe 'вид,' do
-				it_should_behave_like 'создание_карточки'
+				it_should_behave_like 'страница_создания_карточки'
 			end
 
 			describe 'работа,' do
