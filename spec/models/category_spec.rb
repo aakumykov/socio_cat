@@ -49,7 +49,19 @@ describe 'Категория' do
 		end
 	end
 
-	pending 'Очистка пробелов на концах'
+	describe 'удаление концевых пробелов,' do
+		let(:cat_name) { cat.name }
+		let(:cat_description) { cat.description }
+		before {
+			cat.name = " "*5 + cat_name + "\t"*6
+			cat.description = " "*5 + cat_description + "\t"*6
+			cat.save!
+		}
+		specify{
+			expect(cat.reload.name).to eq cat_name
+			expect(cat.reload.description).to eq cat_description
+		}
+	end
 
 	pending 'связь с карточками,' do
 		# let(:card) { FactoryGirl.create(:card, category:) }

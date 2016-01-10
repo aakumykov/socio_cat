@@ -62,6 +62,21 @@ describe 'Карточка,' do
 	end
 
 
+	describe 'удаление концевых пробелов,' do
+		let(:card_title) { card.title }
+		let(:card_content) { card.content }
+		before {
+			card.title = " "*5 + card_title + "\t"*6
+			card.content = " "*5 + card_content + "\t"*6
+			card.save!
+		}
+		specify{
+			expect(card.reload.title).to eq card_title
+			expect(card.reload.content).to eq card_content
+		}
+	end
+
+
 	describe 'связь с пользователем,' do
 
 		it 'должен иметь метод #user' do

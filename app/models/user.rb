@@ -2,6 +2,7 @@ class User < ActiveRecord::Base
 
 	has_many :cards, inverse_of: :user
 
+	before_validation { |m| m.remove_trailing_spaces(:name,:email) }
 	before_create :create_remember_token
 	before_save { email.downcase! }
 

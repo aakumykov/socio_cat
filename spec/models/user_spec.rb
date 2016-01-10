@@ -124,6 +124,17 @@ describe 'Пользователь,' do
 		specify { expect(@user.reload.email).to eq email }
 	end
 
+	describe 'удаление концевых пробелов,' do
+		let(:user_name) { @user.name }
+		before {
+			@user.name = " "*5 + user_name + "\t"*6
+			@user.save!
+		}
+		specify{
+			expect(@user.reload.name).to eq user_name
+		}
+	end
+
 	describe 'значение, возвращаемое методом authenticate(),' do
 		before { @user.save! }
 		let(:user_by_email) { User.find_by(email:@user.email) }
