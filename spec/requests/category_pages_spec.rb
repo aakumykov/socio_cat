@@ -118,6 +118,25 @@ describe 'Категории,' do
 	describe 'Созидание,' do
 		pending 'только для админа'
 		
+		describe 'запрещено пользователю,' do
+			let(:category_params) {
+				{ category: {
+					name: Faker::Lorem.word*2,
+					description: Faker::Lorem.paragraph,
+				}}
+			}
+			let(:initial_cats_count) { Category.count }
+			
+			before { 
+				console_user 
+				post categories_path, category_params
+			}
+			
+			specify{ expect(Category.count).to eq initial_cats_count }
+			specify{ expect(response).to redirect_to(categories_path) }
+		end
+
+
 		describe 'www,' do
 			before {
 				www_user
