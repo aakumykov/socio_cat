@@ -88,13 +88,37 @@ describe 'Карточка,' do
 			expect(card.user).to eq user
 		end
 
-		describe 'удаление карточки не ведёт к удалению пользователя,' do
-			before { card.destroy }
+		describe 'удаление карточки сохраняет пользователя,' do
+			before { card.destroy! }
 			specify{ expect(User.find(card.user_id)).to eq user }
 			specify{ expect(user.reload.id).to eq user.id }
 			specify{ expect(user.reload).to eq user }
 		end
+	end
 
-		pending 'удаление карточки не ведёт к удалению категории'
+	describe 'связь с категориями,' do
+		let(:cat1) { FactoryGirl.create(:category) }
+		let(:cat2) { FactoryGirl.create(:category) }
+
+		before {
+			card.cat_ids = [cat1.id, cat2.id]
+			card.save!
+		}
+
+		it 'есть метод #categories' do
+			should respond_to(:categories)
+		end
+
+		it 'категории карточки тождественны тестовым категориям,' do
+			expect(card.categories).to eq [cat1,cat2]
+		end
+
+		describe 'удаление карточки сохраняет категорию,' do
+			before { card.destroy! }
+			specify {
+				expect(Category.find(cat1.id)).to eq cat1
+				expect(Category.find(cat2.id)).to eq cat2
+			}
+		end
 	end
 end
