@@ -71,8 +71,8 @@ describe 'Категория' do
 		before {
 			cat.save!
 
-			card1.cat_ids = [cat.id]
-			card2.cat_ids = [cat.id]
+			card1.categorize([cat.id])
+			card2.categorize([cat.id])
 			
 			card1.save!
 			card2.save!

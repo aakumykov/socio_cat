@@ -101,7 +101,7 @@ describe 'Карточка,' do
 		let(:cat2) { FactoryGirl.create(:category) }
 
 		before {
-			card.cat_ids = [cat1.id, cat2.id]
+			card.categorize([cat1.id, cat2.id])
 			card.save!
 		}
 

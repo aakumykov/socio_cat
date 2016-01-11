@@ -7,9 +7,8 @@ class CardsController < ApplicationController
 	
 	def create
 		@obj = current_user.cards.new(user_params)
-		
-		@obj.cat_ids = category_params
-		#puts "====== #{controller_name}#create =====> @obj.cat_ids: #{@obj.cat_ids}/#{@obj.cat_ids.class}"
+
+		@obj.categorize(category_params)
 
 		if @obj.save
 			flash[:success] = "Карточка создана"
@@ -22,7 +21,7 @@ class CardsController < ApplicationController
 
 	def update
 		card = Card.find_by(id: params[:id])
-		card.cat_ids = category_params
+		card.categorize(category_params)
 		#puts "=====> #update, card.cat_ids: #{card.cat_ids}"
 		super(card)
 	end
