@@ -6,11 +6,9 @@ class Card < ActiveRecord::Base
 	has_and_belongs_to_many :categories
 	#validates_associated :categories
 
-	attr_accessor :cat_ids
-
 
 	before_validation { |m| m.remove_trailing_spaces(:title,:content) }
-	before_save :categorize
+	after_save :categorize
 
 
 	validates :title, {
@@ -28,17 +26,16 @@ class Card < ActiveRecord::Base
 		format: /\A[0-9]+\z/,
 	}
 
-	private
-		def categorize
-			if !cat_ids.nil?
-				current_cat_ids = Category.where(id:cat_ids).pluck(:id)
-				#puts "==========> current_cat_ids: #{current_cat_ids}"
+	def categorize(cat_id_list=nil)
+		if !cat_id_list.nil? && !cat_id_list.compact.empty?
+			current_cat_ids = Category.where(id:cat_id_list).pluck(:id)
+			#puts "==========> current_cat_ids: #{current_cat_ids}"
 
-				all_cat_ids = cat_ids.concat(current_cat_ids).map!{|i| i.to_i}.uniq!
-				#puts "==========> all_cat_ids: #{all_cat_ids}"
+			all_cat_ids = cat_id_list.concat(current_cat_ids).map!{|i| i.to_i}.uniq!
+			#puts "==========> all_cat_ids: #{all_cat_ids}"
 
-				new_cats = Category.find(all_cat_ids)
-				self.categories.concat(new_cats)
-			end
+			new_cats = Category.find(all_cat_ids)
+			self.categories.concat(new_cats)
 		end
+	end
 end
