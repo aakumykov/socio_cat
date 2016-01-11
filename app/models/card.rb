@@ -27,7 +27,19 @@ class Card < ActiveRecord::Base
 	}
 
 	def categorize(cat_id_list=nil)
-		if !cat_id_list.nil? && !cat_id_list.compact.empty?
+		#puts "=========> cat_id_list: |#{cat_id_list}|"
+
+		if cat_id_list.is_a?(Array) && !cat_id_list.compact.empty?
+			# удаляю то, что не даёт цифровой id
+			cat_id_list.reject! {|i| !i.respond_to?(:id) && !i.respond_to?(:to_i)}
+			#puts "==========> cat_id_list.reject!: #{cat_id_list}"
+			
+			cat_id_list.map! {|i| i.respond_to?(:id) && i.id or i}
+			cat_id_list.map! {|i| i.respond_to?(:to_i) && i.to_i or i}
+			#puts "==========> cat_id_list.map!: #{cat_id_list}"
+
+			return false if cat_id_list.empty?
+
 			current_cat_ids = Category.where(id:cat_id_list).pluck(:id)
 			#puts "==========> current_cat_ids: #{current_cat_ids}"
 
