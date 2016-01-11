@@ -7,6 +7,7 @@ describe 'Категория' do
 			description: 'Описание «Категории 1»',
 		)
 	}
+	let(:user) { FactoryGirl.create(:user) }
 
 	subject { cat }
 
@@ -63,12 +64,34 @@ describe 'Категория' do
 		}
 	end
 
-	pending 'связь с карточками,' do
-		# let(:card) { FactoryGirl.create(:card, category:) }
-		# before {
-		# 	cat.
-		# }
+	describe 'связь с карточками,' do
+		let(:card1) { FactoryGirl.build(:card, user: user) }
+		let(:card2) { FactoryGirl.build(:card, user: user) }
 
-		# it { should respond_to(:cards) }
+		before {
+			cat.save!
+
+			card1.cat_ids = [cat.id]
+			card2.cat_ids = [cat.id]
+			
+			card1.save!
+			card2.save!
+		}
+
+		it 'есть метод #cards' do
+			should respond_to(:cards)
+		end
+
+		it 'обладает карточками,' do
+			expect(cat.cards).to eq [card1,card2]
+		end
+
+		describe 'удаление категории сохраняет карточки,' do
+			before { cat.destroy! }
+			specify {
+				expect(Card.find(card1.id)).to eq card1
+				expect(Card.find(card2.id)).to eq card2
+			}
+		end
 	end
 end
