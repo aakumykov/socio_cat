@@ -5,6 +5,7 @@ describe 'Категории,' do
 	let(:admin) { FactoryGirl.create(:admin) }
 
 	let(:cat) { FactoryGirl.create(:category) }
+	let(:other_cat) { FactoryGirl.create(:category) }
 	let(:new_cat) { FactoryGirl.build(:category) }
 	let(:new_cat_data) {{
 		category: {
@@ -21,6 +22,13 @@ describe 'Категории,' do
 	let(:cancel_button) { 'Отмена' }
 
 	subject { page }
+
+
+	# define :have_button do |type,value|
+	# 	match do |page|
+ #    		page have_selector(:xpath,"//input[@type='#{type}' and @value='#{value}']")
+ #    	end
+	# end
 
 
 	shared_examples_for 'кнопка_списка' do |pisitive=true|
@@ -40,7 +48,7 @@ describe 'Категории,' do
 	end
 
 
-	shared_examples_for 'список_разделов' do
+	shared_examples_for 'список_категорий' do
 		it_should_behave_like 'страница с названием' do
 			let(:title) { 'Категории' }
 			let(:heading) { title }
@@ -48,7 +56,28 @@ describe 'Категории,' do
 		
 		it_should_behave_like 'кнопка_списка'
 
-		pending 'элементы списка'
+		pending 'элементы списка,' do
+			#before { visit categories_path }
+			
+			#it { should have_link(cat.name, href:category_path(cat)) }
+			#it { should have_link(other_cat.name, href:category_path(other_cat)) }
+
+			#it { should have_content(cat.name) }
+			#it { should have_content(other_cat.name) }
+
+			#it { should have_selector(:xpath,"//a[@href='#{category_path(cat)}']") }
+			#it { should have_selector(:xpath,"//a[@href='#{category_path(other_cat)}']") }
+
+			# it { should have_link(
+			# 		cat.name,
+			# 		href: category_path(cat)
+			# 	)}
+			
+			# it { should have_link(
+			# 		other_cat.name,
+			# 		href: category_path(other_cat)
+			# 	)}
+		end
 
 		describe 'кнопка создания,' do
 			describe 'нет у гостя' do
@@ -128,8 +157,18 @@ describe 'Категории,' do
 			let(:heading) { title }
 		end
 		it_should_behave_like 'форма_раздела'
-		it{ should have_button(save_button) }
+		it{ should have_button('submit',save_button) }
 		it { should have_link(cancel_button,href:category_path(cat)) }
+	end
+
+	shared_examples_for 'создание_раздела' do
+		it_should_behave_like 'страница с названием' do
+			let(:title) { 'Новая раздел' }
+			let(:heading) { title }
+		end
+		it_should_behave_like 'форма_раздела'
+		it { should have_button('submit',create_button) }
+		it { should have_link(cancel_button,href:categories_path) }
 	end
 
 	shared_examples_for 'форма_раздела' do	
@@ -140,7 +179,14 @@ describe 'Категории,' do
 
 	describe 'Список,' do
 		before { visit categories_path }
-		it_should_behave_like 'список_разделов'
+		it_should_behave_like 'список_категорий'
+	end
+
+	describe 'Список (http),' do
+		before { get categories_path }
+		specify{
+			expect(response).to render_template(:index)
+		}
 	end
 
 	describe 'Просмотр,' do
@@ -179,16 +225,7 @@ describe 'Категории,' do
 				visit new_category_path
 			}
 			
-			describe 'отображение формы,' do
-				it_should_behave_like 'страница с названием' do
-					let(:title) { 'Новая раздел' }
-					let(:heading) { title }
-				end
-				it_should_behave_like 'форма_раздела'
-				it { should have_selector(:xpath,"//input[@type='submit' and @value='#{create_button}']") }
-				
-				pending 'Ищейка "конпка"'
-			end
+			it_should_behave_like 'создание_раздела'
 
 			describe 'работа формы,' do
 				context 'с верными данными,' do
