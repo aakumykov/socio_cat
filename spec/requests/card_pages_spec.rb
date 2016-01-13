@@ -208,7 +208,10 @@ describe 'Карточки,' do
 			describe 'www,' do
 				before { visit card_path(wrong_id) }
 				it_should_behave_like 'flash-сообщение', 'error', 'Запрошенный объект не существует'
-				it_should_behave_like 'список_карточек'
+				it_should_behave_like 'список_карточек' do
+					let(:the_card1) { card }
+					let(:the_card2) { card }
+				end
 			end
 		end
 
