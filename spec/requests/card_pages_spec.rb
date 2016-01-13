@@ -59,7 +59,7 @@ describe 'Карточки,' do
 		# arguments: the_card
 
 		it { should have_xpath("//*[@id='card#{the_card.id}']//*[contains(@class,'card_title')]//a[@href='#{card_path(the_card)}' and text()='#{the_card.title}']") }
-		it { should have_css('.card_content', text:the_card.content) }
+		it { should have_link(card.content, href:card_path(card)) }
 
 		context 'гость,' do
 			it_should_behave_like 'кнопки_карточки', 'гость'

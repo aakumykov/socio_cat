@@ -4,6 +4,6 @@
 	</legend>
 	<%= render 'edit_buttons', card:card %>
 	<div class='card_content'>
-		<%= card.content %>
+		<%= link_to(card.content, card_path(card), class:'card_content') %>
 	</div>
 </fieldset>
