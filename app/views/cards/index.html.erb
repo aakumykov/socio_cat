@@ -5,8 +5,7 @@
 
 <div class='span8 offset2'>
 	<%= render 'comfort_buttons' %>
-
 	<% @list.each do |card| %>
-	<%= render 'display', card: card, editable: false %>
+		<%= render 'card_in_list', card: card %>
 	<% end %>
 </div>
