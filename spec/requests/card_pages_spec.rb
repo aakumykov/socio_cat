@@ -23,20 +23,71 @@ describe 'Карточки,' do
 	subject { page }
 
 	shared_examples_for 'список_карточек' do
+		# arguments: the_card1, the_card2
+		
 		it_should_behave_like 'страница с названием' do
 			let(:title) {'Карточки'}
 			let(:heading) { title }
 		end
 
-		it_should_behave_like 'просмотр_карточки' do
-			let(:the_card) { card }
-		end
-
-		it_should_behave_like 'просмотр_карточки' do
-			let(:the_card) { other_card }
-		end
-
 		it_should_behave_like 'кнопки_удобства'
+
+		it_should_behave_like 'карточка_в_списке' do
+			let(:the_card) { the_card1 }
+		end
+
+		it_should_behave_like 'карточка_в_списке' do
+			let(:the_card) { the_card2 }
+		end
+	end
+
+	shared_examples_for 'кнопки_карточки' do |mode|
+		case mode
+		when 'администратор'
+			it { should have_link(change_button, href: edit_card_path(the_card)) }
+			it { should have_link(delete_button, href: card_path(the_card)) }
+		when 'автор'
+			it { should have_link(change_button, href: edit_card_path(the_card)) }
+			it { should_not have_link(delete_button, href: card_path(the_card)) }
+		else
+			it { should_not have_link(change_button, href: edit_card_path(the_card)) }
+			it { should_not have_link(delete_button, href: card_path(the_card)) }
+		end		
+	end
+
+	shared_examples_for 'карточка_в_списке' do
+		# arguments: the_card
+
+		it { should have_xpath("//*[@id='card#{the_card.id}']//*[contains(@class,'card_title')]//a[@href='#{card_path(the_card)}' and text()='#{the_card.title}']") }
+		it { should have_css('.card_content', text:the_card.content) }
+
+		context 'гость,' do
+			it_should_behave_like 'кнопки_карточки', 'гость'
+		end
+
+		context 'пользователь,' do
+			before { 
+				sign_in other_user 
+				visit cards_path
+			}
+			it_should_behave_like 'кнопки_карточки', 'пользователь'
+		end
+
+		context 'автор,' do
+			before { 
+				www_user
+				visit cards_path
+			}
+			it_should_behave_like 'кнопки_карточки', 'автор'
+		end
+
+		context 'администратор,' do
+			before { 
+				www_admin
+				visit cards_path
+			}
+			it_should_behave_like 'кнопки_карточки', 'администратор'
+		end
 	end
 
 	shared_examples_for 'просмотр_карточки' do
@@ -234,7 +285,10 @@ describe 'Карточки,' do
 
 	describe 'список,' do
 		before { visit cards_path }
-		it_should_behave_like 'список_карточек'
+		it_should_behave_like 'список_карточек' do
+			let(:the_card1) { card }
+			let(:the_card2) { other_card }
+		end
 	end
 
 	describe 'просмотр,' do
@@ -333,20 +387,4 @@ describe 'Карточки,' do
 			specify{ expect(response).to redirect_to(cards_path) }
 		end
 	end
-
-	# describe 'категорзация http,' do
-	# 	before { 
-	# 		console_user
-	# 		post categorize_card_path(card), { categories: [category.id, other_category.id] }
-	# 	}
-
-	# 	it 'категории карточки должны включать новые категории,' do
-	# 		expect(card.categories).to include(category)
-	# 		expect(card.categories).to include(other_category)
-	# 	end
-
-	# 	specify 'перенаправление на страницу карточки,' do
-	# 		expect(response).to redirect_to(card_path(card))
-	# 	end
-	# end
 end
