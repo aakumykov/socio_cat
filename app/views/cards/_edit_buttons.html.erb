@@ -1,0 +1,14 @@
+<div class="btn-group btn-group-vertical pull-right buttons_container">
+	<% if signed_in? %>
+		<% if current_user == card.user || current_user.admin? %>
+			<%= link_to(edit_card_path(card), class:'btn btn-mini', title:'Изменить') do %>
+				<i class='icon icon-edit'></i>
+			<% end %>
+		<% end %>
+		<% if current_user.admin? %>
+			<%= link_to(card_path(card), method:'delete', class:'btn btn-mini', title:'Удалить', data:{confirm:"Удалить карточку\n«#{card.title}»?"} ) do %>
+				<i class='icon icon-remove'></i>
+			<% end %>
+		<% end %>
+	<% end %>
+</div>

@@ -1,0 +1,9 @@
+<fieldset id='card<%= card.id %>' class='card'>
+	<legend class='card_title'>
+		<%= link_to(card.title, card_path(card)) %><span class='item_user'>, от <%= link_to(card.user.name, user_path(card.user), class:'badge') %></span>
+	</legend>
+	<%= render 'edit_buttons', card:card %>
+	<div class='card_content'>
+		<%= card.content %>
+	</div>
+</fieldset>
