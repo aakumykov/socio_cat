@@ -49,7 +49,16 @@ $card_title: #ececec;
 		color: darkgreen;
 	}
 
+	.badge {
+		padding-right: 4px;
+	}
+
 	A {
 		margin: auto 2px;
+		color: white;
+	}
+
+	.delete_link {
+		font-size: 17px;
 	}
 }
