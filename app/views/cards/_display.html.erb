@@ -17,5 +17,7 @@
 		<% end %>
 	</div>
 	
-	<div class='card_content'><%= card.content %></div>
+	<div class='card_content'>
+		<%= my_sanitize(card.content) %>
+	</div>
 </fieldset>

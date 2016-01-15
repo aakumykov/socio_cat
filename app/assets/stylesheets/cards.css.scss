@@ -7,7 +7,7 @@ $card_title: #ececec;
 	margin-bottom: 10px;
 	border: 1px outset gray;
 	border-radius: 9px;
-	padding: 6px 11px;
+	padding: 6px 14px 12px;
 	
 	LEGEND {
 		margin-bottom: 5px;
@@ -30,6 +30,10 @@ $card_title: #ececec;
 		margin-left: 9px;
 		A { margin-bottom: 3px; }
 	}
+}
+
+.card_content {
+	color:#333;
 }
 
 .card_categories {
