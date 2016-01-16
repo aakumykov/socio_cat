@@ -97,102 +97,38 @@ describe 'Карточка,' do
 	end
 
 	describe 'связь с категориями,' do
+		# план:
+		# + отзывчивость
+		# + обладание (тождественность)
+		# - уничтожение
+
 		let(:cat1) { FactoryGirl.create(:category) }
 		let(:cat2) { FactoryGirl.create(:category) }
 
 		before {
-			card.categorize([cat1.id, cat2.id])
-			card.save!
+			card.categories = [cat1]
+			card.categories << cat2
 		}
 
-		it 'есть метод #categories' do
-			should respond_to(:categories)
+		# отзывчивость
+		it 'отвечает на метод categories' do
+			expect(card).to respond_to(:categories)
 		end
 
-		it 'категории карточки тождественны тестовым категориям,' do
-			expect(card.categories).to eq [cat1,cat2]
+		# обладание и порядок
+		describe 'обладает категориями в правильном порядке,' do
+			before { card.categories = [cat1,cat2] }
+			specify{ expect(card.categories).to eq([cat1,cat2]) }
 		end
 
-		describe 'удаление карточки сохраняет категорию,' do
-			before { card.destroy! }
-			specify {
-				expect(Category.find(cat1.id)).to eq cat1
-				expect(Category.find(cat2.id)).to eq cat2
+		# уничтожение
+		describe 'при уничтожении карточки категории сохраняются,' do
+			before { 
+				card.save!
+				card.destroy! 
 			}
-		end
-	end
-
-	describe 'метод категоризации (card#categorize),' do
-		let(:older_cat) { FactoryGirl.create(:category) }
-		let(:newer_cat) { FactoryGirl.create(:category) }
-
-		before { card.save! }
-		
-		describe 'с корректными данными,' do
-							
-			describe 'категория назначается,' do
-				before { 
-					card.categorize([older_cat.id]) 
-				}
-				specify{
-					expect(card.categories.first).to eq older_cat
-				}
-			end
-
-			describe 'обновление добавляет, а не заменяет,' do
-				before { 
-					card.categorize([older_cat.id])
-					card.categorize([newer_cat.id])
-				}
-				specify{ 
-					expect(card.categories).to eq [older_cat,newer_cat]
-				}
-			end
-		end
-
-		describe 'с некорректными данными,' do
-			describe 'массив категорий частично кривой,' do
-				before { card.categorize([older_cat, Array.new]) }
-				specify{
-					expect(card.categories).to eq [older_cat]
-				}
-			end
-
-			describe 'массив категорий полностью кривой,' do
-				describe 'вариант 1: не nil,' do
-					before { card.categorize([Array.new, Hash.new]) }
-					specify{ expect(card.categories).to eq [] }
-				end
-
-				describe 'вариант 2: nil,' do
-					before { card.categorize([nil, nil]) }
-					specify{ expect(card.categories).to eq [] }
-				end
-			end
-			
-			describe 'это не массив,' do
-				before { card.categorize(5.0) }
-				specify{ expect(card.categories).to eq [] }
-			end
-
-			describe 'массив категорий пустой,' do
-				describe 'категории не назначаются' do
-					before { card.categorize([]) }
-					specify{
-						expect(card.categories).to eq []
-					}
-				end
-
-				describe 'категории не обновляются' do
-					before {
-						card.categorize([older_cat,newer_cat])
-						card.categorize(nil)
-					}
-					specify{
-						expect(card.categories).to eq [older_cat,newer_cat]
-					}
-				end
-			end
+			specify{ expect{ Category.find_by(cat1.id).to eq cat1 } }
+			specify{ expect{ Category.find_by(cat2.id).to eq cat2 } }
 		end
 	end
 end
