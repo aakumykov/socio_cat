@@ -1,6 +1,21 @@
 <div class='row card_categories'>
 	<div class='title'>Категория:</div>
 	<% card.categories.each do |c| %>
-		<%= link_to c.name, category_path(c), class:'label' %>
+		<span class='badge'>
+			<a 
+				class='tag'
+				href="<%= category_path(c) %>" 
+			>
+				<%= c.name %>
+			</a>
+			<a 
+				class="delete_link" 
+				href="<%= category_path(c) %>" 
+				title="удалить категорию «<%= c.name %>»" 
+				data-method="delete" 
+				data-confirm="Удалить метку
+«<%= c.name %>»?" 
+			>&#215;</a>
+		</span>
 	<% end %>
 </div>

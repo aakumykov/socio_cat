@@ -43,4 +43,6 @@ RSpec.configure do |config|
   config.order = "random"
 
   config.include Capybara::DSL
+
+  config.include ActionView::Helpers::TextHelper
 end

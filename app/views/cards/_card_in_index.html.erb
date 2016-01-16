@@ -4,6 +4,6 @@
 	</legend>
 	<%= render 'edit_buttons', card:card %>
 	<div class='card_content'>
-		<%= link_to(card.content, card_path(card), class:'card_content') %>
+		<%= my_sanitize(card.content) %>
 	</div>
 </fieldset>
