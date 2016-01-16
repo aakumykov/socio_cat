@@ -46,8 +46,8 @@ class Card < ActiveRecord::Base
 			all_cat_ids = cat_id_list.concat(current_cat_ids).map!{|i| i.to_i}.uniq!
 			#puts "==========> all_cat_ids: #{all_cat_ids}"
 
-			new_cats = Category.find(all_cat_ids)
-			self.categories.concat(new_cats)
+			all_cats = Category.find(all_cat_ids)
+			self.categories = all_cats
 		end
 	end
 end
