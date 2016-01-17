@@ -23,14 +23,6 @@ ActiveRecord::Schema.define(version: 20160116161308) do
 
   add_index "cards", ["user_id"], name: "index_cards_on_user_id"
 
-  create_table "cards_categories", id: false, force: true do |t|
-    t.integer "card_id"
-    t.integer "category_id"
-  end
-
-  add_index "cards_categories", ["card_id"], name: "index_cards_categories_on_card_id"
-  add_index "cards_categories", ["category_id"], name: "index_cards_categories_on_category_id"
-
   create_table "categories", force: true do |t|
     t.string   "name"
     t.text     "description"

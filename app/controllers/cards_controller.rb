@@ -37,6 +37,11 @@ class CardsController < ApplicationController
 			)
 		end
 
+		# #версия для тестирования ошибок
+		# def category_params
+		# 	params.require(:categories)
+		# end
+
 		def category_params
 			#puts "====== category_params ======> params[:categories]: #{params[:categories]}(#{params[:categories].class})"
 
