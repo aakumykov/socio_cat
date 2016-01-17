@@ -3,8 +3,8 @@ class CcRelationsController < ApplicationController
 	#before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
 	#before_action :not_signed_in_users, only: [:new, :create]
 	#before_action :signed_in_users, only: [:show, :edit, :update]
-	before_action :editor_users, only: [:bind]
-	before_action :admin_users, only: [:unbind]
+	#before_action :editor_users, only: [:bind]
+	before_action :admin_users, only: [:bind, :unbind]
 
 	def bind
 		@card = Card.find_by(id: params[:card_id])
@@ -48,7 +48,7 @@ class CcRelationsController < ApplicationController
 	end
 
 	def unbind
-		@cc_relation = CcRelation.find_by(id: params[:id])
+		@cc_relation = CcRelation.find_by(category_id: params[:category_id], card_id: params[:card_id])
 		if @cc_relation.nil?
 			flash[:error] = "Такой связи не существует"
 			redirect_to cards_path
