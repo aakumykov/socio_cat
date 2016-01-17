@@ -8,7 +8,9 @@ class CardsController < ApplicationController
 	def create
 		@obj = current_user.cards.new(user_params)
 
-		@obj.categorize(category_params)
+		category_params.each { |cat_id|
+			@obj.cc_relations.build(category_id:cat_id)
+		}
 
 		if @obj.save
 			flash[:success] = "Карточка создана"
@@ -25,20 +27,6 @@ class CardsController < ApplicationController
 		#puts "=====> #update, card.cat_ids: #{card.cat_ids}"
 		super(card)
 	end
-
-	# def categorize
-	# 	# @obj устанавливается в фильтре editor_users
-	# 	old_cats = Category.where(id: @obj.categories.pluck(:id))
-	# 	new_cats = old_cats.concat(Category.where(id: category_params)).uniq
-
-	# 	if new_cats.blank?
-	# 		flash[:error] = 'Список категорий пуст'
-	# 	else
-	# 		@obj.categories=new_cats
-	# 		flash[:success] = "Категории для «#{@obj.title}» установлены"
-	# 	end
-	# 	redirect_to card_path
-	# end
 
 	private	
 
