@@ -65,33 +65,33 @@ describe 'Категория' do
 	end
 
 	describe 'связь с карточками,' do
+		
+		# отзывчивость
+		# обладание и порядок
+		# разрушение
+
 		let(:card1) { FactoryGirl.build(:card, user: user) }
 		let(:card2) { FactoryGirl.build(:card, user: user) }
 
 		before {
-			cat.save!
-
-			card1.categorize([cat.id])
-			card2.categorize([cat.id])
-			
-			card1.save!
-			card2.save!
+			cat.cards = [card1]
+			cat.cards << card2
 		}
 
-		it 'есть метод #cards' do
-			should respond_to(:cards)
-		end
+		# отзывчивость
+		it { should respond_to(:cards) }
 
-		it 'обладает карточками,' do
-			expect(cat.cards).to eq [card1,card2]
-		end
+		# обладание и порядок
+		specify{ expect(cat.cards).to eq [card1,card2] }
 
-		describe 'удаление категории сохраняет карточки,' do
-			before { cat.destroy! }
-			specify {
-				expect(Card.find(card1.id)).to eq card1
-				expect(Card.find(card2.id)).to eq card2
+		# разрушение
+		describe 'при удалении категории карточки сохраняются,' do
+			before { 
+				cat.save!
+				cat.destroy!
 			}
+			specify{ expect(Card.find_by(id:card1.id)).to eq card1 }
+			specify{ expect(Card.find_by(id:card2.id)).to eq card2 }
 		end
 	end
 end

@@ -9,7 +9,8 @@ class Category < ActiveRecord::Base
 
 
 	# связи
-	has_and_belongs_to_many :cards
+	has_many :cc_relations
+	has_many :cards, through: :cc_relations
 
 	# фильтры
 	before_validation { |m| m.remove_trailing_spaces(:name,:description) }

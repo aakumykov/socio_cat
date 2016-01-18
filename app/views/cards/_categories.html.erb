@@ -10,11 +10,11 @@
 			</a>
 			<a 
 				class="delete_link" 
-				href="<%= category_path(c) %>" 
+				href="<%= cc_unbind_path(c.id,card.id) %>" 
 				title="удалить категорию «<%= c.name %>»" 
-				data-method="get" 
-				data-confirm="Удалить метку
-«<%= c.name %>»?" 
+				data-method="POST" 
+				data-confirm="Удалить метку «<%= c.name %>» 
+из карточки «<%= card.title %>»?" 
 			>&#215;</a>
 		</span>
 	<% end %>

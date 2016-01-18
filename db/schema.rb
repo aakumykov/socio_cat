@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160106173046) do
+ActiveRecord::Schema.define(version: 20160116161308) do
 
   create_table "cards", force: true do |t|
     t.string   "title"
@@ -23,14 +23,6 @@ ActiveRecord::Schema.define(version: 20160106173046) do
 
   add_index "cards", ["user_id"], name: "index_cards_on_user_id"
 
-  create_table "cards_categories", id: false, force: true do |t|
-    t.integer "card_id"
-    t.integer "category_id"
-  end
-
-  add_index "cards_categories", ["card_id"], name: "index_cards_categories_on_card_id"
-  add_index "cards_categories", ["category_id"], name: "index_cards_categories_on_category_id"
-
   create_table "categories", force: true do |t|
     t.string   "name"
     t.text     "description"
@@ -40,6 +32,17 @@ ActiveRecord::Schema.define(version: 20160106173046) do
   end
 
   add_index "categories", ["name"], name: "index_categories_on_name", unique: true
+
+  create_table "cc_relations", force: true do |t|
+    t.integer  "category_id"
+    t.integer  "card_id"
+    t.datetime "created_at"
+    t.datetime "updated_at"
+  end
+
+  add_index "cc_relations", ["card_id"], name: "index_cc_relations_on_card_id"
+  add_index "cc_relations", ["category_id", "card_id"], name: "index_cc_relations_on_category_id_and_card_id", unique: true
+  add_index "cc_relations", ["category_id"], name: "index_cc_relations_on_category_id"
 
   create_table "users", force: true do |t|
     t.text     "name"

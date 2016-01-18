@@ -1,10 +1,9 @@
 class Card < ActiveRecord::Base
 
 	belongs_to :user, inverse_of: :cards
-	#validates_associated :user
-	
-	has_and_belongs_to_many :categories
-	#validates_associated :categories
+
+	has_many :cc_relations
+	has_many :categories, through: :cc_relations
 
 
 	before_validation { |m| m.remove_trailing_spaces(:title,:content) }
