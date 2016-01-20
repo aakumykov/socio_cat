@@ -5,11 +5,12 @@
 
 <div class='span8 offset2'>
 	<%= render 'comfort_buttons' %>
-	<ul>
-		<% @list.each do |ctg| %>
-			<li id='category_list_item<%= ctg.id %>'>
-				<%= link_to ctg.name, category_path(ctg.id) %>
-			</li>
-		<% end %>
-	</ul>
+	
+	<% @list.each do |ctg| %>
+		<div class='category_list_item category<%= ctg.id %>'>
+			<%= link_to ctg.name, category_path(ctg.id), class:'cat_link' %>
+			<%= render 'side_controls', obj:ctg %>
+		</div>
+	<% end %>
+
 </div>

@@ -16,3 +16,13 @@
 		list-style-type: none;
 	}
 }
+
+.category_list_item {
+	background-color: rgb(240,240,240); 
+	margin-bottom:3px; 
+	overflow:auto;
+
+	.cat_link {
+		margin:3px;
+	}
+}
