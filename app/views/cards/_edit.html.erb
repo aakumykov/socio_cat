@@ -25,22 +25,16 @@ end
 	</div>
 	<div class='span4 pull-right'>
 		<div>
-			<%= label_tag 'categories', cat_label %>
-			<%= select_tag(
-				'categories',
-				options_from_collection_for_select(
-					Category.all.order('created_at DESC'),
-					:id,
-					:name,
-					#selected_cats
-				),
-				{
-					include_blank: true,
-					multiple: true,
-					size: 10,
-					style:'width:100%',
-				}
-			) %>
+			<fieldset>
+				<legend><%= cat_label %></legend>
+				<ul>
+					<% Category.all.each do |c| %>
+						<li>
+							<input name='categories[]' type='checkbox' value='<%= c.id %>' <%= 'checked' if @obj.categories.include?(c) %>> <%= c.name %>
+						</li>
+					<% end %>
+				</ul>
+			</fieldset>
 		</div>
 		<div>
 			<%= label_tag(:attachments, 'Вложения') %>
