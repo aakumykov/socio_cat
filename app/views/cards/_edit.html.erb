@@ -14,17 +14,17 @@ end
 
 <div class='row'>
 	<div class='span4 pull-left'>
-		<div>
+		<div id='title_area'>
 			<%= f.label :title, 'Название' %>
 			<%= f.text_field :title, placeholder:'...', class: 'edit_field' %>
 		</div>
-		<div>
+		<div id='content_area'>
 			<%= f.label :content, 'Содержимое' %>
 			<%= f.text_area :content, placeholder:'...', class: 'edit_area' %>
 		</div>
 	</div>
 	<div class='span4 pull-right'>
-		<div>
+		<div id='categories_area'>
 			<fieldset>
 				<legend><%= cat_label %></legend>
 				<ul>
@@ -36,7 +36,7 @@ end
 				</ul>
 			</fieldset>
 		</div>
-		<div>
+		<div id='attachments_area'>
 			<%= label_tag(:attachments, 'Вложения') %>
 			<%= text_area_tag(:attachments, nil, {disabled:true,style:'width:100%'}) %>
 		</div>
