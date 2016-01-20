@@ -5,11 +5,21 @@
 
 <div class='span8 offset2'>
 	<%= render 'comfort_buttons' %>
-	<ul>
-		<% @list.each do |ctg| %>
-			<li id='category_list_item<%= ctg.id %>'>
-				<%= link_to ctg.name, category_path(ctg.id) %>
-			</li>
-		<% end %>
-	</ul>
+	
+	<% @list.each do |ctg| %>
+		<div class='category_list_item category<%= ctg.id %>'>
+			<%= link_to ctg.name, category_path(ctg.id), class:'cat_link' %>
+			
+			<div class='btn-group pull-right'>
+				<%= link_to edit_category_path(ctg.id), title:'Изменить', class:'btn btn-mini btn-info' do %>
+					<i class='icon icon-edit'></i>
+				<% end %>
+
+				<%= link_to edit_category_path(ctg.id), title:'Удалить', class:'btn btn-mini btn-danger' do %>
+					<i class='icon icon-remove'></i>
+				<% end %>
+			</div>
+		</div>
+	<% end %>
+
 </div>
