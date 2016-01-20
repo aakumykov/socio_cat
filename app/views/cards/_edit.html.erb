@@ -14,35 +14,29 @@ end
 
 <div class='row'>
 	<div class='span4 pull-left'>
-		<div>
+		<div id='title_area'>
 			<%= f.label :title, 'Название' %>
 			<%= f.text_field :title, placeholder:'...', class: 'edit_field' %>
 		</div>
-		<div>
+		<div id='content_area'>
 			<%= f.label :content, 'Содержимое' %>
 			<%= f.text_area :content, placeholder:'...', class: 'edit_area' %>
 		</div>
 	</div>
 	<div class='span4 pull-right'>
-		<div>
-			<%= label_tag 'categories', cat_label %>
-			<%= select_tag(
-				'categories',
-				options_from_collection_for_select(
-					Category.all.order('created_at DESC'),
-					:id,
-					:name,
-					#selected_cats
-				),
-				{
-					include_blank: true,
-					multiple: true,
-					size: 10,
-					style:'width:100%',
-				}
-			) %>
+		<div id='categories_area'>
+			<fieldset>
+				<legend><%= cat_label %></legend>
+				<ul>
+					<% Category.all.each do |c| %>
+						<li>
+							<input name='categories[]' type='checkbox' value='<%= c.id %>' <%= 'checked' if @obj.categories.include?(c) %>> <%= c.name %>
+						</li>
+					<% end %>
+				</ul>
+			</fieldset>
 		</div>
-		<div>
+		<div id='attachments_area'>
 			<%= label_tag(:attachments, 'Вложения') %>
 			<%= text_area_tag(:attachments, nil, {disabled:true,style:'width:100%'}) %>
 		</div>

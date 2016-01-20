@@ -2,7 +2,7 @@
 	<legend class='card_title'>
 		<%= link_to(card.title, card_path(card)) %><span class='item_user'>, от <%= link_to(card.user.name, user_path(card.user), class:'badge') %></span>
 	</legend>
-	<%= render 'edit_buttons', card:card %>
+	<%= render 'side_controls', card:card %>
 	<div class='card_content'>
 		<%= my_sanitize(card.content) %>
 	</div>
