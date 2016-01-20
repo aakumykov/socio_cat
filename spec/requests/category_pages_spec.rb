@@ -299,4 +299,6 @@ describe 'Категории,' do
 		# не работает
 		#specify{ expect{ delete category_path(cat) }.to change(Category,:count).by(-1) }
 	end
+
+	pending 'Обработка ошибки при раскатегоризации пользователем.'
 end
