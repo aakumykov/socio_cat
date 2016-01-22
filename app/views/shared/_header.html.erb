@@ -3,7 +3,7 @@
 <span class='btn-group'>
 	<%= link_to 'Карточки', cards_path, class: 'btn btn-danger' %>
 	<% if signed_in? %>
-		<%= link_to(new_card_path, class: 'btn btn-danger') do %>
+		<%= link_to(new_card_path, class: 'btn btn-danger btn-mini') do %>
 				<i class='icon icon-plus'></i>
 		<% end %>
 	<% end %>
@@ -12,7 +12,7 @@
 <span class='btn-group'>
 	<%= link_to 'Категории', categories_path, class: 'btn btn-success' %>
 	<% if signed_in? && current_user.admin? %>
-		<%= link_to(new_category_path, class: 'btn btn-success') do %>
+		<%= link_to(new_category_path, class: 'btn btn-success btn-mini') do %>
 			<i class='icon icon-plus'></i>
 		<% end %>
 	<% end %>
