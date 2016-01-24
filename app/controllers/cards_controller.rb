@@ -1,8 +1,8 @@
 class CardsController < ApplicationController
 
-	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy, :categorize]
+	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
 	before_action :signed_in_users, only: [:new, :create, :edit, :update]
-	before_action :editor_users, only: [:edit, :update, :categorize]
+	before_action :editor_users, only: [:edit, :update]
 	before_action :admin_users, only: [:destroy, :block]
 	
 	def new
@@ -13,16 +13,13 @@ class CardsController < ApplicationController
 	def create
 		@obj = current_user.cards.new(card_params)
 
-		category_params.each { |cat_id|
-			@obj.cc_relations.build(category_id:cat_id)
-		}
+		@obj.fill_categories(category_params)
 
 		if @obj.save
 			flash[:success] = "Карточка создана"
 			redirect_to card_path(@obj)
 		else
 			flash.now[:error] = 'ОШИБКА, карточка не создана'
-			#puts "===== cards#create =====> category_params: #{category_params}"
 			@checkboxes = hash_for_checkboxes(category_params)
 			render 'new'
 		end
@@ -35,20 +32,14 @@ class CardsController < ApplicationController
 
 	def update
 		@obj = Card.find_by(id: params[:id])
-		@checkboxes = hash_for_checkboxes(category_params)
 		
 		if @obj.update_attributes(card_params)
+			@obj.fill_categories(category_params)
 			flash[:success] = "Изменения сохранены"
-
-			# обновляю категории
-			@obj.cc_relations=[]
-			category_params.each { |cat_id|
-				@obj.cc_relations.create(category_id:cat_id)
-			}
-
 			redirect_to @obj
 		else
 			flash.now[:error] = "Изменения отклонены"
+			@checkboxes = hash_for_checkboxes(category_params)
 			render :edit
 		end
 	end
