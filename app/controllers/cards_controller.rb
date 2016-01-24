@@ -37,8 +37,15 @@ class CardsController < ApplicationController
 		@obj = Card.find_by(id: params[:id])
 		@checkboxes = hash_for_checkboxes(category_params)
 		
-		if @obj.update_attributes(card_prams)
+		if @obj.update_attributes(card_params)
 			flash[:success] = "Изменения сохранены"
+
+			# обновляю категории
+			@obj.cc_relations=[]
+			category_params.each { |cat_id|
+				@obj.cc_relations.create(category_id:cat_id)
+			}
+
 			redirect_to @obj
 		else
 			flash.now[:error] = "Изменения отклонены"

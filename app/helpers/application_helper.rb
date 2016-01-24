@@ -28,8 +28,20 @@ module ApplicationHelper
 	#
 	# Который удобно использовать при построении формы с галочками
 	#
-	def hash_for_checkboxes(categories_list=[])
-		#puts "===== hash_for_checkboxes =====> categories_list: #{categories_list}"
+	def hash_for_checkboxes(categories_list=nil)
+		#puts "===== hash_for_checkboxes =====> categories_list.class: #{categories_list.class}"
+		#puts "===== hash_for_checkboxes =====> categories_list.respond_to?: #{categories_list.respond_to?(:pluck)}"
+
+		if categories_list.is_a?(Array)
+			#puts "===== hash_for_checkboxes =====> case1"
+			true
+		elsif categories_list.respond_to?(:pluck)
+			#puts "===== hash_for_checkboxes =====> case2"
+			categories_list = categories_list.pluck(:id)
+		else
+			#puts "===== hash_for_checkboxes =====> case3"
+			categories_list = []
+		end
 
 		all_cats = Hash.new
 		
