@@ -1,7 +1,8 @@
 class ApplicationController < ActionController::Base
 	# Prevent CSRF attacks by raising an exception.
 	# For APIs, you may want to use :null_session instead.
-	protect_from_forgery with: :exception
+	protect_from_forgery with: :exception	
+	include ApplicationHelper
 	include SessionsHelper
 
 	def index
@@ -18,6 +19,8 @@ class ApplicationController < ActionController::Base
 
 	def edit
 		@obj = the_model.find_by(id: params[:id])
+		#puts "===== ApplicationController#edit ====> @obj: #{@obj} / #{@obj.attributes}"
+		#puts "===== ApplicationController#edit ====> @obj.categories / #{@obj.categories} / #{@obj.categories.pluck(:name)}"
 	end
 
 	def update(obj=nil)

@@ -3,12 +3,12 @@ if 'edit'==mode
 	cancel_path = card_path(@obj)
 	selected_cats = @obj.categories.pluck(:id)
 	button_text = 'Сохранить'
-	cat_label = 'Категория'
+	ctg_label = 'Категория'
 else
 	cancel_path = cards_path
 	selected_cats = nil
 	button_text = 'Создать'
-	cat_label = 'Категория'
+	ctg_label = 'Категория'
 end
 %>
 
@@ -26,12 +26,13 @@ end
 	<div class='span4 pull-right'>
 		<div id='categories_area'>
 			<fieldset>
-				<legend><%= cat_label %></legend>
+				<legend><%= ctg_label %></legend>
 				<ul>
-					<% Category.all.each do |c| %>
-						<li>
-							<input name='categories[]' type='checkbox' value='<%= c.id %>' <%= 'checked' if @obj.categories.include?(c) %>> <%= c.name %>
-						</li>
+					<% @checkboxes.each do |id,data| %>
+						<label>
+							<%= check_box_tag 'categories[]', id, data[:checked] %>
+							<%= data[:name] %>
+						</label>
 					<% end %>
 				</ul>
 			</fieldset>
