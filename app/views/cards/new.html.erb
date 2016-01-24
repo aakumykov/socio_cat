@@ -1,15 +1,5 @@
 <% provide(:title,'Создание карточки') %>
 
-<% 
-	@checkboxes = Category.all.map { |ctg|
-		{
-			name: ctg.name,
-			id: ctg.id,
-			chacked: false,
-		}
-	}
-%>
-
 <h1 class='page_title'><%= yield(:title) %></h1>
 
 <div class='edit span10 offset1'>

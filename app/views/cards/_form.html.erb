@@ -28,10 +28,10 @@ end
 			<fieldset>
 				<legend><%= ctg_label %></legend>
 				<ul>
-					<% @checkboxes.each do |item| %>
+					<% @checkboxes.each do |id,data| %>
 						<label>
-							<%= check_box_tag 'categories[]', item[:id], item[:checked] %>
-							<%= item[:name] %>
+							<%= check_box_tag 'categories[]', id, data[:checked] %>
+							<%= data[:name] %>
 						</label>
 					<% end %>
 				</ul>

@@ -5,8 +5,13 @@ class CardsController < ApplicationController
 	before_action :editor_users, only: [:edit, :update, :categorize]
 	before_action :admin_users, only: [:destroy, :block]
 	
+	def new
+		super
+		@checkboxes = hash_for_checkboxes
+	end
+
 	def create
-		@obj = current_user.cards.new(user_params)
+		@obj = current_user.cards.new(card_params)
 
 		category_params.each { |cat_id|
 			@obj.cc_relations.build(category_id:cat_id)
@@ -17,35 +22,43 @@ class CardsController < ApplicationController
 			redirect_to card_path(@obj)
 		else
 			flash.now[:error] = 'ОШИБКА, карточка не создана'
+			#puts "===== cards#create =====> category_params: #{category_params}"
+			@checkboxes = hash_for_checkboxes(category_params)
 			render 'new'
 		end
 	end
 
+	def edit
+		super
+		@checkboxes = hash_for_checkboxes(@obj.categories)
+	end
+
 	def update
-		card = Card.find_by(id: params[:id])
-		card.categorize(category_params)
-		#puts "=====> #update, card.cat_ids: #{card.cat_ids}"
-		super(card)
+		@obj = Card.find_by(id: params[:id])
+		@checkboxes = hash_for_checkboxes(category_params)
+		
+		if @obj.update_attributes(card_prams)
+			flash[:success] = "Изменения сохранены"
+			redirect_to @obj
+		else
+			flash.now[:error] = "Изменения отклонены"
+			render :edit
+		end
 	end
 
 	private	
 
-		def user_params
+		def card_params
 			params.require(:card).permit(
 				:title,
 				:content,
 			)
 		end
 
-		# #версия для тестирования ошибок
-		# def category_params
-		# 	params.require(:categories)
-		# end
-
 		def category_params
 			#puts "====== category_params ======> params[:categories]: #{params[:categories]}(#{params[:categories].class})"
 
-			if params[:categories].is_a?(Array)
+			if !params[:categories].nil? && params[:categories].is_a?(Array)
 				the_params = params.require(:categories)
 				#puts "====== category_params ======> .require: #{the_params}(#{the_params.class})"
 
@@ -65,11 +78,13 @@ class CardsController < ApplicationController
 			end
 
 			# если в результате список схлопнулся
-			the_params = nil if the_params.to_s.empty?
+			the_params = [] if the_params.to_s.empty?
+
 			#puts "====== category_params ======> final: #{the_params}(#{the_params.class})"
 
 			return the_params
 		end
+
 
 		def editor_users
 			@obj = Card.find_by(id: params[:id])
