@@ -12,7 +12,7 @@ gem 'sass-rails', '~> 4' # пока не тгорать
 gem 'uglifier'
 gem 'coffee-rails'
 gem 'jquery-rails'
-gem 'turbolinks', '1.1.1'
+gem 'turbolinks'
 gem 'jbuilder', '1.0.2'
 
 group :development, :test do
