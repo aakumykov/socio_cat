@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   # See how all your routes lay out with "rake routes".
 
   # You can have the root of your site routed with "root"
-  root 'welcome#home'
+  root 'welcome#welcome'
 
   # Example of regular route:
   #   get 'products/:id' => 'catalog#view'
@@ -29,7 +29,7 @@ Rails.application.routes.draw do
       post 'categorize'
     end
   end
-
+  
   # Example resource route with options:
   #   resources :products do
   #     member do
