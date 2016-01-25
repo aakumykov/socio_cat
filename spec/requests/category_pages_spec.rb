@@ -27,7 +27,7 @@ describe 'Категории,' do
 		end
 		it { should_not have_link('Новая',href:new_category_path) }
 
-		skip 'элементы списка'
+		pending 'элементы списка'
 		
 		describe 'кнопка создания раздела,' do
 			before { 
@@ -116,7 +116,7 @@ describe 'Категории,' do
 	end
 	
 	describe 'Созидание,' do
-		skip 'только для админа'
+		pending 'только для админа'
 		
 		describe 'www,' do
 			before {
@@ -131,7 +131,7 @@ describe 'Категории,' do
 				it_should_behave_like 'форма_раздела'
 				it { should have_selector(:xpath,"//input[@type='submit' and @value='#{create_button}']") }
 				
-				skip 'Ищейка "конпка"'
+				pending 'Ищейка "конпка"'
 			end
 
 			describe 'работа формы,' do
@@ -167,7 +167,7 @@ describe 'Категории,' do
 		end
 	end
 
-	skip ':edit, :update, :destroy --> :admin_users'
+	pending ':edit, :update, :destroy --> :admin_users'
 
 	describe 'Изменение (http),' do
 		before { console_user }
