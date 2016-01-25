@@ -8,7 +8,7 @@ gem 'bcrypt-ruby'
 gem 'faker'
 gem 'will_paginate'
 gem 'bootstrap-will_paginate'
-gem 'sass-rails', '~> 4.0.2' # пока не тгорать
+gem 'sass-rails', '~> 4' # пока не тгорать
 gem 'uglifier'
 gem 'coffee-rails', '4.0.1'
 gem 'jquery-rails', '3.0.4'
