@@ -17,7 +17,7 @@ gem 'turbolinks'
 gem 'jbuilder'
 
 group :development, :test do
-  gem 'sqlite3', '~>1'
+  gem 'sqlite3'
   gem 'rspec-rails', '2.14.2'
 end
 
