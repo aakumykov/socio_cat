@@ -13,7 +13,7 @@ gem 'uglifier'
 gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'turbolinks'
-gem 'jbuilder', '1.0.2'
+gem 'jbuilder'
 
 group :development, :test do
   gem 'sqlite3', '1.3.8'
