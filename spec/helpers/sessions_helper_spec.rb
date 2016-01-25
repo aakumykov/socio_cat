@@ -1,5 +1,5 @@
 require 'spec_helper'
 
 describe SessionsHelper do
-	pending 'тесты помошников сессии'
+	skip 'тесты помошников сессии'
 end

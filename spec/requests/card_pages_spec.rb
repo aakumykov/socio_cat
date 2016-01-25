@@ -220,7 +220,7 @@ describe 'Карточки,' do
 				specify{ expect{ delete card_path(card) }.to change(Card,:count).by(-1) }
 			end
 
-			pending 'уведомления предфильтра admin_users пока не тестируются' do
+			skip 'уведомления предфильтра admin_users пока не тестируются' do
 			end
 		end
 	end
@@ -240,10 +240,10 @@ describe 'Карточки,' do
 
 	describe 'создание,' do
 
-		pending 'категории при создании'
-		pending 'раз-категоризация кардочки'
-		pending 'нет области категорий при создании'
-		pending 'кривые значения в категории'
+		skip 'категории при создании'
+		skip 'раз-категоризация кардочки'
+		skip 'нет области категорий при создании'
+		skip 'кривые значения в категории'
 
 		let(:card_params) {
 			{ card: {
@@ -294,7 +294,7 @@ describe 'Карточки,' do
 	end
 
 	describe 'изменение,' do
-		pending 'категории'
+		skip 'категории'
 
 		let(:new_title) {card.title + ' ' + Faker::Lorem.word}
 		let(:new_content) {Faker::Lorem.paragraph}

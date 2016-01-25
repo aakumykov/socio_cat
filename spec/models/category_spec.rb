@@ -49,9 +49,9 @@ describe 'Категория' do
 		end
 	end
 
-	pending 'Очистка пробелов на концах'
+	skip 'Очистка пробелов на концах'
 
-	pending 'связь с карточками,' do
+	skip 'связь с карточками,' do
 		# let(:card) { FactoryGirl.create(:card, category:) }
 		# before {
 		# 	cat.

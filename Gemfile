@@ -18,7 +18,7 @@ gem 'jbuilder'
 
 group :development, :test do
   gem 'sqlite3', '~>1'
-  gem 'rspec-rails', '2.13.1'
+  gem 'rspec-rails', '~>2.13'
 end
 
 group :test do

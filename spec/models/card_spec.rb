@@ -80,6 +80,6 @@ describe 'Карточка,' do
 			specify{ expect(user.reload).to eq user }
 		end
 
-		pending 'удаление карточки не ведёт к удалению категории'
+		skip 'удаление карточки не ведёт к удалению категории'
 	end
 end

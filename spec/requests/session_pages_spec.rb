@@ -69,7 +69,7 @@ describe 'Сессии,' do
 				end
 			end
 
-			pending 'перенаправление,' do
+			skip 'перенаправление,' do
 			end
 		end
 	end
