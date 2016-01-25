@@ -57,7 +57,7 @@ GEM
     factory_girl_rails (4.2.1)
       factory_girl (~> 4.2.0)
       railties (>= 3.0.0)
-    faker (1.1.2)
+    faker (1.6.1)
       i18n (~> 0.5)
     ffi (1.9.10)
     hike (1.2.3)
@@ -160,13 +160,13 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  bcrypt-ruby (~> 3)
+  bcrypt-ruby
   bootstrap-sass (~> 2.3.0)
   bootstrap-will_paginate (= 0.0.9)
   capybara (= 2.1.0)
   coffee-rails (= 4.0.1)
   factory_girl_rails (= 4.2.1)
-  faker (~> 1.1.0)
+  faker
   jbuilder (= 1.0.2)
   jquery-rails (= 3.0.4)
   pg (= 0.15.1)
