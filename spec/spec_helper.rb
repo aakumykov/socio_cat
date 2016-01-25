@@ -43,6 +43,4 @@ RSpec.configure do |config|
   config.order = "random"
 
   config.include Capybara::DSL
-
-  #config.expose_current_running_example_as :example
 end
