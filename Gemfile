@@ -11,7 +11,7 @@ gem 'bootstrap-will_paginate'
 gem 'sass-rails', '~> 4' # пока не тгорать
 gem 'uglifier'
 gem 'coffee-rails'
-gem 'jquery-rails', '3.0.4'
+gem 'jquery-rails'
 gem 'turbolinks', '1.1.1'
 gem 'jbuilder', '1.0.2'
 
