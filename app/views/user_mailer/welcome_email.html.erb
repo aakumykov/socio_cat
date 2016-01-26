@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <h1>Добро пожаловать в Соционический каталог, <%= @user.name %>!</h1>
+    <p>
+      Вы зарегистрировались на сайте <a href='http://localhost:3000'>Соционического каталога</a>
+      под именем: <%= @user.name %> и с электронной почтой <%= @user.email %>.<br>
+    </p>
+    <p>
+      Чтобы войти на сайт следуйте по ссылке: <%= @url %>.
+    </p>
+    <p>Успехов!</p>
+  </body>
+</html>
