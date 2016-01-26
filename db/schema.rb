@@ -13,7 +13,7 @@
 
 ActiveRecord::Schema.define(version: 20160106173046) do
 
-  create_table "cards", force: true do |t|
+  create_table "cards", force: :cascade do |t|
     t.string   "title"
     t.string   "content"
     t.datetime "created_at"
@@ -23,7 +23,7 @@ ActiveRecord::Schema.define(version: 20160106173046) do
 
   add_index "cards", ["user_id"], name: "index_cards_on_user_id"
 
-  create_table "cards_categories", id: false, force: true do |t|
+  create_table "cards_categories", id: false, force: :cascade do |t|
     t.integer "card_id"
     t.integer "category_id"
   end
@@ -31,7 +31,7 @@ ActiveRecord::Schema.define(version: 20160106173046) do
   add_index "cards_categories", ["card_id"], name: "index_cards_categories_on_card_id"
   add_index "cards_categories", ["category_id"], name: "index_cards_categories_on_category_id"
 
-  create_table "categories", force: true do |t|
+  create_table "categories", force: :cascade do |t|
     t.string   "name"
     t.text     "description"
     t.integer  "user_id"
@@ -41,7 +41,7 @@ ActiveRecord::Schema.define(version: 20160106173046) do
 
   add_index "categories", ["name"], name: "index_categories_on_name", unique: true
 
-  create_table "users", force: true do |t|
+  create_table "users", force: :cascade do |t|
     t.text     "name"
     t.text     "email"
     t.datetime "created_at"
