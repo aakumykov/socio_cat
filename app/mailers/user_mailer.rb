@@ -1,5 +1,5 @@
 class UserMailer < ApplicationMailer
-	default from: 'user@example.org'
+	#default from: 'my.sender.personal@yandex.ru'
 
 	def welcome_email(user)
 		@user = user
@@ -7,6 +7,7 @@ class UserMailer < ApplicationMailer
 		#@url = login_url
 		#@url = login_path
 		mail(
+			from: 'my.sender.personal@yandex.ru',
 			to: @user.email,
 			subject: 'Добро пожаловать в соционический каталог'
 		)
