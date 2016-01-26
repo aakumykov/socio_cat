@@ -14,8 +14,9 @@ class UsersController < ApplicationController
 	def create
 		@user = User.new(user_params)
 		if @user.save
-			flash[:success] = "Добро пожаловать, «#{@user.name}»!"
+			UserMailer.welcome_email(@user).deliver_now!
 			sign_in @user
+			flash[:success] = "Добро пожаловать, «#{@user.name}»!"
 			redirect_to user_path(@user)
 		else
 			flash.now[:error] = 'ОШИБКА. Пользователь не создан'
