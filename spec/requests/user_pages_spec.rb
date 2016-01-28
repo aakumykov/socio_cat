@@ -354,4 +354,14 @@ describe 'Страницы пользователя,' do
 		}
 		specify{ expect(user.reload).not_to be_admin }
 	end
+
+	describe 'восстановление пароля,' do
+		before { visit reset_password_path }
+		it_should_behave_like 'страница с названием' do
+			let(:title) { 'Восстановление пароля' }
+			let(:heading) { title }
+		end
+		it { should have_field 'Электронная почта' }
+		it { should have_xpath("//input[@type='submit' and @value='Отправить']") }
+	end
 end

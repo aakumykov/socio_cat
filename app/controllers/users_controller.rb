@@ -77,7 +77,8 @@ class UsersController < ApplicationController
 		end
 	end
 	
-	# итого 7 действий
+	def reset_password
+	end
 
 	private
 
