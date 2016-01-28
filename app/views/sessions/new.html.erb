@@ -11,8 +11,9 @@
 		<%= f.password_field :password, class: 'edit_area' %>
 
 		<div class='bottom_buttons_holder'>
-			<%= link_to 'Отмена', root_path, class: 'btn pull-right' %>
 			<%= f.submit 'Войти', class: 'btn btn-primary pull-left' %>
+			<%= link_to 'Отмена', root_path, class: 'btn pull-right' %>
+			<%= link_to 'Забыли пароль?', reset_password_path, class: 'btn' %>
 		</div>
 	<% end %>
 </div>

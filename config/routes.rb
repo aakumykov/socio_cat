@@ -19,6 +19,8 @@ Rails.application.routes.draw do
   get 'login' => 'sessions#new', as: :login
   delete 'logout' => 'sessions#destroy', as: :logout
 
+  get 'reset_password' => 'users#reset_password'
+
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
   resources :users
