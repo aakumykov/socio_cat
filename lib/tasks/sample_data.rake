@@ -21,6 +21,12 @@ def create_users
 		password: 'Qwerty123!@#',
 		password_confirmation: 'Qwerty123!@#',
 	)
+	User.create!(
+		name: 'Андрей',
+		email: 'aakumykov@yandex.ru',
+		password: 'Qwerty123!@#',
+		password_confirmation: 'Qwerty123!@#',
+	)
 end
 
 def create_admin_user

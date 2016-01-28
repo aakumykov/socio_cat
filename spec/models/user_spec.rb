@@ -181,4 +181,10 @@ describe 'Пользователь,' do
 			specify{ expect(Card.last.user).to be_nil }
 		end
 	end
+
+	describe 'свойства для сброса пароля,' do
+		it { should respond_to(:in_reset) }
+		it { should respond_to(:reset_code) }
+		it { should respond_to(:reset_date) }
+	end
 end
