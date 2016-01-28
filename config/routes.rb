@@ -20,6 +20,7 @@ Rails.application.routes.draw do
   delete 'logout' => 'sessions#destroy', as: :logout
 
   get 'reset_password' => 'users#reset_password'
+  post 'reset_password' => 'users#reset_request'
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products

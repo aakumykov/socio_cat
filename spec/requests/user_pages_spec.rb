@@ -356,12 +356,31 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'восстановление пароля,' do
-		before { visit reset_password_path }
-		it_should_behave_like 'страница с названием' do
-			let(:title) { 'Восстановление пароля' }
-			let(:heading) { title }
+		describe 'посещение страницы,' do
+			before { visit reset_password_path }
+			it_should_behave_like 'страница с названием' do
+				let(:title) { 'Восстановление пароля' }
+				let(:heading) { title }
+			end
+			it { should have_field 'Электронная почта' }
+			it { should have_xpath("//input[@type='submit' and @value='Отправить']") }
 		end
-		it { should have_field 'Электронная почта' }
-		it { should have_xpath("//input[@type='submit' and @value='Отправить']") }
+
+		describe 'изменение полей сброса пароля,' do
+			let(:old_reset_code) { user.reset_code }
+			let(:old_reset_date) { user.reset_date }
+			before { 
+				visit reset_password_path
+				fill_in :email, with: user.email
+				click_button 'Отправить'
+			}
+			specify{ 
+				expect(user.in_reset).to be_true
+				expect(user.reset_date).to > old_reset_date
+				expect(user.reset_code).not_to eq old_reset_code
+				expect(user.reset_code).not_to be_empty
+			}
+		end
+
 	end
 end

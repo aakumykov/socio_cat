@@ -80,6 +80,10 @@ class UsersController < ApplicationController
 	def reset_password
 	end
 
+	def reset_request
+		redirect_to root_path
+	end
+
 	private
 
 		def user_params
