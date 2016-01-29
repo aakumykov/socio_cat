@@ -43,14 +43,6 @@ class UsersController < ApplicationController
 	def update
 		# @user устанавливается в editor_users()
 		if @user.update_attributes(user_params)
-		#if @user.update_attributes!(params[:user])
-		# if 
-		# 	@user.update_attribute(:name,params[:user][:name]) && 
-		# 	@user.update_attribute(:email,params[:user][:email]) && 
-		# 	@user.update_attribute(:password,params[:user][:password]) && 
-		# 	@user.update_attribute(:password_confirmation,params[:user][:password_confirmation]) &&
-		# 	@user.update_attribute(:admin,params[:user][:admin]) 
-			
 			flash[:success] = "Изменения профиля приняты"
 			redirect_to user_path(@user)
 		else
@@ -78,10 +70,40 @@ class UsersController < ApplicationController
 	end
 	
 	def reset_password
+		#@obj = Object.new
+		#@obj.email = ''
 	end
 
 	def reset_request
-		redirect_to root_path
+		params[:email] ||= ''
+		email = params[:email]
+
+		if email.blank?
+			flash.now[:error] = 'Укажите адрес элетронной почты'
+			render :reset_password
+		elsif !email.match(/\A([a-z0-9+_]+[.-]?)*[a-z0-9]+@([a-z0-9]+[.-]?)*[a-z0-9]+\.[a-z]+\z/i)
+			flash.now[:error] = 'Ошибка в адресе электронной почты'
+			#@obj = Object.new
+			#@obj.email = email
+			render :reset_password
+		else
+			user = User.find_by(email: email)
+			
+			if user.nil?
+				flash.now[:error] = 'Такого пользователя не существует'
+				render :reset_password
+			else
+				date = Time.now
+				code = User.new_remember_token
+
+				user.update_attribute(:in_reset, true)
+				user.update_attribute(:reset_code, User.encrypt(code))
+				user.update_attribute(:reset_date, date)
+
+				flash[:success] = 'Запрос принят'
+				redirect_to root_path
+			end
+		end
 	end
 
 	private

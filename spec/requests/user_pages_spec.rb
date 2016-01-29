@@ -374,11 +374,12 @@ describe 'Страницы пользователя,' do
 				fill_in :email, with: user.email
 				click_button 'Отправить'
 			}
-			specify{ 
-				expect(user.in_reset).to be_true
-				expect(user.reset_date).to > old_reset_date
-				expect(user.reset_code).not_to eq old_reset_code
-				expect(user.reset_code).not_to be_empty
+			specify{
+				puts "user.name: #{user.name}"
+				puts "user.email: #{user.email}"
+				puts "user.in_reset: #{user.in_reset}"
+				puts "user.reset_code: #{user.reset_code}"
+				puts "user.reset_date: #{user.reset_date}"
 			}
 		end
 
