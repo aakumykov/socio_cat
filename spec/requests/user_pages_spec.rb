@@ -367,19 +367,18 @@ describe 'Страницы пользователя,' do
 		end
 
 		describe 'изменение полей сброса пароля,' do
-			let(:old_reset_code) { user.reset_code }
-			let(:old_reset_date) { user.reset_date }
+			let!(:old_reset_code) { user.reset_code }
+			let!(:old_reset_date) { user.reset_date }
 			before { 
 				visit reset_password_path
 				fill_in :email, with: user.email
 				click_button 'Отправить'
 			}
+			it_should_behave_like 'flash-сообщение', 'success', 'Запрос принят'
 			specify{
-				puts "user.name: #{user.name}"
-				puts "user.email: #{user.email}"
-				puts "user.in_reset: #{user.in_reset}"
-				puts "user.reset_code: #{user.reset_code}"
-				puts "user.reset_date: #{user.reset_date}"
+				expect(user.reload.in_reset).to be_true
+				expect(user.reload.reset_date).not_to eq old_reset_code
+				expect(user.reload.reset_date).not_to eq old_reset_date
 			}
 		end
 

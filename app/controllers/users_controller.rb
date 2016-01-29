@@ -96,11 +96,14 @@ class UsersController < ApplicationController
 				date = Time.now
 				code = User.new_remember_token
 
-				user.update_attribute(:in_reset, true)
-				user.update_attribute(:reset_code, User.encrypt(code))
 				user.update_attribute(:reset_date, date)
+				user.update_attribute(:reset_code, User.encrypt(code))
+				user.update_attribute(:in_reset, true)
+
+				#UserMailer.reset_password(user,code,date).deliver_now
 
 				flash[:success] = 'Запрос принят'
+				
 				redirect_to root_path
 			end
 		end
