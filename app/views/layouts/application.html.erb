@@ -19,8 +19,8 @@
 		</div>
 		<div class='row span10 offset1'>
 			<% if Rails.env.development? %>
-				<p><%= link_to 'Предпросмотр писем', '/rails/mailers' %></p>
-				<p><%= link_to 'Восстановление пароля', '/reset_password' %></p>
+				<p><%= link_to 'Предпросмотр писем', '/rails/mailers', class:'btn btn-default' %></p>
+				<p><%= link_to 'Восстановление пароля', '/reset_password', class:'btn btn-default' %></p>
 
 				http-параметры:<br>
 				<%= debug(params) %>

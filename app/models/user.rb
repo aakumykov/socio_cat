@@ -34,33 +34,15 @@ class User < ActiveRecord::Base
 		Digest::SHA1.hexdigest(token.to_s)
 	end
 
-	# def reset_password
-	# 	date = Time.now
-	# 	code = User.new_remember_token
-
-	# 	self.reset_date = date
-	# 	self.reset_code = User.encrypt(code)
-	# 	self.in_reset = true
-	# 	self.save
-
-	# 	puts "===== User#reset_password =====> name: #{name}"
-	# 	puts "===== User#reset_password =====> email: #{email}"
-	# 	puts "===== User#reset_password =====> date: #{date}"
-	# 	puts "===== User#reset_password =====> code: #{code}"
-	# 	puts "===== User#in_reset =====> in_reset: #{in_reset}"
-
-	# 	return { date: date, code: code }
-	# end
-
 	def reset_password
 		date = Time.now
-		code = User.new_remember_token
+		reset_code = User.new_remember_token
 
 		self.update_attribute(:reset_date, date)
-		self.update_attribute(:reset_code, User.encrypt(code))
+		self.update_attribute(:reset_code, User.encrypt(reset_code))
 		self.update_attribute(:in_reset, true)
 
-		return { date: date, code: code }
+		return { date: date, reset_code: reset_code }
 	end
 
 	private

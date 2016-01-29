@@ -19,7 +19,7 @@ class UsersController < ApplicationController
 			flash[:success] = "Добро пожаловать, «#{@user.name}»!"
 			redirect_to user_path(@user)
 		else
-			flash.now[:error] = 'ОШИБКА. Пользователь не создан'
+			flash.now[:danger] = 'ОШИБКА. Пользователь не создан'
 			render 'new'
 		end
 	end
@@ -27,7 +27,7 @@ class UsersController < ApplicationController
 	def show
 		@user = User.find_by(id: params[:id])
 		if @user.nil?
-			flash[:error] = 'Такой страницы не существует'
+			flash[:danger] = 'Такой страницы не существует'
 			redirect_to users_path
 		end
 	end
@@ -43,10 +43,10 @@ class UsersController < ApplicationController
 	def update
 		# @user устанавливается в editor_users()
 		if @user.update_attributes(user_params)
-			flash[:success] = "Изменения профиля приняты"
+			flash[:success] = 'Изменения профиля сохранены'
 			redirect_to user_path(@user)
 		else
-			flash.now[:error] = "Изменения отклонены"
+			flash.now[:danger] = 'Изменения отклонены'
 			render 'edit'
 		end
 	end
@@ -55,14 +55,14 @@ class UsersController < ApplicationController
 		@user = User.find_by(id: params[:id])
 
 		if @user.admin? 
-			flash[:error] = 'Админ не может удалить себя'
+			flash[:danger] = 'Админ не может удалить себя'
 			redirect_to user_path(@user)
 		else				
 			if @user.destroy
 				flash[:success] = "Пользователь «#{@user.name}» удалён"
 				@user=nil
 			else
-				flash[:error] = "Ошибка удаления пользователя «#{@user.name}»"
+				flash[:danger] = "Ошибка удаления пользователя «#{@user.name}»"
 			end
 
 			redirect_to users_path
@@ -79,10 +79,10 @@ class UsersController < ApplicationController
 		email = params[:email]
 
 		if email.blank?
-			flash.now[:error] = 'Укажите адрес элетронной почты'
+			flash.now[:danger] = 'Укажите адрес элетронной почты'
 			render :reset_password
 		elsif !email.match(/\A([a-z0-9+_]+[.-]?)*[a-z0-9]+@([a-z0-9]+[.-]?)*[a-z0-9]+\.[a-z]+\z/i)
-			flash.now[:error] = 'Ошибка в адресе электронной почты'
+			flash.now[:danger] = 'Ошибка в адресе электронной почты'
 			#@obj = Object.new
 			#@obj.email = email
 			render :reset_password
@@ -90,17 +90,17 @@ class UsersController < ApplicationController
 			user = User.find_by(email: email)
 			
 			if user.nil?
-				flash.now[:error] = 'Такого пользователя не существует'
+				flash.now[:danger] = 'Такого пользователя не существует'
 				render :reset_password
 			else
 				reset_params = user.reset_password
 
 				date = reset_params[:date]
-				code = reset_params[:code]
+				reset_code = reset_params[:reset_code]
 
 				UserMailer.reset_email({
 					user: user,
-					code: code,
+					reset_code: reset_code,
 					date: date,
 				}).deliver_now
 
@@ -112,29 +112,43 @@ class UsersController < ApplicationController
 	end
 
 	def reset_response
-		@user = User.find_by(reset_code: User.encrypt(params[:code]))
+		@user = User.find_by(reset_code: User.encrypt(params[:reset_code]))
+		puts "===== users#reset_response =====> @user.name,email: #{@user.name}, #{@user.email}"
 
 		begin
 			raise 'не найден пользователь с таким кодом' if @user.nil? 
 			raise 'пользователь не запрашивал восстановление пароля' if not @user.in_reset? 
 		# 	raise 'код сброса пароля просрочен' if (Time.now - @user.reset_date) <= 24.hours 
 		rescue Exception => e
-			flash[:error] = "Ошибка: #{e.message}"
+			# === кривовато, но работает и избавляет от повторений ===
+			flash[:danger] = 'Ссылка недействительна'
 			redirect_to root_path
+			return false
+			# === кривовато, но работает и избавляет от повторений ===
 		end
 
-		render :new_password
+		@user.toggle!(:in_reset) # ссылка работает только 1 раз
+
+		render :new_password, locals: {reset_code: params[:reset_code]}
 	end
 
 	def new_password
-		@user = User.find_by(id: params[:id])
+		#puts "=== users#new_password ===> params[:user][:id]: #{params[:user][:id]}"
+		#puts "=== users#new_password ===> params[:user][:reset_code]: #{params[:user][:reset_code]}"
+		#puts "=== users#new_password ===> params: #{params}"
+
+		@user = User.find_by(
+			id: params[:user][:id], 
+			reset_code: User.encrypt(params[:user][:reset_code]),
+		)
+		#puts "===== users#new_password =====> @user.name,email: #{@user.name}, #{@user.email}"
 
 		if @user.update_attributes(user_params)
-			flash[:success] = "Новый пароль установен"
+			flash[:success] = "Новый пароль установлен"
 			redirect_to login_path
 		else
-			#flash[:error] 
-			render :new_password
+			#flash[:danger] # ошибки покажет (?) форма
+			render :new_password, locals: { reset_code: params[:user][:reset_code] }
 		end
 	end
 
@@ -153,7 +167,7 @@ class UsersController < ApplicationController
 			@user = User.find_by(id: params[:id])
 
 			if (current_user != @user) && (not current_user.admin?)
-				flash[:error] = 'Редактирование запрещено'
+				flash[:danger] = 'Редактирование запрещено'
 				redirect_to user_path(@user)
 			end
 		end

@@ -13,7 +13,7 @@ class SessionsController < ApplicationController
 			redirect_back
 			#redirect_to user_path(user)
 		else
-			flash.now[:error] = 'Неверная электронная почта или пароль'
+			flash.now[:danger] = 'Неверная электронная почта или пароль'
 			render 'new'
 		end
 	end

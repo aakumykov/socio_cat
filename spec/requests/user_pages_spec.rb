@@ -407,12 +407,17 @@ describe 'Страницы пользователя,' do
 					pending 'неверный флаг'
 					pending 'неверный код'
 					pending 'неверное время'
+					pending 'нет строки запроса'
+					pending 'повторное использование ссылки'
+					pending 'продумать зыщиту методов'
+					pending 'валидация длины пароля' # работают, но проверять!
+					pending 'post to new_password'
 				end
 
 				describe 'с верными параметрами,' do
 					before {
 						reset_params = user.reset_password
-						visit password_reset_url(code:reset_params[:code], date:reset_params[:date])
+						visit password_reset_url(reset_code:reset_params[:reset_code], date:reset_params[:date])
 					}
 					it_should_behave_like 'страница_с_названием' do
 						let(:title) { 'Создание нового пароля' }
@@ -421,6 +426,8 @@ describe 'Страницы пользователя,' do
 					it { should have_field 'Новый пароль' }
 					it { should have_field 'Подтверждение нового пароля' }
 					it { should have_xpath "//input[@type='submit' and @value='#{new_password_button}']" }
+					it { should have_xpath "//input[@type='hidden' and @id='user_reset_code']" }
+					it { should have_xpath "//input[@type='hidden' and @id='user_id']" }
 
 					describe 'установка нового пароля,' do
 						describe 'корректного,' do
@@ -430,7 +437,7 @@ describe 'Страницы пользователя,' do
 								click_button "#{new_password_button}"
 							}
 							specify{
-								expect(user.reload.password).to eq User.encrypt(new_password)
+								expect(user.reload.authenticate(new_password)).not_to be_false
 							}
 							it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
 							it_should_behave_like 'страница_входа'

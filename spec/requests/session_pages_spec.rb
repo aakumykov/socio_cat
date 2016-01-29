@@ -34,11 +34,11 @@ describe 'Сессии,' do
 			describe 'провальный вход,' do
 				before { click_button login_button }
 				it_should_behave_like 'страница входа'
-				it { should have_selector('.alert.alert-error') }
+				it { should have_selector('.alert.alert-danger') }
 
 				describe 'исчезновение flash-сообщения' do
 					before { visit root_path }
-					it { should_not have_selector('.alert.alert-error') }
+					it { should_not have_selector('.alert.alert-danger') }
 				end
 			end
 

@@ -186,5 +186,7 @@ describe 'Пользователь,' do
 		it { should respond_to(:in_reset) }
 		it { should respond_to(:reset_code) }
 		it { should respond_to(:reset_date) }
+
+		pending 'прямой доступ к атрибутам'
 	end
 end

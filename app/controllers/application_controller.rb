@@ -35,7 +35,7 @@ class ApplicationController < ActionController::Base
 				id: @obj.id,
 			)
 		else
-			flash.now[:error] = 'Изменения отклонены'
+			flash.now[:danger] = 'Изменения отклонены'
 			render :edit
 		end
 	end
@@ -49,7 +49,7 @@ class ApplicationController < ActionController::Base
 					action: 'index',
 				)
 		else
-			flash[:error] = "Ошибка удаления"
+			flash[:danger] = "Ошибка удаления"
 			redirect_to url_for(
 					controller: controller_name,
 					action: 'show',
@@ -67,7 +67,7 @@ class ApplicationController < ActionController::Base
 		def reject_nil_target
 			the_model = controller_name.classify.constantize
 			if the_model.find_by(id: params[:id]).nil?
-				flash[:error] = 'Запрошенный объект не существует'
+				flash[:danger] = 'Запрошенный объект не существует'
 				redirect_to url_for(
 								controller: controller_name, 
 								action: 'index',
@@ -83,7 +83,7 @@ class ApplicationController < ActionController::Base
 
 		def not_signed_in_users
 			if signed_in?
-				flash[:error] = 'Вы уже зарегистрированы'
+				flash[:danger] = 'Вы уже зарегистрированы'
 				redirect_to url_for(
 								controller: controller_name, 
 								action: 'show',
@@ -94,7 +94,7 @@ class ApplicationController < ActionController::Base
 
 		def admin_users
 			if not current_user.admin?
-				flash[:error] = 'Доступно только администратору'
+				flash[:danger] = 'Доступно только администратору'
 				redirect_to url_for(
 								controller: controller_name, 
 								action: 'index',

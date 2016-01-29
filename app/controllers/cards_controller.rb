@@ -15,7 +15,7 @@ class CardsController < ApplicationController
 			flash[:success] = "Карточка создана"
 			redirect_to card_path(@obj)
 		else
-			flash.now[:error] = 'ОШИБКА, карточка не создана'
+			flash.now[:danger] = 'ОШИБКА, карточка не создана'
 			render 'new'
 		end
 	end
@@ -33,7 +33,7 @@ class CardsController < ApplicationController
 	# 	new_cats = old_cats.concat(Category.where(id: category_params)).uniq
 
 	# 	if new_cats.blank?
-	# 		flash[:error] = 'Список категорий пуст'
+	# 		flash[:danger] = 'Список категорий пуст'
 	# 	else
 	# 		@obj.categories=new_cats
 	# 		flash[:success] = "Категории для «#{@obj.title}» установлены"
@@ -83,7 +83,7 @@ class CardsController < ApplicationController
 			@obj = Card.find_by(id: params[:id])
 
 			if (current_user != @obj.user) && (not current_user.admin?)
-				flash[:error] = 'Редактирование запрещено'
+				flash[:danger] = 'Редактирование запрещено'
 				redirect_to card_path(@obj)
 			end
 		end
