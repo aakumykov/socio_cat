@@ -93,12 +93,10 @@ class UsersController < ApplicationController
 				flash.now[:error] = 'Такого пользователя не существует'
 				render :reset_password
 			else
-				date = Time.now
-				code = User.new_remember_token
+				reset_params = user.reset_password
 
-				user.update_attribute(:reset_date, date)
-				user.update_attribute(:reset_code, User.encrypt(code))
-				user.update_attribute(:in_reset, true)
+				date = reset_params[:date]
+				code = reset_params[:code]
 
 				UserMailer.reset_email({
 					user: user,

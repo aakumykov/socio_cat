@@ -52,6 +52,17 @@ class User < ActiveRecord::Base
 	# 	return { date: date, code: code }
 	# end
 
+	def reset_password
+		date = Time.now
+		code = User.new_remember_token
+
+		self.update_attribute(:reset_date, date)
+		self.update_attribute(:reset_code, User.encrypt(code))
+		self.update_attribute(:in_reset, true)
+
+		return { date: date, code: code }
+	end
+
 	private
 		def create_remember_token
 			self.remember_token = User.encrypt( User.new_remember_token )
