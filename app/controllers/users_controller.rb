@@ -100,7 +100,11 @@ class UsersController < ApplicationController
 				user.update_attribute(:reset_code, User.encrypt(code))
 				user.update_attribute(:in_reset, true)
 
-				#UserMailer.reset_password(user,code,date).deliver_now
+				UserMailer.reset_email({
+					user: user,
+					code: code,
+					date: date,
+				}).deliver_now
 
 				flash[:success] = 'Запрос принят'
 				

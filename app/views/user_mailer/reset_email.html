@@ -1,0 +1,17 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+  </head>
+  <body>
+    <p>Здравствуйте, <%= @user.name %>.</p>
+    <p>Вы запросили восстановление пароля на сайте <a href='http://localhost:3000'>Соционического каталога</a>.<br>
+    </p>
+    <p>Чтобы продолжить и создать новый пароль, <a href='<%= @url %>'>следуйте по ссылке</a>.</p>
+    <p>Если передумали, просто удалите это сообщение.</p>
+    <p>
+    	-----<br>
+    	Успехов!
+    </p>
+  </body>
+</html>

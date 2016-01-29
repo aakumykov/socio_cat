@@ -393,5 +393,11 @@ describe 'Страницы пользователя,' do
 				expect(user.reload.reset_date).not_to eq old_reset_date
 			}
 		end
+
+		pending 'отправка почты со ссылкой сброса'
+
+		describe 'применение ссылки сброса пароля,' do
+			
+		end
 	end
 end
