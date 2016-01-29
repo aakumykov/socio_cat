@@ -111,6 +111,21 @@ class UsersController < ApplicationController
 		end
 	end
 
+	def reset_response
+		@user = User.find_by(reset_code: User.encrypt(params[:code]))
+
+		begin
+			raise 'не найден пользователь с таким кодом' if @user.nil? 
+			raise 'пользователь не запрашивал восстановление пароля' if not @user.in_reset? 
+		# 	raise 'код сброса пароля просрочен' if (Time.now - @user.reset_date) <= 24.hours 
+		rescue Exception => e
+			flash[:error] = "Ошибка: #{e.message}"
+			redirect_to root_path
+		end
+
+		render :new_password
+	end
+
 	private
 
 		def user_params

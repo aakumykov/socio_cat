@@ -12,14 +12,14 @@ shared_examples_for 'flash-сообщение' do |mode,text=''|
 end
 
 
-shared_examples_for 'страница с названием' do
+shared_examples_for 'страница_с_названием' do
 	it { should have_title( full_title(title) ) }
 	it { should have_selector('h1',text:heading) }
 end
 
 
 shared_examples_for 'главная_страница' do
-	it_should_behave_like 'страница с названием' do
+	it_should_behave_like 'страница_с_названием' do
 		let(:title) { 'начало' }
 		let(:heading) { 'Добро пожаловать' }
 	end
@@ -27,7 +27,7 @@ end
 
 
 shared_examples_for 'страница_входа' do
-	it_should_behave_like 'страница с названием' do
+	it_should_behave_like 'страница_с_названием' do
 		let(:title) {'Вход на сайт'}
 		let(:heading) {'Вход на сайт'}
 	end

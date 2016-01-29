@@ -23,7 +23,7 @@ describe 'Карточки,' do
 	subject { page }
 
 	shared_examples_for 'список_карточек' do
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) {'Карточки'}
 			let(:heading) { title }
 		end
@@ -116,7 +116,7 @@ describe 'Карточки,' do
 	end
 
 	shared_examples_for 'редактирование_карточки' do
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { 'Редактирование карточки' }
 			let(:heading) { title }
 		end
@@ -127,7 +127,7 @@ describe 'Карточки,' do
 	end
 	
 	shared_examples_for 'создание_карточки' do
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { 'Создание карточки' }
 			let(:heading) { title }
 		end

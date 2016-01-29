@@ -14,10 +14,10 @@ class UserMailer < ApplicationMailer
 	end
 
 	def reset_email(arg)
+		@url = password_reset_url({code:arg[:code], date:arg[:date]})
+		@title = 'Восстановление доступа в Соционический каталог'
 		@user = arg[:user]
 		@date = arg[:date]
-		@url = "http://localhost:3000/reset_response?code=#{arg[:code]}"
-		@title = 'Восстановление доступа в Соционический каталог'
 		mail(
 			from: 'my.sender.personal@yandex.ru',
 			to: @user.email,

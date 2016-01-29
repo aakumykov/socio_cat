@@ -22,7 +22,7 @@ describe 'Страницы пользователя,' do
 
 
 	shared_examples_for 'страница_пользователя' do |mode|
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { "Страница пользователя «#{the_user.name}»" }
 			let(:heading) { "Страница пользователя «#{the_user.name}»" }
 		end
@@ -45,7 +45,7 @@ describe 'Страницы пользователя,' do
 	end
 
 	shared_examples_for 'страница_редактирования' do
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { "Редактирование пользователя «#{the_user.name}»" }
 			let(:heading) { "Редактирование пользователя «#{the_user.name}»" }
 		end
@@ -54,7 +54,7 @@ describe 'Страницы пользователя,' do
 	end
 
 	shared_examples_for 'список_пользователей' do
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { 'Пользователи' }
 			let(:heading) { 'Пользователи' }
 		end
@@ -64,7 +64,7 @@ describe 'Страницы пользователя,' do
 	end
 
 	shared_examples_for 'страница_регистрации' do
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { 'Регистрация пользователя' }
 			let(:heading) { 'Регистрация пользователя' }
 		end
@@ -367,7 +367,7 @@ describe 'Страницы пользователя,' do
 
 					describe 'пользователь существует,' do
 						before { visit reset_password_path }
-						it_should_behave_like 'страница с названием' do
+						it_should_behave_like 'страница_с_названием' do
 							let(:title) { 'Восстановление пароля' }
 							let(:heading) { title }
 						end
@@ -397,7 +397,33 @@ describe 'Страницы пользователя,' do
 		pending 'отправка почты со ссылкой сброса'
 
 		describe 'применение ссылки сброса пароля,' do
+			pending 'пользователем,'
 			
+			describe 'гостем,' do
+				pending 'с неверными параметрами' do
+					pending 'неверный флаг'
+					pending 'неверный код'
+					pending 'неверное время'
+				end
+
+				describe 'с верными параметрами,' do
+					before {
+						reset_params = user.reset_password
+						visit password_reset_url(code:reset_params[:code], date:reset_params[:date])
+					}
+					it_should_behave_like 'страница_с_названием' do
+						let(:title) { 'Создание нового пароля' }
+						let(:heading) { title }
+					end
+					it { should have_field 'Новый пароль' }
+					it { should have_field 'Подтверждение нового пароля' }
+					it { should have_xpath "//input[@type='submit' and @value='Установить']" }
+
+					pending 'установка нового пароля,' do
+
+					end
+				end
+			end
 		end
 	end
 end

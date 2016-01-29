@@ -21,4 +21,6 @@ describe ApplicationHelper do
 			expect(card_id(id)).to match(/\Acard#{id}\z/)
 		end
 	end
+
+	pending 'password_reset_url'
 end
