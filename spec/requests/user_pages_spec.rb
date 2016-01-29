@@ -357,13 +357,25 @@ describe 'Страницы пользователя,' do
 
 	describe 'восстановление пароля,' do
 		describe 'посещение страницы,' do
-			before { visit reset_password_path }
-			it_should_behave_like 'страница с названием' do
-				let(:title) { 'Восстановление пароля' }
-				let(:heading) { title }
+			pending 'пользователем,' do
 			end
-			it { should have_field 'Электронная почта' }
-			it { should have_xpath("//input[@type='submit' and @value='Отправить']") }
+
+			describe 'гостем,' do
+				pending 'неверное заполнение'
+				describe 'верное заполнение,' do
+					pending 'несуществующий пользователь'
+
+					describe 'пользователь существует,' do
+						before { visit reset_password_path }
+						it_should_behave_like 'страница с названием' do
+							let(:title) { 'Восстановление пароля' }
+							let(:heading) { title }
+						end
+						it { should have_field 'Электронная почта' }
+						it { should have_xpath("//input[@type='submit' and @value='Отправить']") }
+					end
+				end
+			end
 		end
 
 		describe 'изменение полей сброса пароля,' do
@@ -381,6 +393,5 @@ describe 'Страницы пользователя,' do
 				expect(user.reload.reset_date).not_to eq old_reset_date
 			}
 		end
-
 	end
 end
