@@ -126,6 +126,18 @@ class UsersController < ApplicationController
 		render :new_password
 	end
 
+	def new_password
+		@user = User.find_by(id: params[:id])
+
+		if @user.update_attributes(user_params)
+			flash[:success] = "Новый пароль установен"
+			redirect_to login_path
+		else
+			#flash[:error] 
+			render :new_password
+		end
+	end
+
 	private
 
 		def user_params

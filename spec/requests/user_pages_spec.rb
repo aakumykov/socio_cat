@@ -356,6 +356,9 @@ describe 'Страницы пользователя,' do
 	end
 
 	describe 'восстановление пароля,' do
+		let(:new_password_button) {'Установить'}
+		let(:new_password) {'Abcdef123!@#'}
+
 		describe 'посещение страницы,' do
 			pending 'пользователем,' do
 			end
@@ -417,10 +420,23 @@ describe 'Страницы пользователя,' do
 					end
 					it { should have_field 'Новый пароль' }
 					it { should have_field 'Подтверждение нового пароля' }
-					it { should have_xpath "//input[@type='submit' and @value='Установить']" }
+					it { should have_xpath "//input[@type='submit' and @value='#{new_password_button}']" }
 
-					pending 'установка нового пароля,' do
+					describe 'установка нового пароля,' do
+						describe 'корректного,' do
+							before {
+								fill_in 'Новый пароль', with: new_password
+								fill_in 'Подтверждение нового пароля', with: new_password
+								click_button "#{new_password_button}"
+							}
+							specify{
+								expect(user.reload.password).to eq User.encrypt(new_password)
+							}
+							it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
+							it_should_behave_like 'страница_входа'
+						end
 
+						pending 'некорректного'
 					end
 				end
 			end
