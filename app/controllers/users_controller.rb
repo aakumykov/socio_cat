@@ -104,7 +104,7 @@ class UsersController < ApplicationController
 					date: date,
 				}).deliver_now
 
-				flash[:success] = 'Запрос принят'
+				flash[:success] = 'Вам на почту отправлено сообщение с дальнейшими инструкциями'
 				
 				redirect_to root_path
 			end

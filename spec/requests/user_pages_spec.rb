@@ -373,35 +373,45 @@ describe 'Страницы пользователя,' do
 
 			describe 'гостем,' do
 				before { visit reset_password_path }
+				it_should_behave_like 'страница_сброса_пароля'
+			end
+		end
 
-				describe 'неверное заполнение,' do
-					describe 'поле не заполнено,' do
-						before { click_submit }
-						it_should_behave_like 'flash-сообщение', 'error', 'Укажите адрес элетронной почты'
-					end
+		describe 'отправка формы,' do
+			before { visit reset_password_path }
 
-					describe 'некорректный формат,' do
-						before {
-							fill_in 'Электронная почта', with: 'йцукен'
-							click_submit
-						}
-						it_should_behave_like 'flash-сообщение', 'error', 'Ошибка в адресе электронной почты'
-					end
-
-					describe 'несуществующий пользователь,' do
-						before { 
-							fill_in 'Электронная почта', with: "#{SecureRandom.uuid}@example.com"
-							click_submit
-						}
-						it_should_behave_like 'flash-сообщение', 'error', 'Такого пользователя не существует'
-					end
-
-					it_should_behave_like 'страница_сброса_пароля'
+			describe 'неверное заполненной,' do
+				describe 'поле не заполнено,' do
+					before { click_submit }
+					it_should_behave_like 'flash-сообщение', 'error', 'Укажите адрес элетронной почты'
 				end
-				
-				pending 'верное заполнение,' do
-					it_should_behave_like 'страница_сброса_пароля'					
+
+				describe 'некорректный формат,' do
+					before {
+						fill_in 'Электронная почта', with: 'йцукен'
+						click_submit
+					}
+					it_should_behave_like 'flash-сообщение', 'error', 'Ошибка в адресе электронной почты'
 				end
+
+				describe 'несуществующий пользователь,' do
+					before { 
+						fill_in 'Электронная почта', with: "#{SecureRandom.uuid}@example.com"
+						click_submit
+					}
+					it_should_behave_like 'flash-сообщение', 'error', 'Такого пользователя не существует'
+				end
+
+				it_should_behave_like 'страница_сброса_пароля'
+			end
+			
+			describe 'верно заполненной,' do
+				before {
+					fill_in 'Электронная почта', with: user.email
+					click_submit
+				}
+				it_should_behave_like 'flash-сообщение', 'success', 'Вам на почту отправлено сообщение с дальнейшими инструкциями'
+				it_should_behave_like 'главная_страница'
 			end
 		end
 
