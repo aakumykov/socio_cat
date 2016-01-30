@@ -69,7 +69,7 @@ class UsersController < ApplicationController
 		end
 	end
 	
-	def reset_password
+	def reset_form
 		#@obj = Object.new
 		#@obj.email = ''
 	end
@@ -80,18 +80,18 @@ class UsersController < ApplicationController
 
 		if email.blank?
 			flash.now[:danger] = 'Укажите адрес элетронной почты'
-			render :reset_password
+			render :reset_form
 		elsif !email.match(/\A([a-z0-9+_]+[.-]?)*[a-z0-9]+@([a-z0-9]+[.-]?)*[a-z0-9]+\.[a-z]+\z/i)
 			flash.now[:danger] = 'Ошибка в адресе электронной почты'
 			#@obj = Object.new
 			#@obj.email = email
-			render :reset_password
+			render :reset_form
 		else
 			user = User.find_by(email: email)
 			
 			if user.nil?
 				flash.now[:danger] = 'Такого пользователя не существует'
-				render :reset_password
+				render :reset_form
 			else
 				reset_params = user.reset_password
 
