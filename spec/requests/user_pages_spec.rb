@@ -372,24 +372,40 @@ describe 'Страницы пользователя,' do
 			end
 
 			describe 'гостем,' do
-				pending 'неверное заполнение'
-				describe 'верное заполнение,' do
-					pending 'несуществующий пользователь'
+				before { visit reset_password_path }
 
-					describe 'пользователь существует,' do
-						before { visit reset_password_path }
-						it_should_behave_like 'страница_с_названием' do
-							let(:title) { 'Восстановление пароля' }
-							let(:heading) { title }
-						end
-						it { should have_field 'Электронная почта' }
-						it { should have_xpath("//input[@type='submit' and @value='Отправить']") }
+				describe 'неверное заполнение,' do
+					describe 'поле не заполнено,' do
+						before { click_submit }
+						it_should_behave_like 'flash-сообщение', 'error', 'Укажите адрес элетронной почты'
 					end
+
+					describe 'некорректный формат,' do
+						before {
+							fill_in 'Электронная почта', with: 'йцукен'
+							click_submit
+						}
+						it_should_behave_like 'flash-сообщение', 'error', 'Ошибка в адресе электронной почты'
+					end
+
+					describe 'несуществующий пользователь,' do
+						before { 
+							fill_in 'Электронная почта', with: "#{SecureRandom.uuid}@example.com"
+							click_submit
+						}
+						it_should_behave_like 'flash-сообщение', 'error', 'Такого пользователя не существует'
+					end
+
+					it_should_behave_like 'страница_сброса_пароля'
+				end
+				
+				pending 'верное заполнение,' do
+					it_should_behave_like 'страница_сброса_пароля'					
 				end
 			end
 		end
 
-		describe 'изменение полей сброса пароля,' do
+		describe 'форма изменяет атрибуты сброса пароля,' do
 			let!(:old_reset_code) { user.reset_code }
 			let!(:old_reset_date) { user.reset_date }
 			before { 

@@ -75,3 +75,13 @@ shared_examples_for 'все статические страницы' do
 		it { should have_link('Пользователи', href: users_path) }
 	end
 end
+
+
+shared_examples_for 'страница_сброса_пароля' do
+	it_should_behave_like 'страница_с_названием' do
+		let(:title) { 'Восстановление пароля' }
+		let(:heading) { title }
+	end
+	it { should have_field 'Электронная почта' }
+	it { should have_xpath("//input[@type='submit' and @value='Отправить']") }
+end
