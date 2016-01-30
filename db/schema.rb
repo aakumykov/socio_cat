@@ -49,7 +49,7 @@ ActiveRecord::Schema.define(version: 20160128145038) do
     t.string   "password_digest"
     t.string   "remember_token"
     t.boolean  "admin",           default: false
-    t.boolean  "in_reset"
+    t.boolean  "in_reset",        default: false
     t.string   "reset_code"
     t.datetime "reset_date"
   end

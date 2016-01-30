@@ -9,7 +9,7 @@ module ApplicationHelper
 		"card#{id}"
 	end
 
-	def password_reset_url(arg)
+	def url_for_password_reset(arg)
 		url_for(
 			host:'localhost',
 			port: 3000,

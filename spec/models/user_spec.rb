@@ -188,5 +188,6 @@ describe 'Пользователь,' do
 		it { should respond_to(:reset_date) }
 
 		pending 'прямой доступ к атрибутам'
+		pending 'валидации атрибутов сброса пароля'
 	end
 end

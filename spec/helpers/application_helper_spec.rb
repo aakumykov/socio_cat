@@ -22,5 +22,5 @@ describe ApplicationHelper do
 		end
 	end
 
-	pending 'password_reset_url'
+	pending 'url_for_password_reset'
 end

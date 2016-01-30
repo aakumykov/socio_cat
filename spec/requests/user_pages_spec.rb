@@ -339,20 +339,28 @@ describe 'Страницы пользователя,' do
 	# итого тест 7 действий
 
 	describe 'запрещённые атрибуты,' do
-		let(:user_params) {
+		let(:params) {
 			{ user: {
 				name: Faker::Name.first_name,
 				email: Faker::Internet.email,
 				password: test_password,
 				password_confirmation: test_password,
-				admin: true
+				admin: true,
+				in_reset: true,
+				reset_code: 'йцукен',
+				reset_date: Time.at(0000000000),
 			}}
 		}
 		before { 
 			www_user 
-			patch user_path(user), user_params
+			patch user_path(user), params
 		}
-		specify{ expect(user.reload).not_to be_admin }
+		specify{ 
+			expect(user.reload).not_to be_admin 
+			expect(user.reload.in_reset).to be_false
+			expect(user.reload.reset_date).not_to eq Time.at(0000000000)
+			expect(user.reload.reset_code).not_to eq 'йцукен'
+		}
 	end
 
 	describe 'восстановление пароля,' do
@@ -410,7 +418,7 @@ describe 'Страницы пользователя,' do
 					fill_in 'Электронная почта', with: user.email
 					click_submit
 				}
-				it_should_behave_like 'flash-сообщение', 'success', 'Вам на почту отправлено сообщение с дальнейшими инструкциями'
+				it_should_behave_like 'flash-сообщение', 'success', 'На почтовый адрес отправлено сообщение с инструкциями'
 				it_should_behave_like 'главная_страница'
 			end
 		end
@@ -421,9 +429,9 @@ describe 'Страницы пользователя,' do
 			before { 
 				visit reset_password_path
 				fill_in :email, with: user.email
-				click_button 'Отправить'
+				click_submit
 			}
-			it_should_behave_like 'flash-сообщение', 'success', 'Запрос принят'
+			it_should_behave_like 'flash-сообщение', 'success', 'На почтовый адрес отправлено сообщение с инструкциями'
 			specify{
 				expect(user.reload.in_reset).to be_true
 				expect(user.reload.reset_date).not_to eq old_reset_code
@@ -431,14 +439,12 @@ describe 'Страницы пользователя,' do
 			}
 		end
 
-		pending 'запрещённые атрибуты,'
-
 		pending 'отправка почты со ссылкой сброса,'
 
 		describe 'применение ссылки сброса пароля,' do
-			let(:reset_url) { password_reset_url(reset_code: User.new_remember_token) }
+			let(:reset_url) { url_for_password_reset(reset_code: User.new_remember_token) }
 			
-			describe 'пользователем,' do
+			pending 'пользователем,' do
 				before {
 					www_user
 					puts "===== reset_url =====> #{reset_url}"
@@ -473,7 +479,7 @@ describe 'Страницы пользователя,' do
 				describe 'с верными параметрами,' do
 					before {
 						reset_params = user.reset_password
-						visit password_reset_url(reset_code:reset_params[:reset_code])
+						visit url_for_password_reset(reset_code:reset_params[:reset_code])
 					}
 					it_should_behave_like 'страница_с_названием' do
 						let(:title) { 'Создание нового пароля' }
