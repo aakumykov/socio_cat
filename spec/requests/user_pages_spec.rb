@@ -423,6 +423,10 @@ describe 'Страницы пользователя,' do
 			end
 		end
 
+		pending 'отправка почты со ссылкой сброса,'
+
+		pending 'сброс флага сброса пароля по успешному входу'
+
 		describe 'форма изменяет атрибуты сброса пароля,' do
 			let!(:old_reset_code) { user.reset_code }
 			let!(:old_reset_date) { user.reset_date }
@@ -439,30 +443,35 @@ describe 'Страницы пользователя,' do
 			}
 		end
 
-		pending 'отправка почты со ссылкой сброса,'
-
 		describe 'применение ссылки сброса пароля,' do
-			let(:reset_url) { url_for_password_reset(reset_code: User.new_remember_token) }
+			let!(:reset_params) { user.reset_password }
+			let!(:reset_url) { url_for_password_reset(reset_code: reset_params[:reset_code]) }
 			
-			pending 'пользователем,' do
-				before {
-					www_user
-					puts "===== reset_url =====> #{reset_url}"
-					visit reset_url
-				}
-				it_should_behave_like 'flash-сообщение', 'error', 'Вы зарегистрированный пользователь'
-			end
-
 			# describe 'пользователем,' do
-			# 	before { 
-			# 		console_user 
+			# 	before {
+			# 		console_user
 			# 		get reset_url
 			# 	}
-			# 	specify{
-			# 		#expect(response).to render_template :show
-			# 		expect(response).to redirect_to user_path(user)
+			# 	specify{ 
+			# 		expect(response).to redirect_to root_path 
 			# 	}
+			# 	# specify{
+			# 	# 	expect(user.reload.in_reset).to be_true
+			# 	# }
 			# end
+
+			describe 'пользователем,' do
+				before {
+					www_user
+					visit reset_url
+					puts "===== reset_url =====> #{reset_url}"
+				}
+				# it_should_behave_like 'страница_пользователя', 'владелец' do
+				# 	let(:the_user) { user }
+				# end
+				it_should_behave_like 'flash-сообщение', 'error', 'Ссылка недействительна'
+				it_should_behave_like 'главная_страница'
+			end
 			
 			describe 'гостем,' do
 				pending 'с неверными параметрами' do

@@ -10,11 +10,13 @@ module ApplicationHelper
 	end
 
 	def url_for_password_reset(arg)
-		url_for(
+		url = url_for(
 			host:'localhost',
 			port: 3000,
 			controller: 'users',
 			action: 'reset_response'
 		) + "?reset_code=#{arg[:reset_code]}"
+		puts "===== url_for_password_reset ====> #{url}"
+		return url
 	end
 end

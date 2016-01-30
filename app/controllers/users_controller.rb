@@ -112,6 +112,7 @@ class UsersController < ApplicationController
 	end
 
 	def reset_response
+		puts "===== users#reset_response ====="
 		@user = User.find_by(reset_code: User.encrypt(params[:reset_code]))
 
 		begin
