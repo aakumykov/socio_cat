@@ -21,7 +21,7 @@ Rails.application.routes.draw do
 
   get 'reset_password' => 'users#reset_form'
   post 'reset_request' => 'users#reset_request'
-  get 'new_password' => 'users#reset_response'
+  get 'reset_response' => 'users#reset_response'
   post 'new_password' => 'users#new_password'
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
