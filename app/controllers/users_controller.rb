@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
 	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
-	before_action :not_signed_in_users, only: [:new, :create, :reset_password]
+	before_action :not_signed_in_users, only: [:new, :create, :reset_password, :reset_response]
 	before_action :signed_in_users, only: [:show, :edit, :update]
 	before_action :editor_users, only: [:edit, :update]
 	before_action :admin_users, only: [:destroy]
@@ -113,7 +113,6 @@ class UsersController < ApplicationController
 
 	def reset_response
 		@user = User.find_by(reset_code: User.encrypt(params[:reset_code]))
-		puts "===== users#reset_response =====> @user.name,email: #{@user.name}, #{@user.email}"
 
 		begin
 			raise 'не найден пользователь с таким кодом' if @user.nil? 

@@ -14,7 +14,7 @@ class UserMailer < ApplicationMailer
 	end
 
 	def reset_email(arg)
-		@url = password_reset_url({reset_code:arg[:reset_code], date:arg[:date]})
+		@url = password_reset_url({reset_code:arg[:reset_code]})
 		@title = 'Восстановление доступа в Соционический каталог'
 		@user = arg[:user]
 		@date = arg[:date]

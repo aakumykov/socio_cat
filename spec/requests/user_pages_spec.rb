@@ -103,7 +103,7 @@ describe 'Страницы пользователя,' do
 					www_user
 					visit register_path
 				}
-				it_should_behave_like 'flash-сообщение', 'error', 'Вы уже зарегистрированы'
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы зарегистрированный пользователь'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
@@ -365,7 +365,7 @@ describe 'Страницы пользователя,' do
 					www_user
 					visit reset_password_path
 				}
-				it_should_behave_like 'flash-сообщение', 'error', 'Вы уже зарегистрированы'
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы зарегистрированный пользователь'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
@@ -431,10 +431,32 @@ describe 'Страницы пользователя,' do
 			}
 		end
 
-		pending 'отправка почты со ссылкой сброса'
+		pending 'запрещённые атрибуты,'
+
+		pending 'отправка почты со ссылкой сброса,'
 
 		describe 'применение ссылки сброса пароля,' do
-			pending 'пользователем,'
+			let(:reset_url) { password_reset_url(reset_code: User.new_remember_token) }
+			
+			describe 'пользователем,' do
+				before {
+					www_user
+					puts "===== reset_url =====> #{reset_url}"
+					visit reset_url
+				}
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы зарегистрированный пользователь'
+			end
+
+			# describe 'пользователем,' do
+			# 	before { 
+			# 		console_user 
+			# 		get reset_url
+			# 	}
+			# 	specify{
+			# 		#expect(response).to render_template :show
+			# 		expect(response).to redirect_to user_path(user)
+			# 	}
+			# end
 			
 			describe 'гостем,' do
 				pending 'с неверными параметрами' do
@@ -451,7 +473,7 @@ describe 'Страницы пользователя,' do
 				describe 'с верными параметрами,' do
 					before {
 						reset_params = user.reset_password
-						visit password_reset_url(reset_code:reset_params[:reset_code], date:reset_params[:date])
+						visit password_reset_url(reset_code:reset_params[:reset_code])
 					}
 					it_should_behave_like 'страница_с_названием' do
 						let(:title) { 'Создание нового пароля' }
