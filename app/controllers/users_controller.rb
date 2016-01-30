@@ -1,7 +1,7 @@
 class UsersController < ApplicationController
 
 	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
-	before_action :not_signed_in_users, only: [:new, :create]
+	before_action :not_signed_in_users, only: [:new, :create, :reset_password]
 	before_action :signed_in_users, only: [:show, :edit, :update]
 	before_action :editor_users, only: [:edit, :update]
 	before_action :admin_users, only: [:destroy]
@@ -69,7 +69,7 @@ class UsersController < ApplicationController
 		end
 	end
 	
-	def reset_form
+	def reset_password
 		#@obj = Object.new
 		#@obj.email = ''
 	end
@@ -80,18 +80,18 @@ class UsersController < ApplicationController
 
 		if email.blank?
 			flash.now[:danger] = 'Укажите адрес элетронной почты'
-			render :reset_form
+			render :reset_password
 		elsif !email.match(/\A([a-z0-9+_]+[.-]?)*[a-z0-9]+@([a-z0-9]+[.-]?)*[a-z0-9]+\.[a-z]+\z/i)
 			flash.now[:danger] = 'Ошибка в адресе электронной почты'
 			#@obj = Object.new
 			#@obj.email = email
-			render :reset_form
+			render :reset_password
 		else
 			user = User.find_by(email: email)
 			
 			if user.nil?
 				flash.now[:danger] = 'Такого пользователя не существует'
-				render :reset_form
+				render :reset_password
 			else
 				reset_params = user.reset_password
 

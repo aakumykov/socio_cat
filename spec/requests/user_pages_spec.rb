@@ -360,7 +360,15 @@ describe 'Страницы пользователя,' do
 		let(:new_password) {'Abcdef123!@#'}
 
 		describe 'посещение страницы,' do
-			pending 'пользователем,' do
+			describe 'пользователем,' do
+				before {
+					www_user
+					visit reset_password_path
+				}
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы уже зарегистрированы'
+				it_should_behave_like 'страница_пользователя', 'владелец' do
+					let(:the_user) { user }
+				end
 			end
 
 			describe 'гостем,' do

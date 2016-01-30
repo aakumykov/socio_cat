@@ -19,7 +19,7 @@ Rails.application.routes.draw do
   get 'login' => 'sessions#new', as: :login
   delete 'logout' => 'sessions#destroy', as: :logout
 
-  get 'reset_password' => 'users#reset_form'
+  get 'reset_password' => 'users#reset_password'
   post 'reset_request' => 'users#reset_request'
   get 'reset_response' => 'users#reset_response'
   post 'new_password' => 'users#new_password'
