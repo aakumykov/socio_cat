@@ -1,8 +1,17 @@
 shared_examples_for 'flash-сообщение' do |mode,text=''|
-	if text.blank?
-		it { should have_selector("div.alert.alert-#{mode}") }
+	case mode
+	when 'success'
+		suffix = 'success'
+	when 'error'
+		suffix = 'danger'
 	else
-		it { should have_selector("div.alert.alert-#{mode}", text:text) }
+		suffix = 'notice'
+	end
+		
+	if text.blank?
+		it { should have_selector("div.alert.alert-#{suffix}") }
+	else
+		it { should have_selector("div.alert.alert-#{suffix}", text:text) }
 	end
 
 	describe 'исчезновение flash-сообщения' do
