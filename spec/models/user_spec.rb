@@ -184,6 +184,7 @@ describe 'Пользователь,' do
 
 	describe 'свойства для сброса пароля,' do
 		it { should respond_to(:in_reset) }
+		it { should respond_to(:in_pass_reset) }
 		it { should respond_to(:reset_code) }
 		it { should respond_to(:reset_date) }
 
