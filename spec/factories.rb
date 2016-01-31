@@ -8,7 +8,7 @@ FactoryGirl.define do
 	end
 
 	factory :user do
-		name                  { Faker::Name.first_name }
+		name                  { Faker::Name.first_name + "_#{rand(1..100)}" }
 		email                 { Faker::Internet.email }
 		password              'Password123$%^'
 		password_confirmation 'Password123$%^'
