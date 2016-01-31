@@ -119,7 +119,8 @@ class UsersController < ApplicationController
 
 		begin
 			raise 'не найден пользователь с таким кодом' if @user.nil? 
-			raise 'пользователь не запрашивал восстановление пароля' if not @user.in_reset? 
+			raise 'пользователь не запрашивал восстановление пароля' if not @user.in_reset?
+			raise 'форма восстановления пароля неактивна' if not @user.in_pass_reset?
 		# 	raise 'код сброса пароля просрочен' if (Time.now - @user.reset_date) <= 24.hours 
 		rescue Exception => e
 			# === кривовато, но работает и избавляет от повторений ===
@@ -129,7 +130,8 @@ class UsersController < ApplicationController
 			# === кривовато, но работает и избавляет от повторений ===
 		end
 
-		@user.toggle!(:in_reset) # ссылка работает только 1 раз
+		# ссылка работает только 1 раз
+		@user.disable_password_reset
 
 		render :new_password, locals: {reset_code: params[:reset_code]}
 	end
@@ -137,20 +139,36 @@ class UsersController < ApplicationController
 	def new_password
 		#puts "=== users#new_password ===> params[:user][:id]: #{params[:user][:id]}"
 		#puts "=== users#new_password ===> params[:user][:reset_code]: #{params[:user][:reset_code]}"
-		#puts "=== users#new_password ===> params: #{params}"
+		puts "=== users#new_password ===> params: #{params}"
 
 		@user = User.find_by(
 			id: params[:user][:id], 
 			reset_code: User.encrypt(params[:user][:reset_code]),
 		)
-		#puts "===== users#new_password =====> @user.name,email: #{@user.name}, #{@user.email}"
 
-		if @user.update_attributes(user_params)
-			flash[:success] = "Новый пароль установлен"
-			redirect_to login_path
-		else
-			#flash[:danger] # ошибки покажет (?) форма
-			render :new_password, locals: { reset_code: params[:user][:reset_code] }
+		begin
+			if @user.nil?
+				puts "===== users#new_password ===> @user is nil"
+				raise 'пользователь не найден'
+			elsif !@user.in_pass_reset?
+				puts "===== users#new_password ===> форма неактивна"
+				raise 'форма неактивна'
+			else
+				puts "===== users#new_password ===> ПРОПУСКАЮ"
+				if @user.update_attributes(user_params)
+					@user.disable_password_reset
+					flash[:success] = "Новый пароль установлен"
+					redirect_to login_path
+				else
+					# уведомление об ошибке кажет форма
+					render :new_password, locals: { reset_code: params[:user][:reset_code] }
+				end
+			end
+		rescue Exception => e
+			puts "===== users#new_password ===> ПОЙМАЛ ИСКЛЮЧЕНИЕ"
+			flash[:danger] = e.message
+			redirect_to root_path
+			return false
 		end
 	end
 

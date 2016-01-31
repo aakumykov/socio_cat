@@ -76,8 +76,7 @@ shared_examples_for 'все статические страницы' do
 	end
 end
 
-
-shared_examples_for 'страница_сброса_пароля' do
+shared_examples_for 'страница_восстановления_пароля' do
 	it_should_behave_like 'страница_с_названием' do
 		let(:title) { 'Восстановление пароля' }
 		let(:heading) { title }
@@ -85,3 +84,16 @@ shared_examples_for 'страница_сброса_пароля' do
 	it { should have_field 'Электронная почта' }
 	it { should have_xpath("//input[@type='submit' and @value='Отправить']") }
 end
+
+shared_examples_for 'страница_нового_пароля' do
+	it_should_behave_like 'страница_с_названием' do
+		let(:title) { 'Создание нового пароля' }
+		let(:heading) { title }
+	end
+	it { should have_field 'Новый пароль' }
+	it { should have_field 'Подтверждение нового пароля' }
+	it { should have_xpath "//input[@type='submit' and @value='#{new_password_button}']" }
+	it { should have_xpath "//input[@type='hidden' and @id='user_reset_code']" }
+	it { should have_xpath "//input[@type='hidden' and @id='user_id']" }
+end
+

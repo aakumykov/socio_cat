@@ -103,7 +103,7 @@ describe 'Страницы пользователя,' do
 					www_user
 					visit register_path
 				}
-				it_should_behave_like 'flash-сообщение', 'error', 'Вы - зарегистрированный пользователь'
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы зарегистрированный пользователь'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
@@ -347,6 +347,7 @@ describe 'Страницы пользователя,' do
 				password_confirmation: test_password,
 				admin: true,
 				in_reset: true,
+				in_pass_reset: true,
 				reset_code: 'йцукен',
 				reset_date: Time.at(0000000000),
 			}}
@@ -358,6 +359,7 @@ describe 'Страницы пользователя,' do
 		specify{ 
 			expect(user.reload).not_to be_admin 
 			expect(user.reload.in_reset).to be_false
+			expect(user.reload.in_pass_reset).to be_false
 			expect(user.reload.reset_date).not_to eq Time.at(0000000000)
 			expect(user.reload.reset_code).not_to eq 'йцукен'
 		}
@@ -367,13 +369,16 @@ describe 'Страницы пользователя,' do
 		let(:new_password_button) {'Установить'}
 		let(:new_password) {'Abcdef123!@#'}
 
+		let!(:reset_params) { user.reset_password }
+		let(:reset_url) { url_for_password_reset(reset_code: reset_params[:reset_code]) }
+
 		describe 'посещение страницы,' do
 			describe 'пользователем,' do
 				before {
 					www_user
 					visit reset_password_path
 				}
-				it_should_behave_like 'flash-сообщение', 'error', 'Вы - зарегистрированный пользователь'
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы зарегистрированный пользователь'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
@@ -381,11 +386,11 @@ describe 'Страницы пользователя,' do
 
 			describe 'гостем,' do
 				before { visit reset_password_path }
-				it_should_behave_like 'страница_сброса_пароля'
+				it_should_behave_like 'страница_восстановления_пароля'
 			end
 		end
 
-		describe 'отправка формы,' do
+		describe 'отправка формы запроса на восстановление,' do
 			before { visit reset_password_path }
 
 			describe 'неверное заполненной,' do
@@ -410,7 +415,7 @@ describe 'Страницы пользователя,' do
 					it_should_behave_like 'flash-сообщение', 'error', 'Такого пользователя не существует'
 				end
 
-				it_should_behave_like 'страница_сброса_пароля'
+				it_should_behave_like 'страница_восстановления_пароля'
 			end
 			
 			describe 'верно заполненной,' do
@@ -420,54 +425,40 @@ describe 'Страницы пользователя,' do
 				}
 				it_should_behave_like 'flash-сообщение', 'success', 'На почтовый адрес отправлено сообщение с инструкциями'
 				it_should_behave_like 'главная_страница'
+
+				describe 'форма изменяет атрибуты и флаги,' do
+					let!(:old_reset_code) { user.reset_code }
+					let!(:old_reset_date) { user.reset_date }
+					specify{
+						expect(user.reload.in_reset).to be_true
+						expect(user.reload.in_pass_reset).to be_true
+						expect(user.reload.reset_date).not_to eq old_reset_code
+						expect(user.reload.reset_code).not_to eq old_reset_date
+					}
+				end
 			end
 		end
 
 		pending 'отправка почты со ссылкой сброса,'
 
-		pending 'сброс флага сброса пароля по успешному входу'
-
-		describe 'форма изменяет атрибуты сброса пароля,' do
-			let!(:old_reset_code) { user.reset_code }
-			let!(:old_reset_date) { user.reset_date }
-			before { 
-				visit reset_password_path
-				fill_in :email, with: user.email
-				click_submit
-			}
-			it_should_behave_like 'flash-сообщение', 'success', 'На почтовый адрес отправлено сообщение с инструкциями'
-			specify{
-				expect(user.reload.in_reset).to be_true
-				expect(user.reload.reset_date).not_to eq old_reset_code
-				expect(user.reload.reset_date).not_to eq old_reset_date
-			}
-		end
-
-		describe 'применение ссылки сброса пароля,' do
-			let(:reset_params) { user.reset_password }
-			let(:reset_url) { url_for_password_reset(reset_code: reset_params[:reset_code]) }
-			
+		describe 'переход по ссылке сброса пароля,' do			
 			describe 'пользователем,' do
-				let(:reset_params) { user.reset_password }
-				let(:reset_url) { url_for_password_reset(reset_code: reset_params[:remember_token]) }
 				before {
 					www_user
 					visit reset_url
 				}
-				it_should_behave_like 'flash-сообщение', 'error', 'Вы - зарегистрированный пользователь'
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы зарегистрированный пользователь'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
 				specify{
 					expect(user.reload.in_reset).to eq true
+					expect(user.reload.in_pass_reset).to eq true
 				}
 			end
 			
 			describe 'гостем,' do
 				describe 'с неверными параметрами,' do
-					let!(:reset_params) { user.reset_password }
-			 		let(:reset_url) { url_for_password_reset(reset_code: reset_params[:reset_code]) }
-
 					describe 'неверный код' do
 						before {
 							visit url_for_password_reset(reset_code: SecureRandom::uuid)
@@ -476,7 +467,7 @@ describe 'Страницы пользователя,' do
 						it_should_behave_like 'главная_страница'
 					end
 			 		
-			 		describe 'неверный флаг' do
+			 		describe 'сброшен флаг запроса на восстановление,' do
 			 			before {
 			 				user.toggle!(:in_reset)
 			 				visit reset_url
@@ -485,21 +476,16 @@ describe 'Страницы пользователя,' do
 						it_should_behave_like 'главная_страница'
 			 		end
 
-					pending 'неверное время'
-
-			 		describe 'повторное использование ссылки' do
-			 			before {
-			 				visit reset_url
+					describe 'сброшен флаг смены пароля,' do
+						before {
+			 				user.toggle!(:in_pass_reset)
 			 				visit reset_url
 			 			}
 			 			it_should_behave_like 'flash-сообщение', 'error', 'Ссылка недействительна'
 						it_should_behave_like 'главная_страница'
-						specify{
-							expect(user.reload.in_reset).to be_false
-						}
-			 		end
+					end
 
-					pending 'продумать защиту методов'
+					pending 'неверное время'
 
 					# pending 'post to new_password' должно работать только с флагом.
 					# подумал: сейчас users#new_pasword "защищён" только html-страницей,
@@ -507,39 +493,106 @@ describe 'Страницы пользователя,' do
 				end
 
 				describe 'с верными параметрами,' do
-					before {
-						reset_params = user.reset_password
-						visit url_for_password_reset(reset_code:reset_params[:reset_code])
+					let(:new_password) { SecureRandom.uuid }
+					let(:old_password_digest) { user.password_digest }
+					let(:params) {
+						{ user: {
+							id: user.id,
+							reset_code: reset_params[:reset_code],
+							password: new_password,
+							password_confirmation: new_password,
+						} }
 					}
-					it_should_behave_like 'страница_с_названием' do
-						let(:title) { 'Создание нового пароля' }
-						let(:heading) { title }
-					end
-					it { should have_field 'Новый пароль' }
-					it { should have_field 'Подтверждение нового пароля' }
-					it { should have_xpath "//input[@type='submit' and @value='#{new_password_button}']" }
-					it { should have_xpath "//input[@type='hidden' and @id='user_reset_code']" }
-					it { should have_xpath "//input[@type='hidden' and @id='user_id']" }
-
-					describe 'установка нового пароля,' do
-						describe 'корректного,' do
-							before {
-								fill_in 'Новый пароль', with: new_password
-								fill_in 'Подтверждение нового пароля', with: new_password
-								click_button "#{new_password_button}"
-							}
-							specify{
-								expect(user.reload.authenticate(new_password)).not_to be_false
-							}
-							it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
-							it_should_behave_like 'страница_входа'
-						end
-
-						pending 'некорректного'
-						# pending 'валидация длины пароля' # работают, но проверять!
-					end
 				end
 			end
 		end
+
+		describe 'повторный переход по ссылке сброса пароля,' do
+ 			before {
+ 				visit reset_url
+ 				visit reset_url
+ 			}
+ 			
+ 			it_should_behave_like 'flash-сообщение', 'error', 'Ссылка недействительна'
+			it_should_behave_like 'главная_страница'
+			
+			specify{
+				expect(user.reload.in_reset).to be_false
+				expect(user.reload.in_pass_reset).to be_false
+			}
+ 		end
+
+		describe 'отправка формы с новым паролем,' do
+
+				# это защита от "прямого доступа"
+				# describe 'сброшен флаг смены пароля,' do
+				# 	before {
+				# 		post new_password_path, params
+				# 	}
+				# 	specify{
+				# 		expect(user.reload.password_digest).to eq old_password_digest
+				# 		expect(user.authenticate(new_password)).to be_false
+				# 	}
+				# end
+
+				# describe 'флаг смены пароля стоит,' do
+				# 	describe 'id подменён,' do
+				# 		let(:bad_params) {
+				# 			params[:user].merge!({id: other_user.id})
+				# 			params
+				# 		}
+				# 		before {
+				# 			post new_password_path, bad_params
+				# 		}
+				# 		specify {
+				# 			expect(user.reload.password_digest).to eq old_password_digest
+				# 			# пароль у другого пользователя не должен меняться
+				# 			expect(other_user.reload.authenticate(new_password)).to be_false
+				# 		}
+				# 	end
+
+				# 	describe 'код сброса подменён,' do
+				# 		let(:bad_params) {
+				# 			params[:user].merge!({reset_code: SecureRandom.uuid})
+				# 			params
+				# 		}
+				# 		before {
+				# 			post new_password_path, bad_params
+				# 		}
+				# 		specify {
+				# 			expect(user.reload.password_digest).to eq old_password_digest
+				# 			expect(user.reload.authenticate(new_password)).to be_false
+				# 		}
+				# 	end
+
+				# 	pending 'верная комбинация код-id,' do
+				# 		before {
+				# 			reset_params = user.reset_password
+				# 			visit url_for_password_reset(reset_code:reset_params[:reset_code])
+				# 		}
+				# 		it_should_behave_like 'страница_нового_пароля'
+
+				# 		describe 'установка нового пароля,' do
+				# 			describe 'корректного,' do
+				# 				before {
+				# 					fill_in 'Новый пароль', with: new_password
+				# 					fill_in 'Подтверждение нового пароля', with: new_password
+				# 					click_button "#{new_password_button}"
+				# 				}
+				# 				specify{
+				# 					expect(user.reload.authenticate(new_password)).not_to be_false
+				# 				}
+				# 				it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
+				# 				it_should_behave_like 'страница_входа'
+				# 			end
+
+				# 			pending 'некорректного'
+				# 			# pending 'валидация длины пароля' # работают, но проверять!
+				# 		end
+				# 	end
+				# end
+		end
+
+		pending 'сброс флага сброса пароля по успешному входу'
 	end
 end

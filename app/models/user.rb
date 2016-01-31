@@ -41,8 +41,17 @@ class User < ActiveRecord::Base
 		self.update_attribute(:reset_date, date)
 		self.update_attribute(:reset_code, User.encrypt(reset_code))
 		self.update_attribute(:in_reset, true)
+		self.update_attribute(:in_pass_reset, true)
 
 		return { date: date, reset_code: reset_code }
+	end
+
+	def disable_password_reset
+		#self.toggle!(:in_reset)
+		#self.toggle!(:in_pass_reset)
+
+		self.update_attribute(:in_reset, false)
+		self.update_attribute(:in_pass_reset, false)
 	end
 
 	private
