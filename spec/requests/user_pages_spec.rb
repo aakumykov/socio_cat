@@ -447,48 +447,20 @@ describe 'Страницы пользователя,' do
 			let(:reset_params) { user.reset_password }
 			let(:reset_url) { url_for_password_reset(reset_code: reset_params[:reset_code]) }
 			
-			# describe 'пользователем,' do
-			# 	before {
-			# 		console_user
-			# 		get reset_url
-			# 	}
-			# 	specify{ 
-			# 		expect(response).to redirect_to root_path 
-			# 	}
-			# 	# specify{
-			# 	# 	expect(user.reload.in_reset).to be_true
-			# 	# }
-			# end
-
-			# describe 'пользователем,' do
-			# 	before {
-			# 		#www_user
-			# 		visit users_path
-			# 		#puts "===== reset_url =====> #{reset_url}"
-			# 	}
-			# 	# it_should_behave_like 'страница_пользователя', 'владелец' do
-			# 	# 	let(:the_user) { user }
-			# 	# end
-			# 	#it_should_behave_like 'flash-сообщение', 'error', 'Ссылка недействительна'
-			# 	#it_should_behave_like 'главная_страница'
-			# end
-
-			describe 'йцукен,' do
-				context 'вошедший пользователь,' do
-					before {
-						www_user
-						visit register_path
-					}
-					it_should_behave_like 'flash-сообщение', 'error', 'Вы - зарегистрированный пользователь'
-					it_should_behave_like 'страница_пользователя', 'владелец' do
-						let(:the_user) { user }
-					end
+			describe 'пользователем,' do
+				let(:reset_params) { user.reset_password }
+				let(:reset_url) { url_for_password_reset(reset_code: reset_params[:remember_token]) }
+				before {
+					www_user
+					visit reset_url
+				}
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы - зарегистрированный пользователь'
+				it_should_behave_like 'страница_пользователя', 'владелец' do
+					let(:the_user) { user }
 				end
-
-				context 'невошедший пользователь,' do
-					before { visit register_path }
-					it_should_behave_like 'страница_регистрации'
-				end
+				specify{
+					expect(user.reload.in_reset).to eq true
+				}
 			end
 			
 			# describe 'гостем,' do
@@ -539,17 +511,17 @@ describe 'Страницы пользователя,' do
 		end
 	end
 
-#expect(page).to have_current_path(post_comments_path(post))
+	###expect(page).to have_current_path(post_comments_path(post))
 
-	describe 'проверка1' do
-		let(:reset_url) { url_for_password_reset(reset_code: User.new_remember_token) }
-		before {
-			www_user
-			visit reset_url
-		}
-		it_should_behave_like 'flash-сообщение', 'error', 'Вы - зарегистрированный пользователь'
-		it_should_behave_like 'страница_пользователя', 'владелец' do
-			let(:the_user) { user }
-		end
-	end
+	# describe 'проверка1' do
+	# 	let(:reset_url) { url_for_password_reset(reset_code: User.new_remember_token) }
+	# 	before {
+	# 		www_user
+	# 		visit reset_url
+	# 	}
+	# 	it_should_behave_like 'flash-сообщение', 'error', 'Вы - зарегистрированный пользователь'
+	# 	it_should_behave_like 'страница_пользователя', 'владелец' do
+	# 		let(:the_user) { user }
+	# 	end
+	# end
 end
