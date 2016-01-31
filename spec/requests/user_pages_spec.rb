@@ -463,17 +463,30 @@ describe 'Страницы пользователя,' do
 				}
 			end
 			
-			# describe 'гостем,' do
-			# 	pending 'с неверными параметрами' do
-			# 		pending 'неверный флаг'
-			# 		pending 'неверный код'
+			describe 'гостем,' do
+				describe 'с неверными параметрами,' do
+					describe 'неверный код,' do
+						before {
+							visit url_for_password_reset(reset_code: SecureRandom::uuid)
+						}
+						it_should_behave_like 'flash-сообщение', 'error', 'Ссылка недействительна'
+						it_should_behave_like 'главная_страница'
+					end
+			 		
+			 		# describe 'неверный флаг' do
+			 		# 	let(:reset_params) { user.reset_password }
+			 		# 	before {
+			 		# 		user.toggle!(:in_reset)
+			 		# 		visit
+			 		# 	}
+			 		# end
 			# 		pending 'неверное время'
 			# 		pending 'нет строки запроса'
 			# 		pending 'повторное использование ссылки'
 			# 		pending 'продумать зыщиту методов'
 			# 		pending 'валидация длины пароля' # работают, но проверять!
 			# 		pending 'post to new_password'
-			# 	end
+				end
 
 			# 	describe 'с верными параметрами,' do
 			# 		before {
@@ -507,7 +520,7 @@ describe 'Страницы пользователя,' do
 			# 			pending 'некорректного'
 			# 		end
 			# 	end
-			# end
+			end
 		end
 	end
 
