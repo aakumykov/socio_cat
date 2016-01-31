@@ -103,7 +103,7 @@ describe 'Страницы пользователя,' do
 					www_user
 					visit register_path
 				}
-				it_should_behave_like 'flash-сообщение', 'error', 'Вы зарегистрированный пользователь'
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы - зарегистрированный пользователь'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
@@ -373,7 +373,7 @@ describe 'Страницы пользователя,' do
 					www_user
 					visit reset_password_path
 				}
-				it_should_behave_like 'flash-сообщение', 'error', 'Вы зарегистрированный пользователь'
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы - зарегистрированный пользователь'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
@@ -444,8 +444,8 @@ describe 'Страницы пользователя,' do
 		end
 
 		describe 'применение ссылки сброса пароля,' do
-			let!(:reset_params) { user.reset_password }
-			let!(:reset_url) { url_for_password_reset(reset_code: reset_params[:reset_code]) }
+			let(:reset_params) { user.reset_password }
+			let(:reset_url) { url_for_password_reset(reset_code: reset_params[:reset_code]) }
 			
 			# describe 'пользователем,' do
 			# 	before {
@@ -460,64 +460,96 @@ describe 'Страницы пользователя,' do
 			# 	# }
 			# end
 
-			describe 'пользователем,' do
-				before {
-					www_user
-					visit reset_url
-					puts "===== reset_url =====> #{reset_url}"
-				}
-				# it_should_behave_like 'страница_пользователя', 'владелец' do
-				# 	let(:the_user) { user }
-				# end
-				it_should_behave_like 'flash-сообщение', 'error', 'Ссылка недействительна'
-				it_should_behave_like 'главная_страница'
+			# describe 'пользователем,' do
+			# 	before {
+			# 		#www_user
+			# 		visit users_path
+			# 		#puts "===== reset_url =====> #{reset_url}"
+			# 	}
+			# 	# it_should_behave_like 'страница_пользователя', 'владелец' do
+			# 	# 	let(:the_user) { user }
+			# 	# end
+			# 	#it_should_behave_like 'flash-сообщение', 'error', 'Ссылка недействительна'
+			# 	#it_should_behave_like 'главная_страница'
+			# end
+
+			describe 'йцукен,' do
+				context 'вошедший пользователь,' do
+					before {
+						www_user
+						visit register_path
+					}
+					it_should_behave_like 'flash-сообщение', 'error', 'Вы - зарегистрированный пользователь'
+					it_should_behave_like 'страница_пользователя', 'владелец' do
+						let(:the_user) { user }
+					end
+				end
+
+				context 'невошедший пользователь,' do
+					before { visit register_path }
+					it_should_behave_like 'страница_регистрации'
+				end
 			end
 			
-			describe 'гостем,' do
-				pending 'с неверными параметрами' do
-					pending 'неверный флаг'
-					pending 'неверный код'
-					pending 'неверное время'
-					pending 'нет строки запроса'
-					pending 'повторное использование ссылки'
-					pending 'продумать зыщиту методов'
-					pending 'валидация длины пароля' # работают, но проверять!
-					pending 'post to new_password'
-				end
+			# describe 'гостем,' do
+			# 	pending 'с неверными параметрами' do
+			# 		pending 'неверный флаг'
+			# 		pending 'неверный код'
+			# 		pending 'неверное время'
+			# 		pending 'нет строки запроса'
+			# 		pending 'повторное использование ссылки'
+			# 		pending 'продумать зыщиту методов'
+			# 		pending 'валидация длины пароля' # работают, но проверять!
+			# 		pending 'post to new_password'
+			# 	end
 
-				describe 'с верными параметрами,' do
-					before {
-						reset_params = user.reset_password
-						visit url_for_password_reset(reset_code:reset_params[:reset_code])
-					}
-					it_should_behave_like 'страница_с_названием' do
-						let(:title) { 'Создание нового пароля' }
-						let(:heading) { title }
-					end
-					it { should have_field 'Новый пароль' }
-					it { should have_field 'Подтверждение нового пароля' }
-					it { should have_xpath "//input[@type='submit' and @value='#{new_password_button}']" }
-					it { should have_xpath "//input[@type='hidden' and @id='user_reset_code']" }
-					it { should have_xpath "//input[@type='hidden' and @id='user_id']" }
+			# 	describe 'с верными параметрами,' do
+			# 		before {
+			# 			reset_params = user.reset_password
+			# 			visit url_for_password_reset(reset_code:reset_params[:reset_code])
+			# 		}
+			# 		it_should_behave_like 'страница_с_названием' do
+			# 			let(:title) { 'Создание нового пароля' }
+			# 			let(:heading) { title }
+			# 		end
+			# 		it { should have_field 'Новый пароль' }
+			# 		it { should have_field 'Подтверждение нового пароля' }
+			# 		it { should have_xpath "//input[@type='submit' and @value='#{new_password_button}']" }
+			# 		it { should have_xpath "//input[@type='hidden' and @id='user_reset_code']" }
+			# 		it { should have_xpath "//input[@type='hidden' and @id='user_id']" }
 
-					describe 'установка нового пароля,' do
-						describe 'корректного,' do
-							before {
-								fill_in 'Новый пароль', with: new_password
-								fill_in 'Подтверждение нового пароля', with: new_password
-								click_button "#{new_password_button}"
-							}
-							specify{
-								expect(user.reload.authenticate(new_password)).not_to be_false
-							}
-							it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
-							it_should_behave_like 'страница_входа'
-						end
+			# 		describe 'установка нового пароля,' do
+			# 			describe 'корректного,' do
+			# 				before {
+			# 					fill_in 'Новый пароль', with: new_password
+			# 					fill_in 'Подтверждение нового пароля', with: new_password
+			# 					click_button "#{new_password_button}"
+			# 				}
+			# 				specify{
+			# 					expect(user.reload.authenticate(new_password)).not_to be_false
+			# 				}
+			# 				it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
+			# 				it_should_behave_like 'страница_входа'
+			# 			end
 
-						pending 'некорректного'
-					end
-				end
-			end
+			# 			pending 'некорректного'
+			# 		end
+			# 	end
+			# end
+		end
+	end
+
+#expect(page).to have_current_path(post_comments_path(post))
+
+	describe 'проверка1' do
+		let(:reset_url) { url_for_password_reset(reset_code: User.new_remember_token) }
+		before {
+			www_user
+			visit reset_url
+		}
+		it_should_behave_like 'flash-сообщение', 'error', 'Вы - зарегистрированный пользователь'
+		it_should_behave_like 'страница_пользователя', 'владелец' do
+			let(:the_user) { user }
 		end
 	end
 end
