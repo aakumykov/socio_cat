@@ -112,9 +112,10 @@ class UsersController < ApplicationController
 	end
 
 	def reset_response
-		puts "===== users#reset_response ===== params: #{params}"
+		#puts "===== users#reset_response ===== params: #{params}"
 
 		@user = User.find_by(reset_code: User.encrypt(params[:reset_code]))
+		#@user and puts "===== @user.name,email,in_reset =====> #{@user.name},#{@user.email},#{@user.in_reset}"
 
 		begin
 			raise 'не найден пользователь с таким кодом' if @user.nil? 

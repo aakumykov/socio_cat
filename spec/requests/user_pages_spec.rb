@@ -465,7 +465,7 @@ describe 'Страницы пользователя,' do
 			
 			describe 'гостем,' do
 				describe 'с неверными параметрами,' do
-					describe 'неверный код,' do
+					describe 'неверный код' do
 						before {
 							visit url_for_password_reset(reset_code: SecureRandom::uuid)
 						}
@@ -473,13 +473,16 @@ describe 'Страницы пользователя,' do
 						it_should_behave_like 'главная_страница'
 					end
 			 		
-			 		# describe 'неверный флаг' do
-			 		# 	let(:reset_params) { user.reset_password }
-			 		# 	before {
-			 		# 		user.toggle!(:in_reset)
-			 		# 		visit
-			 		# 	}
-			 		# end
+			 		describe 'неверный флаг' do
+			 			let!(:reset_params) { user.reset_password }
+			 			let(:reset_url) { url_for_password_reset(reset_code: reset_params[:reset_code]) }
+			 			before {
+			 				user.toggle!(:in_reset)
+			 				visit reset_url
+			 			}
+			 			it_should_behave_like 'flash-сообщение', 'error', 'Ссылка недействительна'
+						it_should_behave_like 'главная_страница'
+			 		end
 			# 		pending 'неверное время'
 			# 		pending 'нет строки запроса'
 			# 		pending 'повторное использование ссылки'
