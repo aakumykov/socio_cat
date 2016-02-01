@@ -10,8 +10,8 @@ FactoryGirl.define do
 	factory :user do
 		name                  { Faker::Name.first_name + "_#{rand(1..100)}" }
 		email                 { Faker::Internet.email }
-		password              'Password123$%^'
-		password_confirmation 'Password123$%^'
+		password              'FactoryPass123$%^'
+		password_confirmation 'FactoryPass123$%^'
 
 		factory :admin do
 			admin true
