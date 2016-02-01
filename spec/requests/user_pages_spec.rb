@@ -537,21 +537,21 @@ describe 'Страницы пользователя,' do
 				}
 			end
 
-			# describe 'флаг смены пароля стоит,' do
-			# 	describe 'id подменён,' do
-			# 		let(:bad_params) {
-			# 			params[:user].merge!({id: other_user.id})
-			# 			params
-			# 		}
-			# 		before {
-			# 			post new_password_path, bad_params
-			# 		}
-			# 		specify {
-			# 			expect(user.reload.password_digest).to eq old_password_digest
-			# 			# пароль у другого пользователя не должен меняться
-			# 			expect(other_user.reload.authenticate(new_password)).to be_false
-			# 		}
-			# 	end
+			describe 'флаг смены пароля стоит,' do
+				describe 'id подменён,' do
+					let(:bad_params) {
+						params[:user].merge!({id: other_user.id})
+						params
+					}
+					before {
+						post new_password_path, bad_params
+					}
+					specify {
+						expect(user.reload.password_digest).to eq old_password_digest
+						# пароль у другого пользователя не должен меняться
+						expect(other_user.reload.authenticate(new_password)).to be_false
+					}
+				end
 
 			# 	describe 'код сброса подменён,' do
 			# 		let(:bad_params) {
@@ -592,7 +592,7 @@ describe 'Страницы пользователя,' do
 			# 			# pending 'валидация длины пароля' # работают, но проверять!
 			# 		end
 			# 	end
-			# end
+			end
 		end
 
 		pending 'сброс флага сброса пароля по успешному входу'
