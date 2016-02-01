@@ -131,7 +131,7 @@ class UsersController < ApplicationController
 		end
 
 		# ссылка работает только 1 раз
-		@user.disable_password_reset
+		@user.disable_pass_reset
 
 		render :new_password, locals: {reset_code: params[:reset_code]}
 	end
@@ -156,7 +156,7 @@ class UsersController < ApplicationController
 			else
 				puts "===== users#new_password ===> ПРОПУСКАЮ"
 				if @user.update_attributes(user_params)
-					@user.disable_password_reset
+					@user.disable_pass_reset
 					flash[:success] = "Новый пароль установлен"
 					redirect_to login_path
 				else

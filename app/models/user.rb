@@ -46,7 +46,7 @@ class User < ActiveRecord::Base
 		return { date: date, reset_code: reset_code }
 	end
 
-	def disable_password_reset
+	def disable_pass_reset
 		#self.toggle!(:in_reset)
 		#self.toggle!(:in_pass_reset)
 

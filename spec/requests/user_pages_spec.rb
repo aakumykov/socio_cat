@@ -491,8 +491,11 @@ describe 'Страницы пользователя,' do
 					# а нужно сделать флаго0зависимое поведение
 				end
 
-				pending 'с верными параметрами,' do
-					
+				describe 'с верными параметрами,' do
+					before {
+						visit reset_url
+					}
+					it_should_behave_like 'страница_нового_пароля'
 				end
 			end
 		end
@@ -526,7 +529,7 @@ describe 'Страницы пользователя,' do
 			}
 
 			# это защита от "прямого доступа"
-			describe 'сброшен флаг смены пароля,' do
+			describe 'со сброшенным флаг смены пароля,' do
 				before {
 					user.toggle!(:in_pass_reset)
 					post new_password_path, params
@@ -537,7 +540,7 @@ describe 'Страницы пользователя,' do
 				}
 			end
 
-			describe 'флаг смены пароля стоит,' do
+			describe 'с установленным флагом смены пароля,' do
 				describe 'id подменён,' do
 					let(:bad_params) {
 						params[:user].merge!({id: other_user.id})
@@ -567,31 +570,22 @@ describe 'Страницы пользователя,' do
 					}
 				end
 
-			# 	pending 'верная комбинация код-id,' do
-			# 		before {
-			# 			reset_params = user.reset_password
-			# 			visit url_for_password_reset(reset_code:reset_params[:reset_code])
-			# 		}
-			# 		it_should_behave_like 'страница_нового_пароля'
+				pending 'верная комбинация код-id,' do
+					before {
+						visit new_password_path
+					}
 
-			# 		describe 'установка нового пароля,' do
-			# 			describe 'корректного,' do
-			# 				before {
-			# 					fill_in 'Новый пароль', with: new_password
-			# 					fill_in 'Подтверждение нового пароля', with: new_password
-			# 					click_button "#{new_password_button}"
-			# 				}
-			# 				specify{
-			# 					expect(user.reload.authenticate(new_password)).not_to be_false
-			# 				}
-			# 				it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
-			# 				it_should_behave_like 'страница_входа'
-			# 			end
+					describe 'пустая форма,' do
+						before { click_submit }
+						#it_should_behave_like
+					end
 
-			# 			pending 'некорректного'
-			# 			# pending 'валидация длины пароля' # работают, но проверять!
-			# 		end
-			# 	end
+					describe 'пароли не совпадают,' do
+					end
+
+					describe 'пароли совпалают,' do
+					end
+				end
 			end
 		end
 
