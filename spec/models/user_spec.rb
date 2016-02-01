@@ -182,11 +182,41 @@ describe 'Пользователь,' do
 		end
 	end
 
-	describe 'свойства для сброса пароля,' do
-		it { should respond_to(:in_reset) }
-		it { should respond_to(:in_pass_reset) }
-		it { should respond_to(:reset_code) }
-		it { should respond_to(:reset_date) }
+	describe 'сброс пароля,' do
+		describe 'атрибуты сброса,' do
+			it { should respond_to(:in_reset) }
+			it { should respond_to(:in_pass_reset) }
+			it { should respond_to(:reset_code) }
+			it { should respond_to(:reset_date) }
+		end
+
+		describe 'методы сброса,' do
+			describe 'reset_password()' do
+				let!(:old_reset_flag) { @user.in_reset }
+				let!(:old_pass_reset_flag) { @user.in_pass_reset }
+				before {
+					@user.reset_password
+				}
+				specify{
+					expect(old_reset_flag).to eq false
+					expect(old_pass_reset_flag).to eq false
+
+					expect(@user.reload.in_reset).to eq true
+					expect(@user.reload.in_pass_reset).to eq true
+				}
+			end
+
+			describe 'disable_pass_reset()' do
+				before {
+					@user.reset_password
+					@user.disable_pass_reset
+				}
+				specify {
+					expect(@user.reload.in_reset).to eq false
+					expect(@user.reload.in_pass_reset).to eq false
+				}
+			end
+		end
 
 		pending 'прямой доступ к атрибутам'
 		pending 'валидации атрибутов сброса пароля'
