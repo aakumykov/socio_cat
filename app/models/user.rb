@@ -46,12 +46,17 @@ class User < ActiveRecord::Base
 		return { date: date, reset_code: reset_code }
 	end
 
-	def disable_pass_reset
+	def disable_pass_reset(mode)
 		#self.toggle!(:in_reset)
 		#self.toggle!(:in_pass_reset)
 
-		self.update_attribute(:in_reset, false)
-		self.update_attribute(:in_pass_reset, false)
+		case mode
+		when :link
+			self.update_attribute(:in_reset, false)
+		when :full
+			self.update_attribute(:in_reset, false)
+			self.update_attribute(:in_pass_reset, false)
+		end
 	end
 
 	private

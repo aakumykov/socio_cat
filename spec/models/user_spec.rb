@@ -206,15 +206,28 @@ describe 'Пользователь,' do
 				}
 			end
 
-			describe 'disable_pass_reset()' do
-				before {
-					@user.reset_password
-					@user.disable_pass_reset
-				}
-				specify {
-					expect(@user.reload.in_reset).to eq false
-					expect(@user.reload.in_pass_reset).to eq false
-				}
+			describe 'disable_pass_reset(mode)' do
+				describe 'link mode,' do
+					before {
+						@user.reset_password
+						@user.disable_pass_reset(:link)
+					}
+					specify {
+						expect(@user.reload.in_reset).to eq false
+						expect(@user.reload.in_pass_reset).to eq true
+					}
+				end
+
+				describe 'full mode,' do
+					before {
+						@user.reset_password
+						@user.disable_pass_reset(:full)
+					}
+					specify {
+						expect(@user.reload.in_reset).to eq false
+						expect(@user.reload.in_pass_reset).to eq false
+					}
+				end
 			end
 		end
 
