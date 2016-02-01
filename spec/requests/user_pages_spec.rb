@@ -368,7 +368,6 @@ describe 'Страницы пользователя,' do
 	describe 'восстановление пароля,' do
 		let(:new_password_button) {'Установить'}
 		let(:new_password) {'Abcdef123!@#'}
-
 		let!(:reset_params) { user.reset_password }
 		let(:reset_url) { url_for_password_reset(reset_code: reset_params[:reset_code]) }
 
@@ -492,17 +491,8 @@ describe 'Страницы пользователя,' do
 					# а нужно сделать флаго0зависимое поведение
 				end
 
-				describe 'с верными параметрами,' do
-					let(:new_password) { SecureRandom.uuid }
-					let(:old_password_digest) { user.password_digest }
-					let(:params) {
-						{ user: {
-							id: user.id,
-							reset_code: reset_params[:reset_code],
-							password: new_password,
-							password_confirmation: new_password,
-						} }
-					}
+				pending 'с верными параметрами,' do
+					
 				end
 			end
 		end
@@ -524,73 +514,85 @@ describe 'Страницы пользователя,' do
 
 		describe 'отправка формы с новым паролем,' do
 
-				# это защита от "прямого доступа"
-				# describe 'сброшен флаг смены пароля,' do
-				# 	before {
-				# 		post new_password_path, params
-				# 	}
-				# 	specify{
-				# 		expect(user.reload.password_digest).to eq old_password_digest
-				# 		expect(user.authenticate(new_password)).to be_false
-				# 	}
-				# end
+			let(:old_password_digest) { user.password_digest }
+			
+			let(:params) {
+				{ user: {
+					id: user.id,
+					reset_code: reset_params[:reset_code],
+					password: new_password,
+					password_confirmation: new_password,
+				} }
+			}
 
-				# describe 'флаг смены пароля стоит,' do
-				# 	describe 'id подменён,' do
-				# 		let(:bad_params) {
-				# 			params[:user].merge!({id: other_user.id})
-				# 			params
-				# 		}
-				# 		before {
-				# 			post new_password_path, bad_params
-				# 		}
-				# 		specify {
-				# 			expect(user.reload.password_digest).to eq old_password_digest
-				# 			# пароль у другого пользователя не должен меняться
-				# 			expect(other_user.reload.authenticate(new_password)).to be_false
-				# 		}
-				# 	end
+			# это защита от "прямого доступа"
+			describe 'сброшен флаг смены пароля,' do
+				before {
+					user.toggle!(:in_pass_reset)
+					post new_password_path, params
+				}
+				specify{
+					expect(user.reload.password_digest).to eq old_password_digest
+					expect(user.authenticate(new_password)).to be_false
+				}
+			end
 
-				# 	describe 'код сброса подменён,' do
-				# 		let(:bad_params) {
-				# 			params[:user].merge!({reset_code: SecureRandom.uuid})
-				# 			params
-				# 		}
-				# 		before {
-				# 			post new_password_path, bad_params
-				# 		}
-				# 		specify {
-				# 			expect(user.reload.password_digest).to eq old_password_digest
-				# 			expect(user.reload.authenticate(new_password)).to be_false
-				# 		}
-				# 	end
+			# describe 'флаг смены пароля стоит,' do
+			# 	describe 'id подменён,' do
+			# 		let(:bad_params) {
+			# 			params[:user].merge!({id: other_user.id})
+			# 			params
+			# 		}
+			# 		before {
+			# 			post new_password_path, bad_params
+			# 		}
+			# 		specify {
+			# 			expect(user.reload.password_digest).to eq old_password_digest
+			# 			# пароль у другого пользователя не должен меняться
+			# 			expect(other_user.reload.authenticate(new_password)).to be_false
+			# 		}
+			# 	end
 
-				# 	pending 'верная комбинация код-id,' do
-				# 		before {
-				# 			reset_params = user.reset_password
-				# 			visit url_for_password_reset(reset_code:reset_params[:reset_code])
-				# 		}
-				# 		it_should_behave_like 'страница_нового_пароля'
+			# 	describe 'код сброса подменён,' do
+			# 		let(:bad_params) {
+			# 			params[:user].merge!({reset_code: SecureRandom.uuid})
+			# 			params
+			# 		}
+			# 		before {
+			# 			post new_password_path, bad_params
+			# 		}
+			# 		specify {
+			# 			expect(user.reload.password_digest).to eq old_password_digest
+			# 			expect(user.reload.authenticate(new_password)).to be_false
+			# 		}
+			# 	end
 
-				# 		describe 'установка нового пароля,' do
-				# 			describe 'корректного,' do
-				# 				before {
-				# 					fill_in 'Новый пароль', with: new_password
-				# 					fill_in 'Подтверждение нового пароля', with: new_password
-				# 					click_button "#{new_password_button}"
-				# 				}
-				# 				specify{
-				# 					expect(user.reload.authenticate(new_password)).not_to be_false
-				# 				}
-				# 				it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
-				# 				it_should_behave_like 'страница_входа'
-				# 			end
+			# 	pending 'верная комбинация код-id,' do
+			# 		before {
+			# 			reset_params = user.reset_password
+			# 			visit url_for_password_reset(reset_code:reset_params[:reset_code])
+			# 		}
+			# 		it_should_behave_like 'страница_нового_пароля'
 
-				# 			pending 'некорректного'
-				# 			# pending 'валидация длины пароля' # работают, но проверять!
-				# 		end
-				# 	end
-				# end
+			# 		describe 'установка нового пароля,' do
+			# 			describe 'корректного,' do
+			# 				before {
+			# 					fill_in 'Новый пароль', with: new_password
+			# 					fill_in 'Подтверждение нового пароля', with: new_password
+			# 					click_button "#{new_password_button}"
+			# 				}
+			# 				specify{
+			# 					expect(user.reload.authenticate(new_password)).not_to be_false
+			# 				}
+			# 				it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
+			# 				it_should_behave_like 'страница_входа'
+			# 			end
+
+			# 			pending 'некорректного'
+			# 			# pending 'валидация длины пароля' # работают, но проверять!
+			# 		end
+			# 	end
+			# end
 		end
 
 		pending 'сброс флага сброса пароля по успешному входу'
