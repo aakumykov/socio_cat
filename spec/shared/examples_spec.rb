@@ -47,7 +47,7 @@ shared_examples_for 'страница_входа' do
 	it { should have_selector(:xpath,"//input[@id='session_password']") }
 	
 	it { should have_selector(:xpath,"//input[@type='submit']") }
-	it { should have_selector(:xpath,"//input[@value='#{login_button}']") }
+	it { should have_selector(:xpath,"//input[@value='Войти']") }
 
 	it { should have_link('Забыли пароль?', reset_password_path) }
 end
