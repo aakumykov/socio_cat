@@ -625,6 +625,19 @@ describe 'Страницы пользователя,' do
 		# 	}
 		# end
 
-		pending 'сброс флага сброса пароля по успешному входу'
+		describe 'флаги сброса пароля и вход на сайт,' do
+			describe 'неудачный вход,' do
+				before {
+					visit login_path
+					fill_in 'Электронная почта', with: user.email
+					fill_in 'Электронная почта', with: user.password
+					click_submit
+				}
+			end
+
+			describe 'успешный вход,' do
+
+			end
+		end
 	end
 end
