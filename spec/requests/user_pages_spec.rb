@@ -553,19 +553,19 @@ describe 'Страницы пользователя,' do
 					}
 				end
 
-			# 	describe 'код сброса подменён,' do
-			# 		let(:bad_params) {
-			# 			params[:user].merge!({reset_code: SecureRandom.uuid})
-			# 			params
-			# 		}
-			# 		before {
-			# 			post new_password_path, bad_params
-			# 		}
-			# 		specify {
-			# 			expect(user.reload.password_digest).to eq old_password_digest
-			# 			expect(user.reload.authenticate(new_password)).to be_false
-			# 		}
-			# 	end
+				describe 'код сброса подменён,' do
+					let(:bad_params) {
+						params[:user].merge!({reset_code: SecureRandom.uuid})
+						params
+					}
+					before {
+						post new_password_path, bad_params
+					}
+					specify {
+						expect(user.reload.password_digest).to eq old_password_digest
+						expect(user.reload.authenticate(new_password)).to be_false
+					}
+				end
 
 			# 	pending 'верная комбинация код-id,' do
 			# 		before {
