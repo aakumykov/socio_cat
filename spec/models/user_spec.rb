@@ -206,11 +206,11 @@ describe 'Пользователь,' do
 				}
 			end
 
-			describe 'disable_pass_reset(mode)' do
+			describe 'drop_reset_flags(mode)' do
 				describe 'link mode,' do
 					before {
 						@user.reset_password
-						@user.disable_pass_reset(:link)
+						@user.drop_reset_flags(:link)
 					}
 					specify {
 						expect(@user.reload.in_reset).to eq false
@@ -221,7 +221,7 @@ describe 'Пользователь,' do
 				describe 'full mode,' do
 					before {
 						@user.reset_password
-						@user.disable_pass_reset(:full)
+						@user.drop_reset_flags(:full)
 					}
 					specify {
 						expect(@user.reload.in_reset).to eq false

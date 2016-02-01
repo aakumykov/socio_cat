@@ -123,12 +123,12 @@ class UsersController < ApplicationController
 			end
 			
 			if not @user.in_reset?
-				@user.disable_pass_reset(:full)
+				@user.drop_reset_flags
 				raise 'пользователь не запрашивал восстановление пароля'
 			end
 
 			if not @user.in_pass_reset?
-				@user.disable_pass_reset(:full)
+				@user.drop_reset_flags
 				raise 'форма восстановления пароля неактивна'
 			end
 
@@ -140,7 +140,7 @@ class UsersController < ApplicationController
 		end
 
 		# ссылка работает только 1 раз
-		@user.disable_pass_reset(:link)
+		@user.drop_reset_flags(:link)
 
 		render :new_password, locals: {reset_code: params[:reset_code]}
 	end
@@ -163,7 +163,7 @@ class UsersController < ApplicationController
 			else
 				#puts "===== users#new_password ===> ПРОПУСКАЮ"
 				if @user.update_attributes(user_params)
-					@user.disable_pass_reset(:full)
+					@user.drop_reset_flags
 					flash[:success] = "Новый пароль установлен"
 					redirect_to login_path
 				else

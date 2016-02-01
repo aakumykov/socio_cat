@@ -442,9 +442,13 @@ describe 'Страницы пользователя,' do
 
 		describe 'переход по ссылке сброса пароля,' do			
 			describe 'пользователем,' do
+				# Смысл: пользователь запросил сброс пароля, 
+				# потом зашёл на сайт, авторизовавшись по печенюшкам.
+				# Ссылка сброса остаётся в силе.
 				before {
 					www_user
 					visit reset_url
+					user.reload.reset_password
 				}
 				it_should_behave_like 'flash-сообщение', 'error', 'Вы зарегистрированный пользователь'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
@@ -607,31 +611,37 @@ describe 'Страницы пользователя,' do
 			end
 		end
 
-		# describe 'йцукен-test,' do
-		# 	before {
-		# 		puts "===== 1 user.in_reset =====> #{user.in_reset}"
-		# 		puts "===== 1 user.reload.in_reset =====> #{user.reload.in_reset}"
-
-		# 		puts "===== 1 user.in_pass_reset =====> #{user.in_pass_reset}"
-		# 		puts "===== 1 user.reload.in_pass_reset =====> #{user.reload.in_pass_reset}"
-
-		# 		user.reset_password
-
-		# 		puts "===== 2 user.in_reset =====> #{user.in_reset}"
-		# 		puts "===== 2 user.reload.in_reset =====> #{user.reload.in_reset}"
-
-		# 		puts "===== 2 user.in_pass_reset =====> #{user.in_pass_reset}"
-		# 		puts "===== 2 user.reload.in_pass_reset =====> #{user.reload.in_pass_reset}"
-		# 	}
-		# end
-
 		describe 'флаги сброса пароля и вход на сайт,' do
+			before { visit login_path }
+
 			describe 'неудачный вход,' do
-				
+				before {
+					fill_in 'Электронная почта', with: user.email
+					fill_in 'Пароль', with: user.password+'1'
+					click_submit
+				}
+				it_should_behave_like 'flash-сообщение', 'error', 'Неверная электронная почта или пароль'
+				it_should_behave_like 'страница_входа'
+				specify{
+					expect(user.reload.in_reset).to be_true
+					expect(user.reload.in_pass_reset).to be_true
+				}
 			end
 
+			# Если пользователь зашёл с помощью логина и пароля,
+			# состояние сброса должно стать неактивным.
 			describe 'успешный вход,' do
-
+				before {
+					fill_in 'Электронная почта', with: user.email
+					fill_in 'Пароль', with: user.password
+					click_submit
+				}
+				it_should_behave_like 'flash-сообщение', 'success', 'Добро пожаловать'
+				it_should_behave_like 'главная_страница'
+				specify{
+					expect(user.reload.in_reset).to be_false
+					expect(user.reload.in_pass_reset).to be_false
+				}
 			end
 		end
 	end
