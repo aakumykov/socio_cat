@@ -34,20 +34,22 @@ shared_examples_for 'главная_страница' do
 	end
 end
 
-
 shared_examples_for 'страница_входа' do
-	it_should_behave_like 'страница_с_названием' do
-		let(:title) {'Вход на сайт'}
-		let(:heading) {'Вход на сайт'}
-	end
-
+	let(:title) { 'Вход на сайт' }
+	
+	it { should have_title(full_title(title)) }
+	it { should have_selector('h1',text:title) }
+	
 	it { should have_selector('label',text:'Электронная почта') }
 	it { should have_selector(:xpath,"//input[@id='session_email']") }
 
 	it { should have_selector('label',text:'Пароль') }
 	it { should have_selector(:xpath,"//input[@id='session_password']") }
+	
+	it { should have_selector(:xpath,"//input[@type='submit']") }
+	it { should have_selector(:xpath,"//input[@value='#{login_button}']") }
 
-	it { should have_selector(:xpath,"//input[@type='submit' and @value='Войти']")}
+	it { should have_link('Забыли пароль?', reset_password_path) }
 end
 
 

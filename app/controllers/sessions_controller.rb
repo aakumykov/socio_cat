@@ -10,8 +10,7 @@ class SessionsController < ApplicationController
 		if user && user.authenticate(params[:session][:password])
 			flash[:success] = "Добро пожаловать, «#{user.name}»!"
 			sign_in(user)
-			redirect_back
-			#redirect_to user_path(user)
+			redirect_to root_path
 		else
 			flash.now[:danger] = 'Неверная электронная почта или пароль'
 			render 'new'
