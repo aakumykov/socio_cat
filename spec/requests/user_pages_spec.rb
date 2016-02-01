@@ -487,7 +487,7 @@ describe 'Страницы пользователя,' do
 					pending 'неверное время'
 
 					# pending 'post to new_password' должно работать только с флагом.
-					# подумал: сейчас users#new_pasword "защищён" только html-страницей,
+					# подумал: сейчас users#new_password "защищён" только html-страницей,
 					# а нужно сделать флаго0зависимое поведение
 				end
 
@@ -529,7 +529,7 @@ describe 'Страницы пользователя,' do
 			}
 
 			# это защита от "прямого доступа"
-			describe 'со сброшенным флаг смены пароля,' do
+			describe 'со сброшенным флагом смены пароля,' do
 				before {
 					user.toggle!(:in_pass_reset)
 					post new_password_path, params
@@ -570,24 +570,60 @@ describe 'Страницы пользователя,' do
 					}
 				end
 
-				pending 'верная комбинация код-id,' do
+				describe 'верная комбинация код-id,' do
 					before {
-						visit new_password_path
+						visit reset_url
 					}
+					it_should_behave_like 'страница_нового_пароля'
 
 					describe 'пустая форма,' do
 						before { click_submit }
-						#it_should_behave_like
+						it_should_behave_like 'flash-сообщение', 'error', 'Форма содержит ошибки:'
 					end
 
 					describe 'пароли не совпадают,' do
+						before {
+							fill_in 'Новый пароль', with: new_password
+							fill_in 'Подтверждение нового пароля', with: new_password+'1'
+							click_submit
+						}
+						it_should_behave_like 'flash-сообщение', 'error', 'Форма содержит ошибки:'
 					end
 
 					describe 'пароли совпалают,' do
+						before {
+							fill_in 'Новый пароль', with: new_password
+							fill_in 'Подтверждение нового пароля', with: new_password
+							click_submit
+						}
+						it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
+						it_should_behave_like 'страница_входа'
+						specify{
+							expect(user.reload.authenticate(new_password)).to eq user
+							expect(user.in_pass_reset).to eq false
+						}
 					end
 				end
 			end
 		end
+
+		# describe 'йцукен-test,' do
+		# 	before {
+		# 		puts "===== 1 user.in_reset =====> #{user.in_reset}"
+		# 		puts "===== 1 user.reload.in_reset =====> #{user.reload.in_reset}"
+
+		# 		puts "===== 1 user.in_pass_reset =====> #{user.in_pass_reset}"
+		# 		puts "===== 1 user.reload.in_pass_reset =====> #{user.reload.in_pass_reset}"
+
+		# 		user.reset_password
+
+		# 		puts "===== 2 user.in_reset =====> #{user.in_reset}"
+		# 		puts "===== 2 user.reload.in_reset =====> #{user.reload.in_reset}"
+
+		# 		puts "===== 2 user.in_pass_reset =====> #{user.in_pass_reset}"
+		# 		puts "===== 2 user.reload.in_pass_reset =====> #{user.reload.in_pass_reset}"
+		# 	}
+		# end
 
 		pending 'сброс флага сброса пароля по успешному входу'
 	end

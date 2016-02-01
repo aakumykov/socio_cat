@@ -118,28 +118,35 @@ class UsersController < ApplicationController
 		#@user and puts "===== @user.name,email,in_reset =====> #{@user.name},#{@user.email},#{@user.in_reset}"
 
 		begin
-			raise 'не найден пользователь с таким кодом' if @user.nil? 
-			raise 'пользователь не запрашивал восстановление пароля' if not @user.in_reset?
-			raise 'форма восстановления пароля неактивна' if not @user.in_pass_reset?
+			if @user.nil? 
+				raise 'не найден пользователь с таким кодом'
+			end
+			
+			if not @user.in_reset?
+				@user.disable_pass_reset(:full)
+				raise 'пользователь не запрашивал восстановление пароля'
+			end
+
+			if not @user.in_pass_reset?
+				@user.disable_pass_reset(:full)
+				raise 'форма восстановления пароля неактивна'
+			end
+
 		# 	raise 'код сброса пароля просрочен' if (Time.now - @user.reset_date) <= 24.hours 
 		rescue Exception => e
-			# === кривовато, но работает и избавляет от повторений ===
 			flash[:danger] = 'Ссылка недействительна'
 			redirect_to root_path
 			return false
-			# === кривовато, но работает и избавляет от повторений ===
 		end
 
 		# ссылка работает только 1 раз
-		@user.disable_pass_reset
+		@user.disable_pass_reset(:link)
 
 		render :new_password, locals: {reset_code: params[:reset_code]}
 	end
 
 	def new_password
-		#puts "=== users#new_password ===> params[:user][:id]: #{params[:user][:id]}"
-		#puts "=== users#new_password ===> params[:user][:reset_code]: #{params[:user][:reset_code]}"
-		puts "=== users#new_password ===> params: #{params}"
+		#puts "=== users#new_password ===> params: #{params}"
 
 		@user = User.find_by(
 			id: params[:user][:id], 
@@ -148,15 +155,15 @@ class UsersController < ApplicationController
 
 		begin
 			if @user.nil?
-				puts "===== users#new_password ===> @user is nil"
+				#puts "===== users#new_password ===> @user is nil"
 				raise 'пользователь не найден'
 			elsif !@user.in_pass_reset?
-				puts "===== users#new_password ===> форма неактивна"
+				#puts "===== users#new_password ===> форма неактивна"
 				raise 'форма неактивна'
 			else
-				puts "===== users#new_password ===> ПРОПУСКАЮ"
+				#puts "===== users#new_password ===> ПРОПУСКАЮ"
 				if @user.update_attributes(user_params)
-					@user.disable_pass_reset
+					@user.disable_pass_reset(:full)
 					flash[:success] = "Новый пароль установлен"
 					redirect_to login_path
 				else
