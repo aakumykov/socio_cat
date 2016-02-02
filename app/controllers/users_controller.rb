@@ -101,7 +101,7 @@ class UsersController < ApplicationController
 				UserMailer.reset_email({
 					user: user,
 					reset_code: reset_code,
-					date: date,
+					reset_date: date,
 				}).deliver_now
 
 				flash[:success] = 'На почтовый адрес отправлено сообщение с инструкциями'

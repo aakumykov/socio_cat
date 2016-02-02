@@ -438,7 +438,47 @@ describe 'Страницы пользователя,' do
 			end
 		end
 
-		pending 'отправка почты со ссылкой сброса,'
+		describe 'отправка ссылки сброса почтой,' do
+			before(:each) {
+				ActionMailer::Base.delivery_method = :test
+				ActionMailer::Base.perform_deliveries = true
+				ActionMailer::Base.deliveries = []
+				
+				params = {
+					user: user,
+					code: reset_params[:reset_code],
+					date: reset_params[:reset_date],
+				}
+				
+				UserMailer.reset_email(params).deliver_now!
+			}
+
+			after(:each) {
+				ActionMailer::Base.deliveries.clear
+			}
+
+			#subject { ActionMailer::Base.deliveries.first }
+			
+			describe 'сообщение,' do
+				it 'отправляется,' do
+					ActionMailer::Base.deliveries.count.should eq 1
+				end
+
+				it 'отправляется по адресу,' do
+					ActionMailer::Base.deliveries.first.to.should eq user.email
+				end
+
+				#its(:to) { should eq user.email }
+
+				it 'имеет корректного отправителя,' do
+					ActionMailer::Base.deliveries.first.from.should eq 'my.sender.personal@yandex.ru'
+				end
+				
+				it 'правильно озаглавлено,' do
+					ActionMailer::Base.deliveries.first.subject.should eq 'Восстановление доступа в Соционический каталог'
+				end
+			end
+		end
 
 		describe 'переход по ссылке сброса пароля,' do			
 			describe 'пользователем,' do
