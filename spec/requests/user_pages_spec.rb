@@ -457,26 +457,18 @@ describe 'Страницы пользователя,' do
 				ActionMailer::Base.deliveries.clear
 			}
 
-			#subject { ActionMailer::Base.deliveries.first }
+			subject { ActionMailer::Base.deliveries.first }
 			
 			describe 'сообщение,' do
 				it 'отправляется,' do
 					ActionMailer::Base.deliveries.count.should eq 1
 				end
 
-				it 'отправляется по адресу,' do
-					ActionMailer::Base.deliveries.first.to.should eq user.email
-				end
+				its(:to) { should eq user.email }
 
-				#its(:to) { should eq user.email }
-
-				it 'имеет корректного отправителя,' do
-					ActionMailer::Base.deliveries.first.from.should eq 'my.sender.personal@yandex.ru'
-				end
+				its(:from) { should eq 'my.sender.personal@yandex.ru' }
 				
-				it 'правильно озаглавлено,' do
-					ActionMailer::Base.deliveries.first.subject.should eq 'Восстановление доступа в Соционический каталог'
-				end
+				its(:subject) { should eq 'Восстановление доступа в Соционический каталог' }
 			end
 		end
 
