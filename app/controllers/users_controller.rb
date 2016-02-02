@@ -98,7 +98,7 @@ class UsersController < ApplicationController
 				date = reset_params[:date]
 				reset_code = reset_params[:reset_code]
 
-				UserMailer.reset_email({
+				UserMailer.reset_message({
 					user: user,
 					reset_code: reset_code,
 					reset_date: date,

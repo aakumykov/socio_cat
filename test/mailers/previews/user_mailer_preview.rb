@@ -3,8 +3,8 @@ class UserMailerPreview < ActionMailer::Preview
     UserMailer.welcome_email(User.last)
   end
 
-  def reset_email
-    UserMailer.reset_email(
+  def reset_message
+    UserMailer.reset_message(
     	user:User.last, 
     	reset_code: User.new_remember_token, 
     	date: Time.now

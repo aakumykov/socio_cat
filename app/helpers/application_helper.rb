@@ -17,7 +17,8 @@ module ApplicationHelper
 			url = "http://localhost:3000" + url
 		end
 		
-		#puts "===== url_for_password_reset ====> #{url}"
+		#puts "===== reset_response_path ====> #{reset_response_path}"
+		#puts "===== reset_response_url ====> #{reset_response_url(host:'localhost',port:3000)}"
 		
 		return url
 	end

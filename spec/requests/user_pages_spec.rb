@@ -450,7 +450,7 @@ describe 'Страницы пользователя,' do
 					date: reset_params[:reset_date],
 				}
 				
-				UserMailer.reset_email(params).deliver_now!
+				UserMailer.reset_message(params).deliver_now!
 			}
 
 			after(:each) {
