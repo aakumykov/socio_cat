@@ -2,7 +2,7 @@ FactoryGirl.define do
 	#ActionView::Helpers::TextHelper
 
 	factory :card do
-		title Faker::Lorem.word.capitalize
+		title Faker::Lorem.word.capitalize + "_#{rand(1..100)}"
 		content Faker::Lorem.paragraph
 		user
 	end
@@ -19,8 +19,8 @@ FactoryGirl.define do
 	end
 
 	factory :category do
-		name { Faker::Lorem.word.capitalize * 2 } # иначе бывает слишком коротким
+		# имя с защитой от повторов / недостаточной длины
+		name { "#{Faker::Lorem.word.capitalize*2}#{rand(1..10)}" }
 		description { Faker::Lorem.paragraph }
-		#user
 	end
 end
