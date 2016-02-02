@@ -464,10 +464,14 @@ describe 'Страницы пользователя,' do
 					ActionMailer::Base.deliveries.count.should eq 1
 				end
 
-				its(:to) { should eq user.email }
+				# specify{
+				# 	puts "=== subject.to ===> #{subject.to}"
+				# 	puts "=== subject.from ===> #{subject.from}"
+				# 	puts "=== subject.to ===> #{subject.subject}"
+				# }
 
-				its(:from) { should eq 'my.sender.personal@yandex.ru' }
-				
+				its(:to) { should eq [user.email] }
+				its(:from) { should eq ['my.sender.personal@yandex.ru'] }
 				its(:subject) { should eq 'Восстановление доступа в Соционический каталог' }
 			end
 		end
