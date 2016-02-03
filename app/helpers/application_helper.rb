@@ -10,16 +10,13 @@ module ApplicationHelper
 	end
 
 	def url_for_password_reset(opt = {mode:'url'})
-		url = reset_response_path + "?reset_code=#{opt[:reset_code]}"
-		#url_for(controller: 'users', action: 'reset_response')
-		
-		if 'url'==opt[:mode].to_s
-			url = "http://localhost:3000" + url
+		case mode
+		when 'url'
+			url = url_for(controller: 'users', action: 'reset_response')
+		else
+			url = url_for(controller: 'users', action: 'reset_response', only_path:true)
 		end
-		
-		#puts "===== reset_response_path ====> #{reset_response_path}"
-		#puts "===== reset_response_url ====> #{reset_response_url(host:'localhost',port:3000)}"
-		
-		return url
+			
+		"#{url}?reset_code=#{opt[:reset_code]}"
 	end
 end

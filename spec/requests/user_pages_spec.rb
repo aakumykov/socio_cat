@@ -369,7 +369,12 @@ describe 'Страницы пользователя,' do
 		let(:new_password_button) {'Установить'}
 		let(:new_password) {'Abcdef123!@#'}
 		let!(:reset_params) { user.reset_password }
-		let(:reset_url) { url_for_password_reset(reset_code: reset_params[:reset_code]) }
+		let(:reset_url) { 
+			url_for_password_reset(
+				reset_code: reset_params[:reset_code],
+				mode: 'path',
+			) 
+		}
 
 		describe 'посещение страницы,' do
 			describe 'пользователем,' do
