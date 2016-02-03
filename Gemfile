@@ -15,6 +15,8 @@ gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder'
+gem 'resque'
+gem 'resque-scheduler'
 
 group :development, :test do
   gem 'sqlite3'
