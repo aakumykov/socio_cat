@@ -1,7 +1,7 @@
 class UserMailer < ApplicationMailer
 	#default from: 'my.sender.personal@yandex.ru'
 
-	def welcome_email(user)
+	def welcome_message(user)
 		@user = user
 		@url = 'http://localhost:3000/login'
 		#@url = login_url
