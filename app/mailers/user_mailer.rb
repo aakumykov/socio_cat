@@ -3,9 +3,7 @@ class UserMailer < ApplicationMailer
 
 	def welcome_message(user)
 		@user = user
-		@url = 'http://localhost:3000/login'
-		#@url = login_url
-		#@url = login_path
+		@url = login_url
 		mail(
 			from: 'my.sender.personal@yandex.ru',
 			to: @user.email,
