@@ -34,6 +34,10 @@ class User < ActiveRecord::Base
 		Digest::SHA1.hexdigest(token.to_s)
 	end
 
+	def welcome_message
+		UserMailer.welcome_message(self).deliver_now!
+	end
+
 	def reset_password
 		date = Time.now
 		reset_code = User.new_remember_token

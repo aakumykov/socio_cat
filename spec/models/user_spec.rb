@@ -234,4 +234,6 @@ describe 'Пользователь,' do
 		pending 'прямой доступ к атрибутам'
 		pending 'валидации атрибутов сброса пароля'
 	end
+
+	pending '@user.welcome_message'
 end
