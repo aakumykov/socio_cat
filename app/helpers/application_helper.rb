@@ -10,7 +10,7 @@ module ApplicationHelper
 	end
 
 	def url_for_password_reset(opt = {mode:'url'})
-		case mode
+		case opt[:mode]
 		when 'url'
 			url = url_for(controller: 'users', action: 'reset_response')
 		else

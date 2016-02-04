@@ -174,7 +174,7 @@ class UsersController < ApplicationController
 				end
 			end
 		rescue Exception => e
-			puts "===== users#new_password ===> ПОЙМАЛ ИСКЛЮЧЕНИЕ"
+			#puts "===== users#new_password ===> ПОЙМАЛ ИСКЛЮЧЕНИЕ"
 			flash[:danger] = e.message
 			redirect_to root_path
 			return false
