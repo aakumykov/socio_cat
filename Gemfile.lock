@@ -64,6 +64,7 @@ GEM
       coffee-script-source
       execjs
     coffee-script-source (1.10.0)
+    daemons (1.2.3)
     delayed_job (4.1.1)
       activesupport (>= 3.0, < 5.0)
     delayed_job_active_record (4.1.0)
@@ -199,6 +200,7 @@ DEPENDENCIES
   bootstrap-will_paginate
   capybara
   coffee-rails
+  daemons
   delayed_job_active_record
   factory_girl_rails
   faker

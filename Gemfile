@@ -18,6 +18,7 @@ gem 'jbuilder'
 #gem 'resque'
 #gem 'resque-scheduler'
 gem 'delayed_job_active_record'
+gem 'daemons'
 
 group :development, :test do
   gem 'sqlite3'
