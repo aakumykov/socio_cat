@@ -18,7 +18,7 @@ Rails.application.configure do
   config.action_mailer.smtp_settings = {
     address: 'smtp.yandex.ru',
     user_name: 'my.sender.personal',
-    password: ENV['SMTP_PASSWORD'],
+    password: File.read("#{Rails.root}/config/smtp-password.txt").strip,
   }
 
   # Print deprecation notices to the Rails logger.
