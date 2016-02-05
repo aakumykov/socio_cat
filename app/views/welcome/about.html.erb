@@ -4,8 +4,18 @@
 <p>Соционический каталог явлений окружающей жизни.</p>
 <p>Мобильное приложение для работы с ним.</p>
 
-<ul>
-	<li>Time.zone: <%= Time.zone %></li>
-	<li>Time.now (сервер): <%= Time.now %></li>
-	<li>Time.current (приложение): <%= Time.current %></li>
-</ul>
+<% if Rails.env.dev? %>
+	<ul>
+		<li>Time.zone: <%= Time.zone %></li>
+		<li>Time.now (сервер): <%= Time.now %></li>
+		<li>Time.current (приложение): <%= Time.current %></li>
+	</ul>
+
+	<hr>
+	Rails.configuration.x.password_reset:<br>
+	<ul>
+		<% Rails.configuration.x.password_reset.each do |k,v| %>
+			<li><%= "#{k} => #{v}" %></li>
+		<% end %>
+	</ul>
+<% end %>
