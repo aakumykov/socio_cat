@@ -556,6 +556,13 @@ describe 'Страницы пользователя,' do
 							expect(user.reload.new_pass_expire_time.to_i).to be > Time.current.to_i
 						}
 					end
+
+					pending 'кэширование страницы отключено,' do
+						before { get reset_url }
+						specify {
+							puts "===== response.headers =====> #{response.headers}"
+						}
+					end
 				end
 			end
 		end
