@@ -39,4 +39,7 @@ Rails.application.configure do
 
   # Raises error for missing translations
   # config.action_view.raise_on_missing_translations = true
+
+  # Время в секундах, на протяжение которого ссылка сброса пароля активна
+  config.x.password_reset.lifetime = 1.second.to_i
 end

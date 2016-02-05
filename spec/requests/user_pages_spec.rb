@@ -529,8 +529,14 @@ describe 'Страницы пользователя,' do
 						it_should_behave_like 'главная_страница'
 					end
 
-					pending 'неверное время'
-
+					describe 'ссылка просрочена,' do
+						before {
+							sleep Rails.configuration.x.password_reset.lifetime + 1
+							visit reset_url
+						}
+						it_should_behave_like 'flash-сообщение', 'error', 'Ссылка недействительна'
+						it_should_behave_like 'главная_страница'
+					end
 					# pending 'post to new_password' должно работать только с флагом.
 					# подумал: сейчас users#new_password "защищён" только html-страницей,
 					# а нужно сделать флаго0зависимое поведение
@@ -543,6 +549,9 @@ describe 'Страницы пользователя,' do
 					it_should_behave_like 'страница_нового_пароля'
 				end
 			end
+		end
+
+		pending 'переход по ссылке нового пароля,' do
 		end
 
 		describe 'повторный переход по ссылке сброса пароля,' do

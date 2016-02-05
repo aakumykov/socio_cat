@@ -76,4 +76,7 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+
+  # Время в секундах, на протяжение которого ссылка сброса пароля активна
+  config.x.password_reset.lifetime = 24.hours.to_i
 end

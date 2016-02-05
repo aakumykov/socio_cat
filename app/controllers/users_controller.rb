@@ -119,6 +119,8 @@ class UsersController < ApplicationController
 		@user = User.find_by(reset_code: User.encrypt(params[:reset_code]))
 		#@user and puts "===== @user.name,email,in_reset =====> #{@user.name},#{@user.email},#{@user.in_reset}"
 
+		#puts "======== Time.now: #{Time.now}, @user.reset_date: #{@user.reset_date}, (Time.now - @user.reset_date).to_i: #{(Time.now - @user.reset_date).to_i} ========="
+
 		begin
 			if @user.nil? 
 				raise 'не найден пользователь с таким кодом'
@@ -134,11 +136,12 @@ class UsersController < ApplicationController
 				raise 'форма восстановления пароля неактивна'
 			end
 
-			if (Time.now - @user.reset_date).to_i <= 30.seconds.to_i
-				raise "код сброса пароля просрочен: (#{Time.now}) (#{@user.reset_date}) (#{(Time.now - @user.reset_date).to_i})"
+			if (Time.now - @user.reset_date).to_i > Rails.configuration.x.password_reset.lifetime
+				raise "код сброса пароля просрочен"
 			end
 		rescue Exception => e
-			flash[:danger] = "Ссылка недействительна: #{e.message}"
+			#flash[:danger] = "Ссылка недействительна: #{e.message}"
+			flash[:danger] = "Ссылка недействительна"
 			redirect_to root_path
 			return false
 		end
@@ -201,5 +204,9 @@ class UsersController < ApplicationController
 				flash[:danger] = 'Редактирование запрещено'
 				redirect_to user_path(@user)
 			end
+		end
+
+		def reset_link_lifetime
+
 		end
 end
