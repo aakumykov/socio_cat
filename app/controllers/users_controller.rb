@@ -119,9 +119,6 @@ class UsersController < ApplicationController
 		#puts "===== users#reset_response ===== params: #{params}"
 
 		@user = User.find_by(reset_code: User.encrypt(params[:reset_code]))
-		#@user and puts "===== @user.name,email,in_reset =====> #{@user.name},#{@user.email},#{@user.in_reset}"
-
-		#puts "======== Time.now: #{Time.now}, @user.reset_date: #{@user.reset_date}, (Time.now - @user.reset_date).to_i: #{(Time.now - @user.reset_date).to_i} ========="
 
 		begin
 			if @user.nil? 
@@ -138,7 +135,8 @@ class UsersController < ApplicationController
 				raise 'форма восстановления пароля неактивна'
 			end
 
-			if (Time.now - @user.reset_date).to_i > Rails.configuration.x.password_reset.lifetime
+			if (Time.now - @user.reset_date).to_i > Rails.configuration.x.reset_password_link.lifetime
+				# @user.drop_reset_flags (ЗАДЕЙСТВОВАТЬ?)
 				raise "код сброса пароля просрочен"
 			end
 		rescue Exception => e
@@ -150,6 +148,8 @@ class UsersController < ApplicationController
 
 		# ссылка работает только 1 раз
 		@user.drop_reset_flags(:link)
+
+		@user.update_attribute(:new_pass_date,Time.current)
 
 		render :new_password, locals: {reset_code: params[:reset_code]}
 	end

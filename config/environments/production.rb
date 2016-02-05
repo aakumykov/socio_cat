@@ -78,5 +78,6 @@ Rails.application.configure do
   config.active_record.dump_schema_after_migration = false
 
   # Время в секундах, на протяжение которого ссылка сброса пароля активна
-  config.x.password_reset.lifetime = 24.hours.to_i
+  config.x.reset_password_link.lifetime = 24.hours.to_i
+  config.x.reset_password_form.lifetime = 3.minutes.to_i
 end

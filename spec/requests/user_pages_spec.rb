@@ -88,6 +88,11 @@ describe 'Страницы пользователя,' do
 		it { should have_link('Отмена') }
 	end
 
+	shared_examples_for 'просроченная_форма_пароля' do
+		it_should_behave_like 'flash-сообщение', 'error', 'Форма сброса пароля просрочена'
+		it_should_behave_like 'главная_страница'
+	end
+
 
 	describe 'предфильтры,' do
 		# --------------------------------------------------------------------#
@@ -349,7 +354,8 @@ describe 'Страницы пользователя,' do
 				in_reset: true,
 				in_pass_reset: true,
 				reset_code: 'йцукен',
-				reset_date: Time.at(0000000000),
+				reset_date: Time.at(0),
+				new_pass_date: Time.at(0),
 			}}
 		}
 		before { 
@@ -360,8 +366,9 @@ describe 'Страницы пользователя,' do
 			expect(user.reload).not_to be_admin 
 			expect(user.reload.in_reset).to be_false
 			expect(user.reload.in_pass_reset).to be_false
-			expect(user.reload.reset_date).not_to eq Time.at(0000000000)
 			expect(user.reload.reset_code).not_to eq 'йцукен'
+			expect(user.reload.reset_date).not_to eq Time.at(0)
+			expect(user.reload.new_pass_date).not_to eq Time.at(0)
 		}
 	end
 
@@ -531,7 +538,7 @@ describe 'Страницы пользователя,' do
 
 					describe 'ссылка просрочена,' do
 						before {
-							sleep Rails.configuration.x.password_reset.lifetime + 1
+							sleep Rails.configuration.x.reset_password_link.lifetime + 1
 							visit reset_url
 						}
 						it_should_behave_like 'flash-сообщение', 'error', 'Ссылка недействительна'
@@ -543,10 +550,20 @@ describe 'Страницы пользователя,' do
 				end
 
 				describe 'с верными параметрами,' do
-					before {
-						visit reset_url
-					}
-					it_should_behave_like 'страница_нового_пароля'
+					describe 'появляется страница нового пароля,' do
+						before {
+							visit reset_url
+						}
+						it_should_behave_like 'страница_нового_пароля'
+					end
+
+					describe 'форма нового пароля начинает жить,' do
+						before { get reset_url }
+						specify {
+							expect(user.reload.new_pass_date.to_i).to be >= Time.current.to_i
+							expect(user.reload.new_pass_date.to_i).to be <= (Time.current + Rails.configuration.x.reset_password_form.lifetime).to_i
+						}
+					end
 				end
 			end
 		end
@@ -582,7 +599,6 @@ describe 'Страницы пользователя,' do
 				} }
 			}
 
-			# это защита от "прямого доступа"
 			describe 'со сброшенным флагом смены пароля,' do
 				before {
 					user.toggle!(:in_pass_reset)
@@ -624,18 +640,29 @@ describe 'Страницы пользователя,' do
 					}
 				end
 
+				describe 'в устаревшую форму,' do
+					before {
+						sleep(Rails.configuration.x.reset_password_form.lifetime + 1)
+						post new_password_path, params
+					}
+					specify {
+						expect(user.authenticate(user.password)).to eq user
+					}
+					it_should_behave_like 'просроченная_форма_пароля'
+				end
+
 				describe 'верная комбинация код-id,' do
 					before {
 						visit reset_url
 					}
 					it_should_behave_like 'страница_нового_пароля'
 
-					describe 'пустая форма,' do
+					describe 'но пустая форма,' do
 						before { click_submit }
 						it_should_behave_like 'flash-сообщение', 'error', 'Форма содержит ошибки:'
 					end
 
-					describe 'пароли не совпадают,' do
+					describe 'но пароли не совпадают,' do
 						before {
 							fill_in 'Новый пароль', with: new_password
 							fill_in 'Подтверждение нового пароля', with: new_password+'1'
@@ -646,16 +673,22 @@ describe 'Страницы пользователя,' do
 
 					describe 'пароли совпалают,' do
 						before {
+							puts "===== ВВОЖУ НОВЫЙ ПАРОЛЬ ====="
 							fill_in 'Новый пароль', with: new_password
 							fill_in 'Подтверждение нового пароля', with: new_password
 							click_submit
 						}
+						
 						it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
 						it_should_behave_like 'страница_входа'
 						specify{
 							expect(user.reload.authenticate(new_password)).to eq user
 							expect(user.in_pass_reset).to eq false
 						}
+
+						describe 'форма сброса пароля принудительно устаревает,' do
+							it_should_behave_like 'просроченная_форма_пароля'
+						end
 					end
 				end
 			end
@@ -696,5 +729,16 @@ describe 'Страницы пользователя,' do
 		end
 
 		pending 'disable_page_caching'
+
+		# describe 'устаревание страницы нового пароля,' do
+			
+
+		# 	pending 'отправка нового пароля в устаревшую форму'
+		# 	pending 'принудительное устаревание формы при установке нового пароля'
+		# 	pending 'прямой доступ к атрибуту new_pass_date'
+		# 	pending 'нетронутость пароля'
+		# 	pending 'сообщение об ошибке'
+		# 	pending 'сброс флагов восстановления пароля'
+		# end
 	end
 end

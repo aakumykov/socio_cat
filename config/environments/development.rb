@@ -45,5 +45,6 @@ Rails.application.configure do
   # config.action_view.raise_on_missing_translations = true
 
   # Время в секундах, на протяжение которого ссылка сброса пароля активна
-  config.x.password_reset.lifetime = 30.seconds.to_i
+  config.x.reset_password_link.lifetime = 30.seconds.to_i
+  config.x.reset_password_form.lifetime = 1.minute.to_i
 end

@@ -188,6 +188,7 @@ describe 'Пользователь,' do
 			it { should respond_to(:in_pass_reset) }
 			it { should respond_to(:reset_code) }
 			it { should respond_to(:reset_date) }
+			it { should respond_to(:new_pass_date) }
 		end
 
 		describe 'методы сброса,' do
@@ -230,9 +231,6 @@ describe 'Пользователь,' do
 				end
 			end
 		end
-
-		pending 'прямой доступ к атрибутам'
-		pending 'валидации атрибутов сброса пароля'
 	end
 
 	pending '@user.welcome_message'
