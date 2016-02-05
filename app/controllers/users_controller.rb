@@ -134,9 +134,11 @@ class UsersController < ApplicationController
 				raise 'форма восстановления пароля неактивна'
 			end
 
-		# 	raise 'код сброса пароля просрочен' if (Time.now - @user.reset_date) <= 24.hours 
+			if (Time.now - @user.reset_date).to_i <= 30.seconds.to_i
+				raise "код сброса пароля просрочен: (#{Time.now}) (#{@user.reset_date}) (#{(Time.now - @user.reset_date).to_i})"
+			end
 		rescue Exception => e
-			flash[:danger] = 'Ссылка недействительна'
+			flash[:danger] = "Ссылка недействительна: #{e.message}"
 			redirect_to root_path
 			return false
 		end
