@@ -694,5 +694,7 @@ describe 'Страницы пользователя,' do
 				}
 			end
 		end
+
+		pending 'disable_page_caching'
 	end
 end

@@ -6,6 +6,8 @@ class UsersController < ApplicationController
 	before_action :editor_users, only: [:edit, :update]
 	before_action :admin_users, only: [:destroy]
 
+	before_action :disable_page_caching, only: [:new_password]
+
 
 	def new
 		@user = User.new
@@ -206,7 +208,10 @@ class UsersController < ApplicationController
 			end
 		end
 
-		def reset_link_lifetime
-
+		def disable_page_caching
+			puts "===== disable_page_caching ====="
+			response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
+			response.headers["Pragma"] = "no-cache"
+			response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
 		end
 end
