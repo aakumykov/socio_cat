@@ -92,7 +92,7 @@ class UsersController < ApplicationController
 			user = User.find_by(email: email)
 			
 			if user.nil?
-				flash.now[:danger] = 'Такого пользователя не существует'
+				flash.now[:danger] = 'Пользователь не найден'
 				render :reset_password
 			else
 				reset_params = user.reset_password

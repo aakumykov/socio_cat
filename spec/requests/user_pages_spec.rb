@@ -416,7 +416,7 @@ describe 'Страницы пользователя,' do
 						fill_in 'Электронная почта', with: "#{SecureRandom.uuid}@example.com"
 						click_submit
 					}
-					it_should_behave_like 'flash-сообщение', 'error', 'Такого пользователя не существует'
+					it_should_behave_like 'flash-сообщение', 'error', 'Пользователь не найден'
 				end
 
 				it_should_behave_like 'страница_восстановления_пароля'
