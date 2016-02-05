@@ -560,9 +560,6 @@ describe 'Страницы пользователя,' do
 			end
 		end
 
-		pending 'переход по ссылке установки нового пароля,' do
-		end
-
 		describe 'повторный переход по ссылке сброса пароля,' do
  			before {
  				visit reset_url
@@ -577,6 +574,11 @@ describe 'Страницы пользователя,' do
 				expect(user.reload.in_pass_reset).to be_false
 			}
  		end
+
+		describe 'get-запрос ссылки нового пароля,' do
+			before { visit new_password_path }
+			it_should_behave_like 'главная_страница'
+		end
 
 		describe 'отправка формы с новым паролем,' do
 			let(:old_password_digest) { user.password_digest }
@@ -735,19 +737,6 @@ describe 'Страницы пользователя,' do
 			end
 		end
 
-		pending 'disable_page_caching'
-
-		pending 'reject_nil_target'
-
-		# describe 'устаревание страницы нового пароля,' do
-			
-
-		# 	pending 'отправка нового пароля в устаревшую форму'
-		# 	pending 'принудительное устаревание формы при установке нового пароля'
-		# 	pending 'прямой доступ к атрибуту new_pass_expire_time'
-		# 	pending 'нетронутость пароля'
-		# 	pending 'сообщение об ошибке'
-		# 	pending 'сброс флагов восстановления пароля'
-		# end
+		describe ','
 	end
 end
