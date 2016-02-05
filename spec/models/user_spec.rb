@@ -188,7 +188,7 @@ describe 'Пользователь,' do
 			it { should respond_to(:in_pass_reset) }
 			it { should respond_to(:reset_code) }
 			it { should respond_to(:reset_date) }
-			it { should respond_to(:new_pass_date) }
+			it { should respond_to(:new_pass_expire_time) }
 		end
 
 		describe 'методы сброса,' do

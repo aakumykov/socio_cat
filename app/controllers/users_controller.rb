@@ -149,7 +149,11 @@ class UsersController < ApplicationController
 		# ссылка работает только 1 раз
 		@user.drop_reset_flags(:link)
 
-		@user.update_attribute(:new_pass_date,Time.current)
+		# форма нового пароля начинает жить
+		@user.update_attribute(
+			:new_pass_expire_time,
+			Time.current + Rails.configuration.x.reset_password_form.lifetime
+		)
 
 		render :new_password, locals: {reset_code: params[:reset_code]}
 	end
@@ -169,11 +173,20 @@ class UsersController < ApplicationController
 			elsif !@user.in_pass_reset?
 				#puts "===== users#new_password ===> форма неактивна"
 				raise 'форма неактивна'
+			elsif Time.current > @user.new_pass_expire_time
+				#puts "===== users#new_password ===> форма просрочена"
+				raise 'форма просрочена'
 			else
 				#puts "===== users#new_password ===> ПРОПУСКАЮ"
 				if @user.update_attributes(user_params)
 					@user.drop_reset_flags
+
+					#puts "===== @user.new_pass_expire_time =====> #{@user.new_pass_expire_time}"
+					@user.update_attribute(:new_pass_expire_time,Time.parse('1917/10/25'))
+					#puts "===== @user.new_pass_expire_time =====> #{@user.new_pass_expire_time}"
+					
 					flash[:success] = "Новый пароль установлен"
+					
 					redirect_to login_path
 				else
 					# уведомление об ошибке кажет форма
@@ -209,7 +222,7 @@ class UsersController < ApplicationController
 		end
 
 		def disable_page_caching
-			puts "===== disable_page_caching ====="
+			#puts "===== disable_page_caching ====="
 			response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
 			response.headers["Pragma"] = "no-cache"
 			response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"

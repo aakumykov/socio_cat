@@ -69,7 +69,7 @@ ActiveRecord::Schema.define(version: 20160205162950) do
     t.string   "reset_code"
     t.datetime "reset_date"
     t.boolean  "in_pass_reset",   default: false
-    t.datetime "new_pass_date"
+    t.datetime "new_pass_expire_time"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
