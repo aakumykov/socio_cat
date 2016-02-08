@@ -16,12 +16,9 @@ class UsersController < ApplicationController
 	def create
 		@user = User.new(user_params)
 		if @user.save
-			#UserMailer.welcome_message(@user).deliver_now!
-			#MailJob.new(@user).enqueue(wait: 5.seconds)
 			@user.delay(run_at: 5.seconds.from_now).welcome_message
-			sign_in @user
-			flash[:success] = "Добро пожаловать, «#{@user.name}»!"
-			redirect_to user_path(@user)
+			flash[:success] = "Вам отправлено сообщение со ссылкой активации"
+			redirect_to root_path
 		else
 			flash.now[:danger] = 'ОШИБКА. Пользователь не создан'
 			render 'new'

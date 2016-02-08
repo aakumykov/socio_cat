@@ -261,8 +261,8 @@ describe 'Страницы пользователя,' do
 
 				describe 'уведомление об успехе,' do
 					before { click_button register_button }
-					it_should_behave_like 'flash-сообщение', 'success', 'Добро пожаловать'
-					it_should_behave_like 'вид_пользователя'
+					it_should_behave_like 'flash-сообщение', 'success', "Вам отправлено сообщение со ссылкой активации"
+					it_should_behave_like 'главная_страница'
 				end
 			end
 
@@ -272,9 +272,11 @@ describe 'Страницы пользователя,' do
 				describe 'уведомление об ошибке,' do
 					before { click_button register_button }
 					it_should_behave_like 'flash-сообщение', 'error', 'ОШИБКА. Пользователь не создан'
-					it_should_behave_like 'вид_гостя'
+					it_should_behave_like 'страница_регистрации'
 				end
 			end
+
+			it_should_behave_like 'вид_гостя'
 		end
 	end
 
