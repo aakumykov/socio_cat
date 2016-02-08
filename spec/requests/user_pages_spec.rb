@@ -107,12 +107,22 @@ describe 'Страницы пользователя,' do
 				new_pass_expire_time: Time.at(0),
 			}}
 		}
-		before { 
-			www_user 
-			patch user_path(user), params
-		}
+
+		describe 'при регистрации,' do
+			before { 
+				post users_path, params
+			}
+		end
+
+		describe 'при изменении профиля,' do
+			before { 
+				www_user
+				patch user_path(user), params
+			}
+		end
+
 		specify{ 
-			expect(user.reload).not_to be_admin 
+			expect(user.reload).not_to be_admin
 			expect(user.reload).not_to be_activated
 			expect(user.reload.in_reset).to be_false
 			expect(user.reload.in_pass_reset).to be_false
