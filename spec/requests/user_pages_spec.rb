@@ -16,6 +16,8 @@ describe 'Страницы пользователя,' do
 	let(:save_button) { 'Сохранить' }
 	let(:delete_button) { 'Удалить' }
 
+	let(:test_name) { Faker::Name.first_name }
+	let(:test_email) { Faker::Internet.email }
 	let(:test_password) { 'Qwerty123!@#' }
 
 	subject { page }
@@ -218,8 +220,8 @@ describe 'Страницы пользователя,' do
 		describe 'отправка данных,' do
 			context 'верных,' do
 				before {
-					fill_in 'Имя', with: Faker::Name.first_name
-					fill_in 'Электронная почта', with: Faker::Internet.email
+					fill_in 'Имя', with: test_name
+					fill_in 'Электронная почта', with: test_email
 					fill_in 'Пароль', with: test_password
 					fill_in 'Подтверждение пароля', with: test_password
 				}
@@ -341,8 +343,8 @@ describe 'Страницы пользователя,' do
 	describe 'запрещённые атрибуты,' do
 		let(:params) {
 			{ user: {
-				name: Faker::Name.first_name,
-				email: Faker::Internet.email,
+				name: test_name,
+				email: test_email,
 				password: test_password,
 				password_confirmation: test_password,
 				admin: true,
