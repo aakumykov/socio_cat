@@ -91,6 +91,38 @@ describe 'Страницы пользователя,' do
 	end
 
 
+	describe 'запрещённые атрибуты,' do
+		let(:params) {
+			{ user: {
+				name: test_name,
+				email: test_email,
+				password: test_password,
+				password_confirmation: test_password,
+				admin: true,
+				activated: false,
+				in_reset: true,
+				in_pass_reset: true,
+				reset_code: 'йцукен',
+				reset_date: Time.at(0),
+				new_pass_expire_time: Time.at(0),
+			}}
+		}
+		before { 
+			www_user 
+			patch user_path(user), params
+		}
+		specify{ 
+			expect(user.reload).not_to be_admin 
+			expect(user.reload).to be_activated
+			expect(user.reload.in_reset).to be_false
+			expect(user.reload.in_pass_reset).to be_false
+			expect(user.reload.reset_code).not_to eq 'йцукен'
+			expect(user.reload.reset_date).not_to eq Time.at(0)
+			expect(user.reload.new_pass_expire_time).not_to eq Time.at(0)
+		}
+	end
+
+
 	describe 'предфильтры,' do
 		# --------------------------------------------------------------------#
 		# Один тест на группу, обрабатываемую предфильтром.
@@ -336,37 +368,6 @@ describe 'Страницы пользователя,' do
 			before { delete user_path(admin) }
 			specify{ expect(response).to redirect_to user_path(admin) }
 		end
-	end
-
-	# итого тест 7 действий
-
-	describe 'запрещённые атрибуты,' do
-		let(:params) {
-			{ user: {
-				name: test_name,
-				email: test_email,
-				password: test_password,
-				password_confirmation: test_password,
-				admin: true,
-				in_reset: true,
-				in_pass_reset: true,
-				reset_code: 'йцукен',
-				reset_date: Time.at(0),
-				new_pass_expire_time: Time.at(0),
-			}}
-		}
-		before { 
-			www_user 
-			patch user_path(user), params
-		}
-		specify{ 
-			expect(user.reload).not_to be_admin 
-			expect(user.reload.in_reset).to be_false
-			expect(user.reload.in_pass_reset).to be_false
-			expect(user.reload.reset_code).not_to eq 'йцукен'
-			expect(user.reload.reset_date).not_to eq Time.at(0)
-			expect(user.reload.new_pass_expire_time).not_to eq Time.at(0)
-		}
 	end
 
 	describe 'восстановление пароля,' do
