@@ -1,6 +1,7 @@
 include ApplicationHelper
 
 def sign_in(user, opt={})
+	activation_status = user.activated?
 	user.update_attribute(:activated,true)
 	
 	if opt[:no_capybara]
@@ -13,6 +14,8 @@ def sign_in(user, opt={})
 		fill_in 'Пароль', with: user.password
 		click_button 'Войти'
 	end
+	
+	activation_status = user.update_attribute(:activated,activation_status)
 end
 
 def click_submit
