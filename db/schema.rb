@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160204063628) do
+ActiveRecord::Schema.define(version: 20160205162950) do
 
   create_table "cards", force: :cascade do |t|
     t.string   "title"
@@ -64,11 +64,13 @@ ActiveRecord::Schema.define(version: 20160204063628) do
     t.datetime "updated_at"
     t.string   "password_digest"
     t.string   "remember_token"
-    t.boolean  "admin",           default: false
-    t.boolean  "in_reset",        default: false
+    t.boolean  "admin",                default: false
+    t.boolean  "in_reset",             default: false
     t.string   "reset_code"
     t.datetime "reset_date"
-    t.boolean  "in_pass_reset",   default: false
+    t.boolean  "in_pass_reset",        default: false
+    t.datetime "new_pass_date"
+    t.datetime "new_pass_expire_time"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true

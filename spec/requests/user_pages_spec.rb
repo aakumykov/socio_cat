@@ -349,7 +349,8 @@ describe 'Страницы пользователя,' do
 				in_reset: true,
 				in_pass_reset: true,
 				reset_code: 'йцукен',
-				reset_date: Time.at(0000000000),
+				reset_date: Time.at(0),
+				new_pass_expire_time: Time.at(0),
 			}}
 		}
 		before { 
@@ -360,8 +361,9 @@ describe 'Страницы пользователя,' do
 			expect(user.reload).not_to be_admin 
 			expect(user.reload.in_reset).to be_false
 			expect(user.reload.in_pass_reset).to be_false
-			expect(user.reload.reset_date).not_to eq Time.at(0000000000)
 			expect(user.reload.reset_code).not_to eq 'йцукен'
+			expect(user.reload.reset_date).not_to eq Time.at(0)
+			expect(user.reload.new_pass_expire_time).not_to eq Time.at(0)
 		}
 	end
 
@@ -503,6 +505,7 @@ describe 'Страницы пользователя,' do
 			
 			describe 'гостем,' do
 				describe 'с неверными параметрами,' do
+					# защищает от ситуации 'пользователь не найден'
 					describe 'неверный код' do
 						before {
 							visit url_for_password_reset(reset_code: SecureRandom::uuid)
@@ -531,27 +534,37 @@ describe 'Страницы пользователя,' do
 
 					describe 'ссылка просрочена,' do
 						before {
-							sleep Rails.configuration.x.password_reset.lifetime + 1
+							sleep Rails.configuration.x.reset_password_link.lifetime + 2
 							visit reset_url
 						}
 						it_should_behave_like 'flash-сообщение', 'error', 'Ссылка недействительна'
 						it_should_behave_like 'главная_страница'
 					end
-					# pending 'post to new_password' должно работать только с флагом.
-					# подумал: сейчас users#new_password "защищён" только html-страницей,
-					# а нужно сделать флаго0зависимое поведение
 				end
 
 				describe 'с верными параметрами,' do
-					before {
-						visit reset_url
-					}
-					it_should_behave_like 'страница_нового_пароля'
+					describe 'появляется страница нового пароля,' do
+						before {
+							visit reset_url
+						}
+						it_should_behave_like 'страница_нового_пароля'
+					end
+
+					describe 'форма нового пароля начинает жить,' do
+						before { get reset_url }
+						specify {
+							expect(user.reload.new_pass_expire_time.to_i).to be > Time.current.to_i
+						}
+					end
+
+					pending 'кэширование страницы отключено,' do
+						before { get reset_url }
+						specify {
+							puts "===== response.headers =====> #{response.headers}"
+						}
+					end
 				end
 			end
-		end
-
-		pending 'переход по ссылке нового пароля,' do
 		end
 
 		describe 'повторный переход по ссылке сброса пароля,' do
@@ -569,8 +582,12 @@ describe 'Страницы пользователя,' do
 			}
  		end
 
-		describe 'отправка формы с новым паролем,' do
+		describe 'get-запрос ссылки нового пароля,' do
+			before { visit new_password_path }
+			it_should_behave_like 'главная_страница'
+		end
 
+		describe 'отправка формы с новым паролем,' do
 			let(:old_password_digest) { user.password_digest }
 			
 			let(:params) {
@@ -582,7 +599,6 @@ describe 'Страницы пользователя,' do
 				} }
 			}
 
-			# это защита от "прямого доступа"
 			describe 'со сброшенным флагом смены пароля,' do
 				before {
 					user.toggle!(:in_pass_reset)
@@ -624,18 +640,18 @@ describe 'Страницы пользователя,' do
 					}
 				end
 
-				describe 'верная комбинация код-id,' do
+				describe 'верная комбинация код--id,' do
 					before {
 						visit reset_url
 					}
 					it_should_behave_like 'страница_нового_пароля'
 
-					describe 'пустая форма,' do
+					describe 'но пустая форма,' do
 						before { click_submit }
 						it_should_behave_like 'flash-сообщение', 'error', 'Форма содержит ошибки:'
 					end
 
-					describe 'пароли не совпадают,' do
+					describe 'но пароли не совпадают,' do
 						before {
 							fill_in 'Новый пароль', with: new_password
 							fill_in 'Подтверждение нового пароля', with: new_password+'1'
@@ -646,16 +662,49 @@ describe 'Страницы пользователя,' do
 
 					describe 'пароли совпалают,' do
 						before {
+							puts "===== ВВОЖУ НОВЫЙ ПАРОЛЬ ====="
 							fill_in 'Новый пароль', with: new_password
 							fill_in 'Подтверждение нового пароля', with: new_password
-							click_submit
+							#click_submit
 						}
-						it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
-						it_should_behave_like 'страница_входа'
-						specify{
-							expect(user.reload.authenticate(new_password)).to eq user
-							expect(user.in_pass_reset).to eq false
-						}
+
+						context 'форма действует,' do
+							before { click_submit }
+							
+							describe 'новый пароль сохраняется,' do
+								it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
+								it_should_behave_like 'страница_входа'
+								specify{
+									expect(user.reload.authenticate(new_password)).to eq user
+									expect(user.in_pass_reset).to eq false
+								}
+
+								describe 'форма принудительно устаревает,' do
+									specify {
+										expect(user.reload.new_pass_expire_time.to_i).to be < Time.current.to_i
+									}
+								end
+								
+								describe 'флаги восстановления пароля сбрасываются,' do
+									specify {
+										expect(user.reload.in_reset).to be_false
+										expect(user.reload.in_pass_reset).to be_false
+									}
+								end
+							end
+						end
+
+						context 'форма просрочена,' do
+							before {
+								sleep(Rails.configuration.x.reset_password_form.lifetime + 2)
+								click_submit
+							}
+							specify {
+								expect(user.reload.authenticate(user.password)).to eq user
+							}
+							it_should_behave_like 'flash-сообщение', 'error', 'форма просрочена'
+							it_should_behave_like 'главная_страница'
+						end
 					end
 				end
 			end
@@ -695,6 +744,6 @@ describe 'Страницы пользователя,' do
 			end
 		end
 
-		pending 'disable_page_caching'
+		describe ','
 	end
 end

@@ -119,9 +119,6 @@ class UsersController < ApplicationController
 		#puts "===== users#reset_response ===== params: #{params}"
 
 		@user = User.find_by(reset_code: User.encrypt(params[:reset_code]))
-		#@user and puts "===== @user.name,email,in_reset =====> #{@user.name},#{@user.email},#{@user.in_reset}"
-
-		#puts "======== Time.now: #{Time.now}, @user.reset_date: #{@user.reset_date}, (Time.now - @user.reset_date).to_i: #{(Time.now - @user.reset_date).to_i} ========="
 
 		begin
 			if @user.nil? 
@@ -138,7 +135,8 @@ class UsersController < ApplicationController
 				raise 'форма восстановления пароля неактивна'
 			end
 
-			if (Time.now - @user.reset_date).to_i > Rails.configuration.x.password_reset.lifetime
+			if (Time.now - @user.reset_date).to_i > Rails.configuration.x.reset_password_link.lifetime
+				# @user.drop_reset_flags (ЗАДЕЙСТВОВАТЬ?)
 				raise "код сброса пароля просрочен"
 			end
 		rescue Exception => e
@@ -150,6 +148,12 @@ class UsersController < ApplicationController
 
 		# ссылка работает только 1 раз
 		@user.drop_reset_flags(:link)
+
+		# форма нового пароля начинает жить
+		@user.update_attribute(
+			:new_pass_expire_time,
+			Time.current + Rails.configuration.x.reset_password_form.lifetime
+		)
 
 		render :new_password, locals: {reset_code: params[:reset_code]}
 	end
@@ -169,11 +173,20 @@ class UsersController < ApplicationController
 			elsif !@user.in_pass_reset?
 				#puts "===== users#new_password ===> форма неактивна"
 				raise 'форма неактивна'
+			elsif Time.current > @user.new_pass_expire_time
+				#puts "===== users#new_password ===> форма просрочена"
+				raise 'форма просрочена'
 			else
 				#puts "===== users#new_password ===> ПРОПУСКАЮ"
 				if @user.update_attributes(user_params)
 					@user.drop_reset_flags
+
+					#puts "===== @user.new_pass_expire_time =====> #{@user.new_pass_expire_time}"
+					@user.update_attribute(:new_pass_expire_time,Time.parse('1917/10/25'))
+					#puts "===== @user.new_pass_expire_time =====> #{@user.new_pass_expire_time}"
+					
 					flash[:success] = "Новый пароль установлен"
+					
 					redirect_to login_path
 				else
 					# уведомление об ошибке кажет форма
@@ -209,9 +222,9 @@ class UsersController < ApplicationController
 		end
 
 		def disable_page_caching
-			puts "===== disable_page_caching ====="
-			response.headers["Cache-Control"] = "no-cache, no-store, max-age=0, must-revalidate"
-			response.headers["Pragma"] = "no-cache"
-			response.headers["Expires"] = "Fri, 01 Jan 1990 00:00:00 GMT"
+			#puts "===== disable_page_caching ====="
+			response.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
+			response.headers['Pragma'] = 'no-cache'
+			response.headers['Expires'] = 'Fri, 01 Jan 1990 00:00:00 GMT'
 		end
 end
