@@ -662,7 +662,7 @@ describe 'Страницы пользователя,' do
 
 					describe 'пароли совпалают,' do
 						before {
-							puts "===== ВВОЖУ НОВЫЙ ПАРОЛЬ ====="
+							#puts "===== ВВОЖУ НОВЫЙ ПАРОЛЬ ====="
 							fill_in 'Новый пароль', with: new_password
 							fill_in 'Подтверждение нового пароля', with: new_password
 							#click_submit

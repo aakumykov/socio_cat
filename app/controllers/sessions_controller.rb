@@ -8,10 +8,15 @@ class SessionsController < ApplicationController
 		user = User.find_by(email: params[:session][:email].downcase)
 		
 		if user && user.authenticate(params[:session][:password])
-			flash[:success] = "Добро пожаловать, «#{user.name}»!"
-			sign_in(user)
-			user.drop_reset_flags
-			redirect_to root_path
+			if user.activated?
+				flash[:success] = "Добро пожаловать, «#{user.name}»!"
+				sign_in(user)
+				user.drop_reset_flags
+				redirect_to root_path
+			else
+				flash[:danger]="Учётная запись не подтверждена"
+				redirect_to login_path
+			end
 		else
 			flash.now[:danger] = 'Неверная электронная почта или пароль'
 			render 'new'
