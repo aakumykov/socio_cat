@@ -267,7 +267,42 @@ describe 'Страницы пользователя,' do
 					fill_in 'Пароль', with: test_password
 					fill_in 'Подтверждение пароля', with: test_password
 				}
-				specify{ expect{ click_button register_button}.to change(User,:count).by(1) }
+				specify{ 
+					expect{ click_button register_button}.to change(User,:count).by(1)
+				}
+
+				pending 'отправка письма активации,' do
+					before(:each) {
+						ActionMailer::Base.delivery_method = :test
+						ActionMailer::Base.perform_deliveries = true
+						ActionMailer::Base.deliveries = []
+						
+						params = {
+							user: user,
+							activation_code: code,
+						}
+						
+						UserMailer.welcome_message(params).deliver_now!
+					}
+
+					subject { ActionMailer::Base.deliveries.first }
+
+					after(:each) {
+						ActionMailer::Base.deliveries.clear
+					}
+					
+					describe 'сообщение,' do
+						it 'отправляется,' do
+							ActionMailer::Base.deliveries.count.should eq 1
+						end
+
+						its(:to) { should eq [user.email] }
+						its(:from) { should eq ['my.sender.personal@yandex.ru'] }
+						its(:subject) { should eq 'Восстановление доступа в Соционический каталог' }
+
+						pending 'тело сообщения'
+					end
+				end
 
 				describe 'уведомление об успехе,' do
 					before { click_button register_button }
@@ -463,7 +498,7 @@ describe 'Страницы пользователя,' do
 			end
 		end
 
-		describe 'отправка ссылки сброса почтой,' do
+		describe 'отправка письма со ссылкой сброса,' do
 			before(:each) {
 				ActionMailer::Base.delivery_method = :test
 				ActionMailer::Base.perform_deliveries = true
@@ -498,6 +533,8 @@ describe 'Страницы пользователя,' do
 				its(:to) { should eq [user.email] }
 				its(:from) { should eq ['my.sender.personal@yandex.ru'] }
 				its(:subject) { should eq 'Восстановление доступа в Соционический каталог' }
+
+				pending 'тело сообщения'
 			end
 		end
 
