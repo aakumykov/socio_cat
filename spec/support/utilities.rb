@@ -1,6 +1,8 @@
 include ApplicationHelper
 
 def sign_in(user, opt={})
+	user.update_attribute(:activated,true)
+	
 	if opt[:no_capybara]
 		remember_token = User.new_remember_token
 		user.update_attribute(:remember_token, User.encrypt(remember_token))
