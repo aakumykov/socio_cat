@@ -69,7 +69,6 @@ ActiveRecord::Schema.define(version: 20160208031732) do
     t.string   "reset_code"
     t.datetime "reset_date"
     t.boolean  "in_pass_reset",        default: false
-    t.datetime "new_pass_date"
     t.datetime "new_pass_expire_time"
     t.boolean  "activated",            default: false
   end
