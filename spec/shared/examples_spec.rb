@@ -34,6 +34,18 @@ shared_examples_for 'главная_страница' do
 	end
 end
 
+shared_examples_for 'вид_пользователя' do
+	it { should_not have_link('Вход', href: login_path) }
+	it { should have_link('Выход', href: logout_path) }
+	it { should have_link('Пользователи', href: users_path) }
+end
+
+shared_examples_for 'вид_гостя' do
+	it { should have_link('Вход', href: login_path) }
+	it { should_not have_link('Выход', href: logout_path) }
+	it { should_not have_link('Пользователи', href: users_path) }
+end
+
 shared_examples_for 'страница_входа' do
 	let(:title) { 'Вход на сайт' }
 	

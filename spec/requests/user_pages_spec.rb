@@ -262,14 +262,17 @@ describe 'Страницы пользователя,' do
 				describe 'уведомление об успехе,' do
 					before { click_button register_button }
 					it_should_behave_like 'flash-сообщение', 'success', 'Добро пожаловать'
+					it_should_behave_like 'вид_пользователя'
 				end
 			end
+
 			context 'неверных,' do
 				specify{ expect{ click_button register_button}.not_to change(User,:count) }
 
 				describe 'уведомление об ошибке,' do
 					before { click_button register_button }
 					it_should_behave_like 'flash-сообщение', 'error', 'ОШИБКА. Пользователь не создан'
+					it_should_behave_like 'вид_гостя'
 				end
 			end
 		end
