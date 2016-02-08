@@ -786,7 +786,7 @@ describe 'Страницы пользователя,' do
 			# состояние сброса должно стать неактивным.
 			describe 'успешный вход,' do
 				before {
-					user.update_attribute(:activated,true)
+					user.activate
 					fill_in 'Электронная почта', with: user.email
 					fill_in 'Пароль', with: user.password
 					click_submit

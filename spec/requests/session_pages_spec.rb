@@ -32,7 +32,7 @@ describe 'Сессии,' do
 
 				context 'пользователь активирован,' do
 					before {
-						user.toggle!(:activated)
+						user.activate
 						click_button login_button
 					}
 					it { should have_content('Добро пожаловать') }
@@ -53,7 +53,7 @@ describe 'Сессии,' do
 		describe 'выход,' do
 			before { 
 				visit login_path
-				user.toggle!(:activated)
+				user.activate
 				fill_in 'Электронная почта', with: user.email
 				fill_in 'Пароль', with: user.password
 				click_button(login_button)

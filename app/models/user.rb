@@ -38,6 +38,10 @@ class User < ActiveRecord::Base
 		UserMailer.welcome_message(self).deliver_now!
 	end
 
+	def activate(status=true)
+		self.update_attribute(:activated,status)
+	end
+
 	def reset_password
 		date = Time.now
 		reset_code = User.new_remember_token

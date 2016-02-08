@@ -35,11 +35,11 @@ describe 'Пользователь,' do
 	its(:activated) { should be_false }
 
 	# проверки
-	it 'с корректными данными' do
+	it 'модель с корректными данными' do
 		should be_valid
 	end
 
-	describe 'с некорректными данными,' do
+	describe 'модель с некорректными данными,' do
 		describe 'отсутствует имя,' do
 			before { @user.name = ' ' }
 			it { should_not be_valid }
@@ -164,14 +164,25 @@ describe 'Пользователь,' do
 		it { should be_admin }
 	end
 
-	describe 'переключение флага активации,' do
-		before { 
-			@user.save!
-			@user.toggle!(:activated)
-		}
-		it { should be_activated }
-	end
+	describe 'метод activate()' do
+		describe 'false' do
+			before {
+				@user.activate(false)
+			}
+			specify {
+				expect(@user).not_to be_activated
+			}
+		end
 
+		describe 'true' do
+			before {
+				@user.activate
+			}
+			specify {
+				expect(@user).to be_activated
+			}
+		end
+	end
 
 	describe 'связь с карточками,' do
 		let(:user) { FactoryGirl.create(:user) }

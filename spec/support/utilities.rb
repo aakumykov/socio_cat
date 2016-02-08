@@ -2,7 +2,7 @@ include ApplicationHelper
 
 def sign_in(user, opt={})
 	activation_status = user.activated?
-	user.update_attribute(:activated,true)
+	user.activate
 	
 	if opt[:no_capybara]
 		remember_token = User.new_remember_token
@@ -15,7 +15,7 @@ def sign_in(user, opt={})
 		click_button 'Войти'
 	end
 	
-	activation_status = user.update_attribute(:activated,activation_status)
+	user.activate(activation_status)
 end
 
 def click_submit
