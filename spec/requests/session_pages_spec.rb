@@ -24,7 +24,6 @@ describe 'Сессии,' do
 
 				context 'пользователь не активирован,' do
 					before {
-						user.update_attribute(:activated,false)
 						click_button login_button
 					}
 					it_should_behave_like 'flash-сообщение', 'error', "Учётная запись не подтверждена"
@@ -33,7 +32,7 @@ describe 'Сессии,' do
 
 				context 'пользователь активирован,' do
 					before {
-						user.update_attribute(:activated,true)
+						user.toggle!(:activated)
 						click_button login_button
 					}
 					it { should have_content('Добро пожаловать') }
@@ -54,6 +53,7 @@ describe 'Сессии,' do
 		describe 'выход,' do
 			before { 
 				visit login_path
+				user.toggle!(:activated)
 				fill_in 'Электронная почта', with: user.email
 				fill_in 'Пароль', with: user.password
 				click_button(login_button)
