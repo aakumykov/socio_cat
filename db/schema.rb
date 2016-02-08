@@ -65,12 +65,12 @@ ActiveRecord::Schema.define(version: 20160208031732) do
     t.string   "password_digest"
     t.string   "remember_token"
     t.boolean  "admin",                default: false
+    t.boolean  "activated",            default: false
     t.boolean  "in_reset",             default: false
+    t.boolean  "in_pass_reset",        default: false
     t.string   "reset_code"
     t.datetime "reset_date"
-    t.boolean  "in_pass_reset",        default: false
     t.datetime "new_pass_expire_time"
-    t.boolean  "activated",            default: false
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
