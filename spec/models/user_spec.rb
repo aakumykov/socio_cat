@@ -31,9 +31,8 @@ describe 'Пользователь,' do
 	it { should_not be_admin }
 	its(:admin) { should be_false }
 	
-	pending 'ПОМЕНЯТЬ активированность по умолчанию (+ в миграции, схеме)'
-	it { should be_activated } # является (по умолчанию)
-	its(:activated) { should be_true }
+	it { should_not be_activated } # является (по умолчанию)
+	its(:activated) { should be_false }
 
 	# проверки
 	it 'с корректными данными' do
@@ -165,13 +164,12 @@ describe 'Пользователь,' do
 		it { should be_admin }
 	end
 
-	pending 'ПОМЕНЯТЬ переключение флага активации,'
 	describe 'переключение флага активации,' do
 		before { 
 			@user.save!
 			@user.toggle!(:activated)
 		}
-		it { should_not be_activated }
+		it { should be_activated }
 	end
 
 
@@ -254,12 +252,4 @@ describe 'Пользователь,' do
 	end
 
 	pending '@user.welcome_message'
-
-	describe 'переключение флага активации' do # меняет состояние
-		# before {
-		# 	@user.save!
-		# 	@user.toggle!(:activated)
-		# }
-		# it { should be_activated }
-	end
 end
