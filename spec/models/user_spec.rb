@@ -21,11 +21,17 @@ describe 'Пользователь,' do
 	it { should respond_to(:authenticate) }
 	it { should respond_to(:remember_token) }
 	it { should respond_to(:admin) }
+
+	it { should respond_to(:activated) } # присутствует
 	
 	#it { should respond_to(:cards) } # теперь в разделе 'связь с карточками'
+	# ПЕРЕНЕСТИ СЮДА!
 
+	# значения по умолчанию
 	it { should_not be_admin }
+	it { should_not be_activated } # является (по умолчанию)
 
+	# проверки
 	it 'с корректными данными' do
 		should be_valid
 	end
@@ -146,7 +152,7 @@ describe 'Пользователь,' do
 		before { @user.save }
 		its(:remember_token) { should_not be_blank }
 	end
-	describe 'флаг администратора,' do
+	describe 'переключение флага администратора,' do
 		before { 
 			@user.save!
 			@user.toggle!(:admin)
@@ -234,4 +240,12 @@ describe 'Пользователь,' do
 	end
 
 	pending '@user.welcome_message'
+
+	describe 'переключение флага активации' do # меняет состояние
+		before {
+			@user.save!
+			@user.toggle!(:activated)
+		}
+		it { should be_activated }
+	end
 end

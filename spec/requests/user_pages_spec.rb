@@ -744,6 +744,8 @@ describe 'Страницы пользователя,' do
 			end
 		end
 
-		describe ','
+		describe 'активация пользователя по email,' do
+			
+		end
 	end
 end
