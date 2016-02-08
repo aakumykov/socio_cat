@@ -99,7 +99,7 @@ describe 'Страницы пользователя,' do
 				password: test_password,
 				password_confirmation: test_password,
 				admin: true,
-				activated: false,
+				activated: true,
 				in_reset: true,
 				in_pass_reset: true,
 				reset_code: 'йцукен',
@@ -113,7 +113,7 @@ describe 'Страницы пользователя,' do
 		}
 		specify{ 
 			expect(user.reload).not_to be_admin 
-			expect(user.reload).to be_activated
+			expect(user.reload).not_to be_activated
 			expect(user.reload.in_reset).to be_false
 			expect(user.reload.in_pass_reset).to be_false
 			expect(user.reload.reset_code).not_to eq 'йцукен'
