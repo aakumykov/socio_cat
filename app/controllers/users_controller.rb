@@ -17,6 +17,7 @@ class UsersController < ApplicationController
 		@user = User.new(user_params)
 		if @user.save
 			@user.delay(run_at: 5.seconds.from_now).welcome_message
+			# переделать на: @user.activation_request
 			flash[:success] = "Вам отправлено сообщение со ссылкой активации"
 			redirect_to root_path
 		else
@@ -195,6 +196,23 @@ class UsersController < ApplicationController
 			flash[:danger] = e.message
 			redirect_to root_path
 			return false
+		end
+	end
+
+	def activation
+		@user = User.new
+	end
+
+	def activation_request
+		@user = User.find_by(email: params[:email])
+
+		if @user
+			@user.activation_request
+			flash[:success] = 'Письмо с кодом активации отправлено'
+			redirect_to root_path
+		else
+			flash.now[:danger] = 'Не найден пользователь с такой электронной почтой'
+			render :activation
 		end
 	end
 

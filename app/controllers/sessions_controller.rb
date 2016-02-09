@@ -14,7 +14,7 @@ class SessionsController < ApplicationController
 				user.drop_reset_flags
 				redirect_to root_path
 			else
-				flash[:danger]="Учётная запись не подтверждена"
+				flash[:danger]="Учётная запись не подтверждена. Проверьте электронную почту или запросите письмо с активацией ещё раз"
 				redirect_to login_path
 			end
 		else

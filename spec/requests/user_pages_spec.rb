@@ -90,6 +90,15 @@ describe 'Страницы пользователя,' do
 		it { should have_link('Отмена') }
 	end
 
+	shared_examples_for 'страница_активации' do
+		it_should_behave_like 'страница_с_названием' do
+			let(:title) { 'Активация пользователя' }
+			let(:heading) { title }
+		end
+		it { should have_field 'Электронная почта' }
+		it { should have_button 'Отправить' }
+	end
+
 
 	describe 'запрещённые атрибуты,' do
 		let(:params) {
@@ -801,7 +810,33 @@ describe 'Страницы пользователя,' do
 		end
 
 		describe 'активация пользователя по email,' do
-			
+			let(:activation_code) { User.new_remember_token }
+
+			describe 'запрос кода активации,' do
+				before { visit activation_path }
+				it_should_behave_like 'страница_активации'
+				
+				describe 'с верными данными,' do
+					before {
+						fill_in 'Электронная почта', with: user.email
+						click_submit
+					}
+					it_should_behave_like 'flash-сообщение', 'success', 'Письмо с кодом активации отправлено'
+					it_should_behave_like 'главная_страница'
+				end
+
+				describe 'с неверными данными,' do
+					before {
+						fill_in 'Электронная почта', with: "#{SecureRandom.uuid}@example.com"
+						click_submit
+					}
+					it_should_behave_like 'flash-сообщение', 'error', 'Не найден пользователь с такой электронной почтой'
+					it_should_behave_like 'страница_активации'
+				end
+			end
+
+			pending 'применение кода активации,' do
+			end
 		end
 	end
 end

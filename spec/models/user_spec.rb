@@ -174,6 +174,7 @@ describe 'Пользователь,' do
 			}
 			specify {
 				expect(@user).not_to be_activated
+
 			}
 		end
 
@@ -183,9 +184,18 @@ describe 'Пользователь,' do
 			}
 			specify {
 				expect(@user).to be_activated
+				
 			}
 		end
+
+		specify{
+			expect(@user.activation_code).to be_nil
+		}
 	end
+
+	# describe 'метод activation_request()' do
+	# 	# нужно ли? так я приду к тестам контроллера. А, нет. Это же модель...
+	# end
 
 	describe 'связь с карточками,' do
 		let(:user) { FactoryGirl.create(:user) }

@@ -25,6 +25,9 @@ Rails.application.routes.draw do
   get 'new_password' => redirect('/')
   post 'new_password' => 'users#new_password'
 
+  get 'activation' => 'users#activation'
+  post 'activation_request' => 'users#activation_request'
+
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products
   resources :users

@@ -20,6 +20,17 @@ shared_examples_for 'flash-сообщение' do |mode,text=''|
 	end
 end
 
+shared_examples_for 'вид_пользователя' do
+	it { should_not have_link('Вход', href: login_path) }
+	it { should have_link('Выход', href: logout_path) }
+	it { should have_link('Пользователи', href: users_path) }
+end
+
+shared_examples_for 'вид_гостя' do
+	it { should have_link('Вход', href: login_path) }
+	it { should_not have_link('Выход', href: logout_path) }
+	it { should_not have_link('Пользователи', href: users_path) }
+end
 
 shared_examples_for 'страница_с_названием' do
 	it { should have_title( full_title(title) ) }
@@ -32,18 +43,6 @@ shared_examples_for 'главная_страница' do
 		let(:title) { 'начало' }
 		let(:heading) { 'Добро пожаловать' }
 	end
-end
-
-shared_examples_for 'вид_пользователя' do
-	it { should_not have_link('Вход', href: login_path) }
-	it { should have_link('Выход', href: logout_path) }
-	it { should have_link('Пользователи', href: users_path) }
-end
-
-shared_examples_for 'вид_гостя' do
-	it { should have_link('Вход', href: login_path) }
-	it { should_not have_link('Выход', href: logout_path) }
-	it { should_not have_link('Пользователи', href: users_path) }
 end
 
 shared_examples_for 'страница_входа' do
@@ -62,6 +61,7 @@ shared_examples_for 'страница_входа' do
 	it { should have_selector(:xpath,"//input[@value='Войти']") }
 
 	it { should have_link('Забыли пароль?', reset_password_path) }
+	it { should have_link('Выслать письмо активации', activation_path) }
 end
 
 

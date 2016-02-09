@@ -26,7 +26,7 @@ describe 'Сессии,' do
 					before {
 						click_button login_button
 					}
-					it_should_behave_like 'flash-сообщение', 'error', "Учётная запись не подтверждена"
+					it_should_behave_like 'flash-сообщение', 'error', "Учётная запись не подтверждена. Проверьте электронную почту или запросите письмо с активацией ещё раз"
 					it_should_behave_like 'страница_входа'
 				end
 
