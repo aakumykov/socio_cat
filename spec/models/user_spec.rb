@@ -193,9 +193,18 @@ describe 'Пользователь,' do
 		}
 	end
 
-	# describe 'метод activation_request()' do
-	# 	# нужно ли? так я приду к тестам контроллера. А, нет. Это же модель...
-	# end
+	describe 'метод activation_request()' do
+		let!(:old_activation_code) { @user.activation_code }
+		
+		before {
+			@user.activation_request
+		}
+		
+		specify{
+			expect(@user.activated?).to be_false
+			expect(@user.activation_code).not_to eq(old_activation_code)
+		}
+	end
 
 	describe 'связь с карточками,' do
 		let(:user) { FactoryGirl.create(:user) }

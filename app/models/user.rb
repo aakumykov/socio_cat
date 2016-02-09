@@ -40,8 +40,13 @@ class User < ActiveRecord::Base
 
 	def activation_request
 		code = User.new_remember_token
+		
+		self.update_attribute(:activated,false)
 		self.update_attribute(:activation_code, User.encrypt(code))
+		
 		self.welcome_message
+		
+		return { activation_code:code }
 	end
 
 	def activate(status=true)
