@@ -1,6 +1,6 @@
 class UserMailerPreview < ActionMailer::Preview
   def welcome_message
-    UserMailer.welcome_message(User.last)
+    UserMailer.welcome_message(User.last,12345)
   end
 
   def reset_message

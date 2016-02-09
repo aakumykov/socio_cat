@@ -27,6 +27,7 @@ Rails.application.routes.draw do
 
   get 'activation' => 'users#activation'
   post 'activation_request' => 'users#activation_request'
+  get 'activation_response/:code' => 'users#activation_response', as: :activation_response
 
   # Example resource route (maps HTTP verbs to controller actions automatically):
   #   resources :products

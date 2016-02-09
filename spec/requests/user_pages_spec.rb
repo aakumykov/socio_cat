@@ -810,13 +810,11 @@ describe 'Страницы пользователя,' do
 		end
 
 		describe 'активация пользователя по email,' do
-			let(:activation_code) { User.new_remember_token }
-
 			describe 'запрос кода активации,' do
 				before { visit activation_path }
 				it_should_behave_like 'страница_активации'
 				
-				describe 'с верными данными,' do
+				context 'с верными данными,' do
 					before {
 						fill_in 'Электронная почта', with: user.email
 						click_submit
@@ -825,7 +823,7 @@ describe 'Страницы пользователя,' do
 					it_should_behave_like 'главная_страница'
 				end
 
-				describe 'с неверными данными,' do
+				context 'с неверными данными,' do
 					before {
 						fill_in 'Электронная почта', with: "#{SecureRandom.uuid}@example.com"
 						click_submit
@@ -835,7 +833,45 @@ describe 'Страницы пользователя,' do
 				end
 			end
 
-			pending 'применение кода активации,' do
+			describe 'применение кода активации,' do
+				let(:good_code) { 
+					(user.activation_request)[:activation_code]
+				}
+				let(:bad_code) {
+					SecureRandom.uuid
+				}
+
+				describe 'неверного,' do
+					before {
+						visit activation_response_path(bad_code)
+					}
+					it_should_behave_like 'flash-сообщение', 'error', 'Неверный код активации'
+					it_should_behave_like 'страница_входа'
+				end
+				
+				describe 'верного,' do
+					context 'когда пользователь уже активирован,' do
+						before { 
+							user.activate 
+							visit 'http://localhost:3000/activation_response/12345'
+						}
+						it_should_behave_like 'flash-сообщение', 'warning', 'Пользователь уже активирован'
+						it_should_behave_like 'страница_входа'
+
+						specify{
+							puts "===== #{url_for(controller:'users',action:'activation_response')} ====="
+						}
+					end
+
+					context 'когда пользователь ещё не активирован,' do
+						before {
+							visit activation_response_path(good_code)
+						}
+						it_should_behave_like 'flash-сообщение', 'success', 'Добро пожаловать на сайт'
+						it_should_behave_like 'главная_страница'
+						it_should_behave_like 'вид_пользователя'
+					end
+				end
 			end
 		end
 	end

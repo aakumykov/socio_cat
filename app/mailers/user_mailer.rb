@@ -1,8 +1,9 @@
 class UserMailer < ApplicationMailer
 	#default from: 'my.sender.personal@yandex.ru'
 
-	def welcome_message(user)
+	def welcome_message(user,activation_code)
 		@user = user
+		@activation_code = activation_code
 		@url = login_url
 		mail(
 			from: 'my.sender.personal@yandex.ru',

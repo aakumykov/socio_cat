@@ -2,8 +2,10 @@ shared_examples_for 'flash-сообщение' do |mode,text=''|
 	case mode
 	when 'success'
 		suffix = 'success'
-	when 'error'
+	when 'error' || 'danger'
 		suffix = 'danger'
+	when 'warning'
+		suffix = 'warning'
 	else
 		suffix = 'notice'
 	end

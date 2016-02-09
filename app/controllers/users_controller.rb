@@ -216,6 +216,25 @@ class UsersController < ApplicationController
 		end
 	end
 
+	def activation_response
+		@user = User.find_by(activation_code: User.encrypt(params[:code]))
+
+		if @user
+			if @user.activated?
+				flash[:warning] = 'Пользователь уже активирован'
+				redirect_to login_path
+			else
+				@user.activate
+				flash[:success] = 'Добро пожаловать на сайт'
+				sign_in @user
+				redirect_to root_path
+			end
+		else
+			flash[:danger] = 'Неверный код активации'
+			redirect_to login_path
+		end
+	end
+
 	private
 
 		def user_params
