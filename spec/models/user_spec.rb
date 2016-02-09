@@ -22,10 +22,12 @@ describe 'Пользователь,' do
 	it { should respond_to(:remember_token) }
 	it { should respond_to(:admin) }
 
-	it { should respond_to(:activated) } # присутствует
+	it { should respond_to(:activated) }
+	it { should respond_to(:activation_code) }
 	
 	#it { should respond_to(:cards) } # теперь в разделе 'связь с карточками'
 	# ПЕРЕНЕСТИ СЮДА!
+
 
 	# значения по умолчанию
 	it { should_not be_admin }
@@ -33,6 +35,7 @@ describe 'Пользователь,' do
 	
 	it { should_not be_activated } # является (по умолчанию)
 	its(:activated) { should be_false }
+
 
 	# проверки
 	it 'модель с корректными данными' do

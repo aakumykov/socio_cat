@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160208031732) do
+ActiveRecord::Schema.define(version: 20160209031303) do
 
   create_table "cards", force: :cascade do |t|
     t.string   "title"
@@ -71,6 +71,7 @@ ActiveRecord::Schema.define(version: 20160208031732) do
     t.string   "reset_code"
     t.datetime "reset_date"
     t.datetime "new_pass_expire_time"
+    t.string   "activation_code"
   end
 
   add_index "users", ["email"], name: "index_users_on_email", unique: true
