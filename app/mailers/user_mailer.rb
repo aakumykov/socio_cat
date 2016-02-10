@@ -1,12 +1,12 @@
 class UserMailer < ApplicationMailer
-	#default from: 'my.sender.personal@yandex.ru'
+	default from: 'my.sender.personal@yandex.ru'
 
 	def welcome_message(arg)
 		@user = arg[:user]
 		@activation_code = arg[:activation_code]
 		
 		mail(
-			from: 'my.sender.personal@yandex.ru',
+			#from: 'my.sender.personal@yandex.ru',
 			to: @user.email,
 			subject: 'Добро пожаловать в соционический каталог'
 		)
@@ -18,7 +18,7 @@ class UserMailer < ApplicationMailer
 		@user = arg[:user]
 		@date = arg[:reset_date]
 		mail(
-			from: 'my.sender.personal@yandex.ru',
+			#from: 'my.sender.personal@yandex.ru',
 			to: @user.email,
 			subject: @title
 		)

@@ -1,6 +1,6 @@
 require 'spec_helper'
 
-describe 'UserMailer,' do
+describe 'Почтальон Печкин,' do
 	let(:sender_address) { 'my.sender.personal@yandex.ru' }
 	
 	before(:all) {
@@ -15,7 +15,7 @@ describe 'UserMailer,' do
 		ActionMailer::Base.deliveries.clear
 	}
 
-	describe 'welcome_message,' do
+	describe 'письмо приветствия,' do
 		before {
 			@activation_code = @user.new_activation[:activation_code]
 			
@@ -29,26 +29,22 @@ describe 'UserMailer,' do
 
 		subject { @mail }
 
-		describe 'письмо,' do
-			it 'отправляется,' do
-				ActionMailer::Base.deliveries.count.should eq 1
-			end
-
-			describe 'содержит,' do
-				its(:to) { should eq [@user.email] }
-				its(:from) { should eq [sender_address] }
-				its(:subject) { should eq 'Добро пожаловать в соционический каталог' }
-
-				specify{
-					expect(@mail.body).to have_content(@user.name)
-					expect(@mail.body).to have_xpath("//a[@href='#{activation_response_url(@activation_code)}']")
-					expect(@mail.body).to have_xpath("//a[@href='#{root_url}']")
-				}
-			end
+		it 'отправляется,' do
+			ActionMailer::Base.deliveries.count.should eq 1
 		end
+
+		its(:to) { should eq [@user.email] }
+		its(:from) { should eq [sender_address] }
+		its(:subject) { should eq 'Добро пожаловать в соционический каталог' }
+
+		specify{
+			expect(@mail.body).to have_content(@user.name)
+			expect(@mail.body).to have_xpath("//a[@href='#{activation_response_url(@activation_code)}']")
+			expect(@mail.body).to have_xpath("//a[@href='#{root_url}']")
+		}
 	end
 
-	describe 'reset_message,' do
+	describe 'письмо сброса пароля,' do
 		before {
 			reset_params = @user.reset_password
 			@reset_code = reset_params[:reset_code]
@@ -65,22 +61,18 @@ describe 'UserMailer,' do
 
 		subject { @mail }
 
-		describe 'письмо,' do
-			it 'отправляется,' do
-				ActionMailer::Base.deliveries.count.should eq 1
-			end
-
-			describe 'содержит,' do
-				its(:to) { should eq [@user.email] }
-				its(:from) { should eq [sender_address] }
-				its(:subject) { should eq 'Восстановление доступа в Соционический каталог' }
-
-				specify{
-					expect(@mail.body).to have_content(@user.name)
-					expect(@mail.body).to have_xpath("//a[@href='#{url_for_password_reset(reset_code:@reset_code, mode:'url')}']")
-					expect(@mail.body).to have_xpath("//a[@href='#{root_url}']")
-				}
-			end
+		it 'отправляется,' do
+			ActionMailer::Base.deliveries.count.should eq 1
 		end
+
+		its(:to) { should eq [@user.email] }
+		its(:from) { should eq [sender_address] }
+		its(:subject) { should eq 'Восстановление доступа в Соционический каталог' }
+
+		specify{
+			expect(@mail.body).to have_content(@user.name)
+			expect(@mail.body).to have_xpath("//a[@href='#{url_for_password_reset(reset_code:@reset_code, mode:'url')}']")
+			expect(@mail.body).to have_xpath("//a[@href='#{root_url}']")
+		}
 	end
 end
