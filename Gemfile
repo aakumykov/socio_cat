@@ -21,7 +21,7 @@ gem 'daemons'
 group :development, :test do
   gem 'sqlite3'
   gem 'rspec-rails', '2.14.2'
-  gem 'awesome_print'
+  #gem 'awesome_print'
 end
 
 group :test do
