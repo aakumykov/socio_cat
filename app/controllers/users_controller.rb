@@ -6,7 +6,7 @@ class UsersController < ApplicationController
 		:create, 
 		:reset_password, 
 		:reset_response, 
-		:activation_request, 
+		:activation, 
 		:activation_response,
 	]
 	before_action :signed_in_users, only: [:show, :edit, :update]
@@ -224,17 +224,25 @@ class UsersController < ApplicationController
 		@user = User.find_by(activation_code: User.encrypt(params[:code]))
 
 		if @user
+			puts "===== контроллер: activation_response =====> пользователь найден (#{@user.name})"
 			if !@user.activated?
+				puts "===== контроллер: activation_response =====> пользователь ещё не активирован"
+				
+				#puts "===== контроллер: @user.activated? (1) =====> #{@user.activated?}"
 				@user.activate
+				#puts "===== контроллер: @user.activated? (2) =====> #{@user.activated?}"
+				
 				sign_in @user
 				flash[:success] = 'Добро пожаловать на сайт'
 				redirect_to root_path
 			else
+				puts "===== контроллер: activation_response =====> пользователь уже активирован"
 				flash[:warning] = 'Пользователь уже активирован'
 				redirect_to login_path
 			end
 		else
-			flash[:error] = 'Неверный код активации'
+			puts "===== контроллер: activation_response =====> пользователь не найден по коду #{User.encrypt(params[:code])}"
+			flash[:danger] = 'Неверный код активации'
 			redirect_to login_path
 		end
 	end
@@ -267,14 +275,11 @@ class UsersController < ApplicationController
 		end
 
 		def init_activation(user)
-			code = User.new_remember_token
-			
-			user.update_attribute(:activated,false)
-			user.update_attribute(:activation_code, User.encrypt(code))
+			data = user.new_activation
 
 			UserMailer.delay(run_at: 5.seconds.from_now).welcome_message(
 				user: user, 
-				activation_code: code,
+				activation_code: data[:activation_code],
 			)
 
 			flash[:success] = 'Вам отправлено сообщение с кодом активации'

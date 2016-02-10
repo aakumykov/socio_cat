@@ -38,9 +38,17 @@ class User < ActiveRecord::Base
 		UserMailer.welcome_message(self,activation_code).deliver_now!
 	end
 
+	def new_activation
+		code = User.new_remember_token
+		self.update_attribute(:activated,false)
+		self.update_attribute(:activation_code, User.encrypt(code))
+		return { activation_code: code }
+	end
+
 	def activate(status=true)
+		puts "===== модель: User#activate (before) =====> #{self.activated}"
 		self.update_attribute(:activated,status)
-		self.update_attribute(:activation_code,nil)
+		puts "===== модель: User#activate (after) =====> #{self.activated}"
 	end
 
 	def reset_password
