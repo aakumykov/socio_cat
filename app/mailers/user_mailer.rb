@@ -1,10 +1,10 @@
 class UserMailer < ApplicationMailer
 	#default from: 'my.sender.personal@yandex.ru'
 
-	def welcome_message(user,activation_code)
-		@user = user
-		@activation_code = activation_code
-		@url = login_url
+	def welcome_message(arg)
+		@user = arg[:user]
+		@activation_code = arg[:activation_code]
+		
 		mail(
 			from: 'my.sender.personal@yandex.ru',
 			to: @user.email,
