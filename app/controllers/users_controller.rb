@@ -9,7 +9,12 @@ class UsersController < ApplicationController
 		:activation, 
 		:activation_response,
 	]
-	before_action :signed_in_users, only: [:show, :edit, :update]
+	before_action :signed_in_users, only: [
+		:index,
+		:show, 
+		:edit, 
+		:update,
+	]
 	before_action :editor_users, only: [:edit, :update]
 	before_action :admin_users, only: [:destroy]
 

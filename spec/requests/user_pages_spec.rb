@@ -336,13 +336,19 @@ describe 'Страницы пользователя,' do
 
 	# #index
 	describe 'список пользователей,' do
-		before { 
-			www_user
-			visit users_path
-		}
-		it_should_behave_like 'список_пользователей'
+		context 'для гостя,' do
+			before { visit users_path }
+			it_should_behave_like 'flash-сообщение', 'notice', 'Сначала войдите на сайт'
+			it_should_behave_like 'страница_входа'
+		end
 
-		pending 'список только зарегистрированным'
+		context 'для пользователя,' do
+			before { 
+				www_user
+				visit users_path
+			}
+			it_should_behave_like 'список_пользователей'
+		end
 	end
 
 	# #show, #edit. #update
