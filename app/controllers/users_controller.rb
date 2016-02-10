@@ -193,7 +193,7 @@ class UsersController < ApplicationController
 					@user.update_attribute(:new_pass_expire_time,Time.parse('1917/10/25'))
 					#puts "===== @user.new_pass_expire_time =====> #{@user.new_pass_expire_time}"
 					
-					flash[:success] = "Новый пароль установлен"
+					flash[:success] = "Теперь вы можете войти на сайт с новым паролем"
 					
 					redirect_to login_path
 				else

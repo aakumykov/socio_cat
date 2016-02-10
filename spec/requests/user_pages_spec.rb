@@ -706,7 +706,7 @@ describe 'Страницы пользователя,' do
 							before { click_submit }
 							
 							describe 'новый пароль сохраняется,' do
-								it_should_behave_like 'flash-сообщение', 'success', 'Новый пароль установлен'
+								it_should_behave_like 'flash-сообщение', 'success', 'Теперь вы можете войти на сайт с новым паролем'
 								it_should_behave_like 'страница_входа'
 								specify{
 									expect(user.reload.authenticate(new_password)).to eq user
