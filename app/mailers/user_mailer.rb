@@ -5,31 +5,34 @@ class UserMailer < ApplicationMailer
 	def welcome_message(arg)
 		@user = arg[:user]
 		@activation_code = arg[:activation_code]
+		@subject = 'Добро пожаловать в соционический каталог'
 		
 		mail(
 			to: @user.email,
-			subject: 'Добро пожаловать в соционический каталог'
+			subject: @subject
 		)
 	end
 
 	def activation_message(arg)
 		@user = arg[:user]
 		@activation_code = arg[:activation_code]
+		@subject = 'Активация учётной записи на сайте Соционического каталога'
 		
 		mail(
 			to: @user.email,
-			subject: 'Активация учётной записи на сайте Соционического каталога'
+			subject: @subject
 		)
 	end
 
 	def reset_message(arg)
 		@url = url_for_password_reset(reset_code:arg[:reset_code], mode:'url')
-		@title = 'Восстановление доступа в Соционический каталог'
 		@user = arg[:user]
 		@date = arg[:reset_date]
+		@subject = 'Восстановление доступа в Соционический каталог'
+		
 		mail(
 			to: @user.email,
-			subject: @title
+			subject: @subject
 		)
 	end
 end

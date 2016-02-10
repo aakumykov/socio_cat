@@ -7,7 +7,7 @@ class UserMailerPreview < ActionMailer::Preview
   end
 
   def activation_message
-    UserMailer.welcome_message({
+    UserMailer.activation_message({
       user: User.last,
       activation_code: 12345,
     })

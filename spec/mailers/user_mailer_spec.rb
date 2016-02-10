@@ -48,7 +48,7 @@ describe 'Почтальон Печкин,' do
 		before {
 			@activation_code = @user.new_activation[:activation_code]
 			
-			UserMailer.welcome_message({
+			UserMailer.activation_message({
 				user: @user,
 				activation_code: @activation_code,
 			}).deliver_now!
