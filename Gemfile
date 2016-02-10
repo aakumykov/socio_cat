@@ -15,14 +15,13 @@ gem 'coffee-rails'
 gem 'jquery-rails'
 gem 'turbolinks'
 gem 'jbuilder'
-#gem 'resque'
-#gem 'resque-scheduler'
 gem 'delayed_job_active_record'
 gem 'daemons'
 
 group :development, :test do
   gem 'sqlite3'
   gem 'rspec-rails', '2.14.2'
+  gem 'awesome_print'
 end
 
 group :test do
