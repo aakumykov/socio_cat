@@ -34,9 +34,9 @@ class User < ActiveRecord::Base
 		Digest::SHA1.hexdigest(token.to_s)
 	end
 
-	def welcome_message(activation_code)
-		UserMailer.welcome_message(self,activation_code).deliver_now!
-	end
+	# def welcome_message(activation_code)
+	# 	UserMailer.welcome_message(self,activation_code).deliver_now!
+	# end
 
 	def new_activation
 		code = User.new_remember_token
@@ -46,9 +46,9 @@ class User < ActiveRecord::Base
 	end
 
 	def activate(status=true)
-		puts "===== модель: User#activate (before) =====> #{self.activated}"
+		#puts "===== модель: User#activate (before) =====> #{self.activated}"
 		self.update_attribute(:activated,status)
-		puts "===== модель: User#activate (after) =====> #{self.activated}"
+		#puts "===== модель: User#activate (after) =====> #{self.activated}"
 	end
 
 	def reset_password

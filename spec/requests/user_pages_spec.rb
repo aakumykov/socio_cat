@@ -156,7 +156,7 @@ describe 'Страницы пользователя,' do
 					www_user
 					visit register_path
 				}
-				it_should_behave_like 'flash-сообщение', 'danger', 'Вы авторизованы на сайте'
+				it_should_behave_like 'flash-сообщение', 'warning', 'Вы авторизованы на сайте'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
@@ -315,7 +315,7 @@ describe 'Страницы пользователя,' do
 
 				describe 'уведомление об успехе,' do
 					before { click_button register_button }
-					it_should_behave_like 'flash-сообщение', 'success', "Вам отправлено сообщение со ссылкой активации"
+					it_should_behave_like 'flash-сообщение', 'success', 'Вам отправлено сообщение с кодом активации'
 					it_should_behave_like 'главная_страница'
 				end
 			end
@@ -448,7 +448,7 @@ describe 'Страницы пользователя,' do
 					www_user
 					visit reset_password_path
 				}
-				it_should_behave_like 'flash-сообщение', 'danger', 'Вы авторизованы на сайте'
+				it_should_behave_like 'flash-сообщение', 'warning', 'Вы авторизованы на сайте'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
@@ -559,7 +559,7 @@ describe 'Страницы пользователя,' do
 					visit reset_url
 					user.reload.reset_password
 				}
-				it_should_behave_like 'flash-сообщение', 'danger', 'Вы авторизованы на сайте'
+				it_should_behave_like 'flash-сообщение', 'warning', 'Вы авторизованы на сайте'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
@@ -819,7 +819,7 @@ describe 'Страницы пользователя,' do
 						www_user
 						visit activation_path
 					}
-					it_should_behave_like 'flash-сообщение', 'danger', 'Вы авторизованы на сайте'
+					it_should_behave_like 'flash-сообщение', 'warning', 'Вы авторизованы на сайте'
 					it_should_behave_like 'страница_пользователя', 'владелец' do
 						let(:the_user) { user }
 					end
@@ -863,7 +863,7 @@ describe 'Страницы пользователя,' do
 						sign_in other_user
 						visit activation_response_path(good_code)
 					}
-					it_should_behave_like 'flash-сообщение', 'danger', 'Вы авторизованы на сайте'
+					it_should_behave_like 'flash-сообщение', 'warning', 'Вы авторизованы на сайте'
 					it_should_behave_like 'страница_пользователя', 'владелец' do
 						let(:the_user) { other_user }
 					end
@@ -879,27 +879,27 @@ describe 'Страницы пользователя,' do
 					end
 					
 					describe 'верного,' do
-						context 'когда пользователь уже активирован,' do
-							# before { 
-							# 	user.reload.activate 
-							# 	visit activation_response_path(good_code)
-							# }
-							# it_should_behave_like 'flash-сообщение', 'warning', 'Пользователь уже активирован'
-							# it_should_behave_like 'страница_входа'
-							before {
-								#user.update_attribute(:activated,true)
+						pending 'когда пользователь уже активирован,' do
+						# 	# before { 
+						# 	# 	user.reload.activate 
+						# 	# 	visit activation_response_path(good_code)
+						# 	# }
+						# 	# it_should_behave_like 'flash-сообщение', 'warning', 'Пользователь уже активирован'
+						# 	# it_should_behave_like 'страница_входа'
+						# 	before {
+						# 		#user.update_attribute(:activated,true)
 								
-								puts "=== тест10: user.activated? ==> #{user.activated?}"
-								user.activate
-								puts "=== тест20: user.activated? ==> #{user.activated?}"
+						# 		puts "=== тест10: user.activated? ==> #{user.activated?}"
+						# 		user.activate
+						# 		puts "=== тест20: user.activated? ==> #{user.activated?}"
 
-								get activation_response_path(good_code)
-							}
-							specify {
-								puts "=== тест30: user.activated? ==> #{user.activated?}"
-								puts "=== тест40: response.code ==> #{response.code}"
-								puts "=== тест50: response.location ==> #{response.location}"
-							}
+						# 		get activation_response_path(good_code)
+						# 	}
+						# 	specify {
+						# 		puts "=== тест30: user.activated? ==> #{user.activated?}"
+						# 		puts "=== тест40: response.code ==> #{response.code}"
+						# 		puts "=== тест50: response.location ==> #{response.location}"
+						# 	}
 						end
 
 						context 'когда пользователь ещё не активирован,' do

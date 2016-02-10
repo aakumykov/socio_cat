@@ -193,11 +193,11 @@ describe 'Пользователь,' do
 		}
 	end
 
-	describe 'метод activation_request()' do
+	describe 'метод new_activation()' do
 		let!(:old_activation_code) { @user.activation_code }
 		
 		before {
-			@user.activation_request
+			@user.new_activation
 		}
 		
 		specify{
@@ -283,6 +283,4 @@ describe 'Пользователь,' do
 			end
 		end
 	end
-
-	pending '@user.welcome_message'
 end

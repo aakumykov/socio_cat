@@ -224,24 +224,21 @@ class UsersController < ApplicationController
 		@user = User.find_by(activation_code: User.encrypt(params[:code]))
 
 		if @user
-			puts "===== контроллер: activation_response =====> пользователь найден (#{@user.name})"
+			#puts "===== контроллер: activation_response =====> пользователь найден (#{@user.name})"
 			if !@user.activated?
-				puts "===== контроллер: activation_response =====> пользователь ещё не активирован"
-				
-				#puts "===== контроллер: @user.activated? (1) =====> #{@user.activated?}"
+				#puts "===== контроллер: activation_response =====> пользователь ещё не активирован"
 				@user.activate
-				#puts "===== контроллер: @user.activated? (2) =====> #{@user.activated?}"
 				
 				sign_in @user
 				flash[:success] = 'Добро пожаловать на сайт'
 				redirect_to root_path
 			else
-				puts "===== контроллер: activation_response =====> пользователь уже активирован"
+				#puts "===== контроллер: activation_response =====> пользователь уже активирован"
 				flash[:warning] = 'Пользователь уже активирован'
 				redirect_to login_path
 			end
 		else
-			puts "===== контроллер: activation_response =====> пользователь не найден по коду #{User.encrypt(params[:code])}"
+			#puts "===== контроллер: activation_response =====> пользователь не найден по коду #{User.encrypt(params[:code])}"
 			flash[:danger] = 'Неверный код активации'
 			redirect_to login_path
 		end
