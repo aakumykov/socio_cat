@@ -325,7 +325,7 @@ describe 'Страницы пользователя,' do
 
 				describe 'уведомление об ошибке,' do
 					before { click_button register_button }
-					it_should_behave_like 'flash-сообщение', 'error', 'ОШИБКА. Пользователь не создан'
+					#it_should_behave_like 'flash-сообщение', 'error', 'ОШИБКА. Пользователь не создан'
 					it_should_behave_like 'страница_регистрации'
 				end
 			end

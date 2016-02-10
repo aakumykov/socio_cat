@@ -31,7 +31,7 @@ class UsersController < ApplicationController
 			init_activation(@user)
 			redirect_to root_path
 		else
-			flash.now[:danger] = 'ОШИБКА. Пользователь не создан'
+			#flash.now[:danger] = 'ОШИБКА. Пользователь не создан'
 			render 'new'
 		end
 	end
