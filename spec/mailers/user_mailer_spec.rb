@@ -34,51 +34,53 @@ describe 'UserMailer,' do
 				ActionMailer::Base.deliveries.count.should eq 1
 			end
 
-			its(:to) { should eq [@user.email] }
-			its(:from) { should eq [sender_address] }
-			its(:subject) { should eq 'Добро пожаловать в соционический каталог' }
+			describe 'содержит,' do
+				its(:to) { should eq [@user.email] }
+				its(:from) { should eq [sender_address] }
+				its(:subject) { should eq 'Добро пожаловать в соционический каталог' }
 
-			specify{
-				expect(@mail.body).to have_content(@user.name)
-				expect(@mail.body).to have_xpath("//a[@href='#{activation_response_url(@activation_code)}']")
-				expect(@mail.body).to have_xpath("//a[@href='#{root_url}']")
-			}
+				specify{
+					expect(@mail.body).to have_content(@user.name)
+					expect(@mail.body).to have_xpath("//a[@href='#{activation_response_url(@activation_code)}']")
+					expect(@mail.body).to have_xpath("//a[@href='#{root_url}']")
+				}
+			end
 		end
 	end
 
-	pending 'reset_message,' do
+	describe 'reset_message,' do
 		before {
-			params = {
-				user: @user,
-				code: reset_params[:reset_code],
-				date: reset_params[:reset_date],
-			}
+			reset_params = @user.reset_password
+			@reset_code = reset_params[:reset_code]
+			@reset_date = reset_params[:date]
 			
-			UserMailer.reset_message(params).deliver_now!
+			UserMailer.reset_message({
+				user: @user,
+				reset_code: @reset_code,
+				reset_date: @reset_date,
+			}).deliver_now!
+
+			@mail = ActionMailer::Base.deliveries.first
 		}
 
-		after(:each) {
-			ActionMailer::Base.deliveries.clear
-		}
+		subject { @mail }
 
-		subject { ActionMailer::Base.deliveries.first }
-
-		describe 'сообщение,' do
+		describe 'письмо,' do
 			it 'отправляется,' do
 				ActionMailer::Base.deliveries.count.should eq 1
 			end
 
-			# specify{
-			# 	puts "=== subject.to ===> #{subject.to}"
-			# 	puts "=== subject.from ===> #{subject.from}"
-			# 	puts "=== subject.to ===> #{subject.subject}"
-			# }
+			describe 'содержит,' do
+				its(:to) { should eq [@user.email] }
+				its(:from) { should eq [sender_address] }
+				its(:subject) { should eq 'Восстановление доступа в Соционический каталог' }
 
-			its(:to) { should eq [@user.email] }
-			its(:from) { should eq ['my.sender.personal@yandex.ru'] }
-			its(:subject) { should eq 'Восстановление доступа в Соционический каталог' }
-
-			pending 'тело сообщения'
+				specify{
+					expect(@mail.body).to have_content(@user.name)
+					expect(@mail.body).to have_xpath("//a[@href='#{url_for_password_reset(reset_code:@reset_code, mode:'url')}']")
+					expect(@mail.body).to have_xpath("//a[@href='#{root_url}']")
+				}
+			end
 		end
 	end
 end
