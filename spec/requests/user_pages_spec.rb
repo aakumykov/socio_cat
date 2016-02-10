@@ -779,108 +779,110 @@ describe 'Страницы пользователя,' do
 				}
 			end
 		end
+	end
 
-		describe 'активация пользователя по email,' do
-			describe 'запрос кода активации,' do
-				context 'пользователем,' do
-					before {
-						www_user
-						visit activation_path
-					}
-					it_should_behave_like 'flash-сообщение', 'warning', 'Вы авторизованы на сайте'
-					it_should_behave_like 'страница_пользователя', 'владелец' do
-						let(:the_user) { user }
-					end
-				end
-
-				context 'гостем,' do
-					before { visit activation_path }
-
-					it_should_behave_like 'страница_активации'
-
-					context 'с верными данными,' do
-						before {
-							fill_in 'Электронная почта', with: user.email
-							click_submit
-						}
-						it_should_behave_like 'flash-сообщение', 'success', 'Вам отправлено сообщение с кодом активации'
-						it_should_behave_like 'главная_страница'
-					end
-
-					context 'с неверными данными,' do
-						before {
-							fill_in 'Электронная почта', with: "#{SecureRandom.uuid}@example.com"
-							click_submit
-						}
-						it_should_behave_like 'flash-сообщение', 'error', 'Не найден пользователь с такой электронной почтой'
-						it_should_behave_like 'страница_активации'
-					end
+	describe 'активация пользователя по email,' do
+		describe 'запрос кода активации,' do
+			context 'пользователем,' do
+				before {
+					www_user
+					visit activation_path
+				}
+				it_should_behave_like 'flash-сообщение', 'warning', 'Вы авторизованы на сайте'
+				it_should_behave_like 'страница_пользователя', 'владелец' do
+					let(:the_user) { user }
 				end
 			end
 
-			describe 'применение кода активации,' do
-				let(:good_code) { 
-					(user.new_activation)[:activation_code]
-				}
-				let(:bad_code) {
-					SecureRandom.uuid
-				}
+			context 'гостем,' do
+				before { visit activation_path }
 
-				context 'пользователем,' do
+				it_should_behave_like 'страница_активации'
+
+				context 'с верными данными,' do
 					before {
-						sign_in other_user
-						visit activation_response_path(good_code)
+						fill_in 'Электронная почта', with: user.email
+						click_submit
 					}
-					it_should_behave_like 'flash-сообщение', 'warning', 'Вы авторизованы на сайте'
-					it_should_behave_like 'страница_пользователя', 'владелец' do
-						let(:the_user) { other_user }
-					end
+					it_should_behave_like 'flash-сообщение', 'success', 'Вам отправлено сообщение с кодом активации'
+					it_should_behave_like 'главная_страница'
 				end
 
-				context 'гостем,' do
-					describe 'неверного,' do
-						before {
-							visit activation_response_path(bad_code)
-						}
-						it_should_behave_like 'flash-сообщение', 'error', 'Неверный код активации'
-						it_should_behave_like 'страница_входа'
+				context 'с неверными данными,' do
+					before {
+						fill_in 'Электронная почта', with: "#{SecureRandom.uuid}@example.com"
+						click_submit
+					}
+					it_should_behave_like 'flash-сообщение', 'error', 'Не найден пользователь с такой электронной почтой'
+					it_should_behave_like 'страница_активации'
+				end
+			end
+		end
+
+		describe 'применение кода активации,' do
+			let(:good_code) { 
+				(user.new_activation)[:activation_code]
+			}
+			let(:bad_code) {
+				SecureRandom.uuid
+			}
+
+			context 'пользователем,' do
+				before {
+					sign_in other_user
+					visit activation_response_path(good_code)
+				}
+				it_should_behave_like 'flash-сообщение', 'warning', 'Вы авторизованы на сайте'
+				it_should_behave_like 'страница_пользователя', 'владелец' do
+					let(:the_user) { other_user }
+				end
+			end
+
+			context 'гостем,' do
+				describe 'неверного,' do
+					before {
+						visit activation_response_path(bad_code)
+					}
+					it_should_behave_like 'flash-сообщение', 'error', 'Неверный код активации'
+					it_should_behave_like 'страница_входа'
+				end
+				
+				describe 'верного,' do
+					pending 'когда пользователь уже активирован,' do
+					# 	# before { 
+					# 	# 	user.reload.activate 
+					# 	# 	visit activation_response_path(good_code)
+					# 	# }
+					# 	# it_should_behave_like 'flash-сообщение', 'warning', 'Пользователь уже активирован'
+					# 	# it_should_behave_like 'страница_входа'
+					# 	before {
+					# 		#user.update_attribute(:activated,true)
+							
+					# 		puts "=== тест10: user.activated? ==> #{user.activated?}"
+					# 		user.activate
+					# 		puts "=== тест20: user.activated? ==> #{user.activated?}"
+
+					# 		get activation_response_path(good_code)
+					# 	}
+					# 	specify {
+					# 		puts "=== тест30: user.activated? ==> #{user.activated?}"
+					# 		puts "=== тест40: response.code ==> #{response.code}"
+					# 		puts "=== тест50: response.location ==> #{response.location}"
+					# 	}
 					end
-					
-					describe 'верного,' do
-						pending 'когда пользователь уже активирован,' do
-						# 	# before { 
-						# 	# 	user.reload.activate 
-						# 	# 	visit activation_response_path(good_code)
-						# 	# }
-						# 	# it_should_behave_like 'flash-сообщение', 'warning', 'Пользователь уже активирован'
-						# 	# it_should_behave_like 'страница_входа'
-						# 	before {
-						# 		#user.update_attribute(:activated,true)
-								
-						# 		puts "=== тест10: user.activated? ==> #{user.activated?}"
-						# 		user.activate
-						# 		puts "=== тест20: user.activated? ==> #{user.activated?}"
 
-						# 		get activation_response_path(good_code)
-						# 	}
-						# 	specify {
-						# 		puts "=== тест30: user.activated? ==> #{user.activated?}"
-						# 		puts "=== тест40: response.code ==> #{response.code}"
-						# 		puts "=== тест50: response.location ==> #{response.location}"
-						# 	}
-						end
-
-						context 'когда пользователь ещё не активирован,' do
-							before {
-								visit activation_response_path(good_code)
-							}
-							it_should_behave_like 'flash-сообщение', 'success', 'Добро пожаловать на сайт'
-							it_should_behave_like 'главная_страница'
-							it_should_behave_like 'вид_пользователя'
-						end
+					context 'когда пользователь ещё не активирован,' do
+						before {
+							visit activation_response_path(good_code)
+						}
+						it_should_behave_like 'flash-сообщение', 'success', 'Добро пожаловать на сайт'
+						it_should_behave_like 'главная_страница'
+						it_should_behave_like 'вид_пользователя'
 					end
 				end
 			end
 		end
 	end
+
+	pending 'тест ActiveJob'
 end
