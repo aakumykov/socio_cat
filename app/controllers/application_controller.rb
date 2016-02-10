@@ -84,7 +84,7 @@ class ApplicationController < ActionController::Base
 		def not_signed_in_users
 			if signed_in?
 				#puts "===== not_signed_in_users() =====: ЗАРЕГИСТРИРОВАН"
-				flash[:danger] = 'Вы зарегистрированный пользователь'
+				flash[:warning] = 'Вы авторизованы на сайте'
 				redirect_to url_for(
 								controller: controller_name, 
 								action: 'show',

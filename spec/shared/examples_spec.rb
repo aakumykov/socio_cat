@@ -2,14 +2,19 @@ shared_examples_for 'flash-сообщение' do |mode,text=''|
 	case mode
 	when 'success'
 		suffix = 'success'
-	when 'error' || 'danger'
-		suffix = 'danger'
+	when 'info'
+		suffix = 'info'
+	when 'notice'
+		suffix = 'notice'
 	when 'warning'
 		suffix = 'warning'
+	when 'error' || 'danger'
+		suffix = 'danger'
 	else
 		suffix = 'notice'
 	end
-		
+
+
 	if text.blank?
 		it { should have_selector("div.alert.alert-#{suffix}") }
 	else
