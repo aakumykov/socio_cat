@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
+    <style>
+    	.smaller { font-size: 94%; }
+    	.email { font-style: italic; }
+    </style>
+  </head>
+  <body>
+    <h1>Добро пожаловать в Соционический каталог</h1>
+    <p>Здравствуйте, <%= @user.name %>!</p>
+ 
+    <%= yield %>
+   
+    <p>
+    	-------<br>
+    	Успехов<small>!</small><br>
+    	<span class='smaller'>Добрых мыслей, благих начинаний.</span>
+    </p>
+  </body>
+</html>

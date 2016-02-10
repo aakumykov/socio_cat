@@ -1,5 +1,6 @@
 class UserMailer < ApplicationMailer
 	default from: 'my.sender.personal@yandex.ru'
+	layout 'user_mail'
 
 	def welcome_message(arg)
 		@user = arg[:user]

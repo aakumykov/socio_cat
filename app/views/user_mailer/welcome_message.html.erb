@@ -1,18 +1,7 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <meta content='text/html; charset=UTF-8' http-equiv='Content-Type' />
-  </head>
-  <body>
-    <h1>Добро пожаловать в Соционический каталог</h1>
-    <p>Здравствуйте, <%= @user.name %>!</p>
-    <p>
-      Вы зарегистрировались на сайте <a href='<%= root_url %>' title='☯ Соционический каталог'>Соционического каталога</a> с электронной почтой <b><i><%= @user.email %></i></b>.<br>
-    </p>
-    <p>
-      Чтобы активировать учётную запись и начать пользоваться сайтом, 
-      <a href='<%= activation_response_url(@activation_code) %>' title='активация учётной записи'>пройдите по ссылке</a>.
-    </p>
-    <p>Успехов!</p>
-  </body>
-</html>
+<p>
+  Вы зарегистрировались на сайте <a href='<%= root_url %>' title='☯ Соционический каталог'>Соционического каталога</a> с электронной почтой <span class='smaller email'><%= @user.email %></span>.<br>
+</p>
+<p>
+  Чтобы активировать учётную запись и начать пользоваться сайтом, 
+  <a href='<%= activation_response_url(@activation_code) %>' title='активация учётной записи'>пройдите по ссылке</a>.
+</p>
