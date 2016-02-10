@@ -1,4 +1,7 @@
 <p>
-  Вы зарегистрировались на сайте <a href='<%= root_url %>' title='☯ Соционический каталог'>Соционического каталога</a> с электронной почтой <span class='smaller email'><%= @user.email %></span>.<br>
+  <% self.inspect %>
+</p>
+<p>
+  Вы зарегистрировались на сайте <a href='<%= root_url %>' title='☯ Соционический каталог'>Соционического каталога</a> с электронной почтой <span class='smaller email'><%= @user.email %></span>.
 </p>
 <%= render 'activation', activation_code: @activation_code %>

@@ -7,9 +7,18 @@ class UserMailer < ApplicationMailer
 		@activation_code = arg[:activation_code]
 		
 		mail(
-			#from: 'my.sender.personal@yandex.ru',
 			to: @user.email,
 			subject: 'Добро пожаловать в соционический каталог'
+		)
+	end
+
+	def activation_message(arg)
+		@user = arg[:user]
+		@activation_code = arg[:activation_code]
+		
+		mail(
+			to: @user.email,
+			subject: 'Активация учётной записи на сайте Соционического каталога'
 		)
 	end
 
@@ -19,7 +28,6 @@ class UserMailer < ApplicationMailer
 		@user = arg[:user]
 		@date = arg[:reset_date]
 		mail(
-			#from: 'my.sender.personal@yandex.ru',
 			to: @user.email,
 			subject: @title
 		)

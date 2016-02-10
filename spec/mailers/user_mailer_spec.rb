@@ -44,6 +44,35 @@ describe 'Почтальон Печкин,' do
 		}
 	end
 
+	describe 'письмо активации,' do
+		before {
+			@activation_code = @user.new_activation[:activation_code]
+			
+			UserMailer.welcome_message({
+				user: @user,
+				activation_code: @activation_code,
+			}).deliver_now!
+
+			@mail = ActionMailer::Base.deliveries.first
+		}
+
+		subject { @mail }
+
+		it 'отправляется,' do
+			ActionMailer::Base.deliveries.count.should eq 1
+		end
+
+		its(:to) { should eq [@user.email] }
+		its(:from) { should eq [sender_address] }
+		its(:subject) { should eq 'Активация учётной записи на сайте Соционического каталога' }
+
+		specify{
+			expect(@mail.body).to have_content(@user.name)
+			expect(@mail.body).to have_xpath("//a[@href='#{activation_response_url(@activation_code)}']")
+			expect(@mail.body).to have_xpath("//a[@href='#{root_url}']")
+		}
+	end
+
 	describe 'письмо сброса пароля,' do
 		before {
 			reset_params = @user.reset_password
