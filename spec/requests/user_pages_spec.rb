@@ -156,7 +156,7 @@ describe 'Страницы пользователя,' do
 					www_user
 					visit register_path
 				}
-				it_should_behave_like 'flash-сообщение', 'error', 'Вы зарегистрированный пользователь'
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы авторизованы на сайте'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
@@ -446,7 +446,7 @@ describe 'Страницы пользователя,' do
 					www_user
 					visit reset_password_path
 				}
-				it_should_behave_like 'flash-сообщение', 'error', 'Вы зарегистрированный пользователь'
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы авторизованы на сайте'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
@@ -557,7 +557,7 @@ describe 'Страницы пользователя,' do
 					visit reset_url
 					user.reload.reset_password
 				}
-				it_should_behave_like 'flash-сообщение', 'error', 'Вы зарегистрированный пользователь'
+				it_should_behave_like 'flash-сообщение', 'error', 'Вы авторизованы на сайте'
 				it_should_behave_like 'страница_пользователя', 'владелец' do
 					let(:the_user) { user }
 				end
@@ -811,25 +811,37 @@ describe 'Страницы пользователя,' do
 
 		describe 'активация пользователя по email,' do
 			describe 'запрос кода активации,' do
-				before { visit activation_path }
-				it_should_behave_like 'страница_активации'
-				
-				context 'с верными данными,' do
+				context 'пользователем,' do
 					before {
-						fill_in 'Электронная почта', with: user.email
-						click_submit
+						www_user
+						visit activation_path
 					}
-					it_should_behave_like 'flash-сообщение', 'success', 'Письмо с кодом активации отправлено'
+					it_should_behave_like 'flash-сообщение', 'error', 'Вы авторизованы на сайте'
 					it_should_behave_like 'главная_страница'
 				end
 
-				context 'с неверными данными,' do
-					before {
-						fill_in 'Электронная почта', with: "#{SecureRandom.uuid}@example.com"
-						click_submit
-					}
-					it_should_behave_like 'flash-сообщение', 'error', 'Не найден пользователь с такой электронной почтой'
+				context 'гостем,' do
+					before { visit activation_path }
+
 					it_should_behave_like 'страница_активации'
+
+					context 'с верными данными,' do
+						before {
+							fill_in 'Электронная почта', with: user.email
+							click_submit
+						}
+						it_should_behave_like 'flash-сообщение', 'success', 'Письмо с кодом активации отправлено'
+						it_should_behave_like 'главная_страница'
+					end
+
+					context 'с неверными данными,' do
+						before {
+							fill_in 'Электронная почта', with: "#{SecureRandom.uuid}@example.com"
+							click_submit
+						}
+						it_should_behave_like 'flash-сообщение', 'error', 'Не найден пользователь с такой электронной почтой'
+						it_should_behave_like 'страница_активации'
+					end
 				end
 			end
 
@@ -841,31 +853,42 @@ describe 'Страницы пользователя,' do
 					SecureRandom.uuid
 				}
 
-				describe 'неверного,' do
+				context 'пользователем,' do
 					before {
-						visit activation_response_path(bad_code)
+						sign_in other_user
+						visit activation_response_path(good_code)
 					}
-					it_should_behave_like 'flash-сообщение', 'error', 'Неверный код активации'
-					it_should_behave_like 'страница_входа'
+					it_should_behave_like 'flash-сообщение', 'error', 'Вы авторизованы на сайте'
+					it_should_behave_like 'главная_страница'
 				end
-				
-				describe 'верного,' do
-					context 'когда пользователь уже активирован,' do
-						before { 
-							user.activate 
+
+				context 'гостем,' do
+					describe 'неверного,' do
+						before {
 							visit activation_response_path(bad_code)
 						}
-						it_should_behave_like 'flash-сообщение', 'warning', 'Пользователь уже активирован'
+						it_should_behave_like 'flash-сообщение', 'error', 'Неверный код активации'
 						it_should_behave_like 'страница_входа'
 					end
+					
+					describe 'верного,' do
+						context 'когда пользователь уже активирован,' do
+							before { 
+								user.activate 
+								visit activation_response_path(good_code)
+							}
+							it_should_behave_like 'flash-сообщение', 'warning', 'Пользователь уже активирован'
+							it_should_behave_like 'страница_входа'
+						end
 
-					context 'когда пользователь ещё не активирован,' do
-						before {
-							visit activation_response_path(good_code)
-						}
-						it_should_behave_like 'flash-сообщение', 'success', 'Добро пожаловать на сайт'
-						it_should_behave_like 'главная_страница'
-						it_should_behave_like 'вид_пользователя'
+						context 'когда пользователь ещё не активирован,' do
+							before {
+								visit activation_response_path(good_code)
+							}
+							it_should_behave_like 'flash-сообщение', 'success', 'Добро пожаловать на сайт'
+							it_should_behave_like 'главная_страница'
+							it_should_behave_like 'вид_пользователя'
+						end
 					end
 				end
 			end

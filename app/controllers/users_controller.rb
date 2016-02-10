@@ -1,7 +1,14 @@
 class UsersController < ApplicationController
 
 	before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
-	before_action :not_signed_in_users, only: [:new, :create, :reset_password, :reset_response]
+	before_action :not_signed_in_users, only: [
+		:new, 
+		:create, 
+		:reset_password, 
+		:reset_response, 
+		:activation_request, 
+		:activation_response,
+	]
 	before_action :signed_in_users, only: [:show, :edit, :update]
 	before_action :editor_users, only: [:edit, :update]
 	before_action :admin_users, only: [:destroy]
@@ -16,9 +23,7 @@ class UsersController < ApplicationController
 	def create
 		@user = User.new(user_params)
 		if @user.save
-			@user.delay(run_at: 5.seconds.from_now).welcome_message
-			# переделать на: @user.activation_request
-			flash[:success] = "Вам отправлено сообщение со ссылкой активации"
+			init_activation(@user)
 			redirect_to root_path
 		else
 			flash.now[:danger] = 'ОШИБКА. Пользователь не создан'
@@ -207,8 +212,7 @@ class UsersController < ApplicationController
 		@user = User.find_by(email: params[:email])
 
 		if @user
-			@user.activation_request
-			flash[:success] = 'Письмо с кодом активации отправлено'
+			init_activation(@user)
 			redirect_to root_path
 		else
 			flash.now[:danger] = 'Не найден пользователь с такой электронной почтой'
@@ -220,17 +224,17 @@ class UsersController < ApplicationController
 		@user = User.find_by(activation_code: User.encrypt(params[:code]))
 
 		if @user
-			if @user.activated?
+			if !@user.activated?
+				@user.activate
+				sign_in @user
+				flash[:success] = 'Добро пожаловать на сайт'
+				redirect_to root_path
+			else
 				flash[:warning] = 'Пользователь уже активирован'
 				redirect_to login_path
-			else
-				@user.activate
-				flash[:success] = 'Добро пожаловать на сайт'
-				sign_in @user
-				redirect_to root_path
 			end
 		else
-			flash[:danger] = 'Неверный код активации'
+			flash[:error] = 'Неверный код активации'
 			redirect_to login_path
 		end
 	end
@@ -260,5 +264,19 @@ class UsersController < ApplicationController
 			response.headers['Cache-Control'] = 'no-cache, no-store, max-age=0, must-revalidate'
 			response.headers['Pragma'] = 'no-cache'
 			response.headers['Expires'] = 'Fri, 01 Jan 1990 00:00:00 GMT'
+		end
+
+		def init_activation(user)
+			code = User.new_remember_token
+			
+			user.update_attribute(:activated,false)
+			user.update_attribute(:activation_code, User.encrypt(code))
+
+			UserMailer.delay(run_at: 5.seconds.from_now).welcome_message(
+				user: user, 
+				activation_code: code,
+			)
+
+			flash[:success] = 'Вам отправлено сообщение с кодом активации'
 		end
 end
