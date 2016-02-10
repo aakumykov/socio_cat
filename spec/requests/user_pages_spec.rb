@@ -853,14 +853,10 @@ describe 'Страницы пользователя,' do
 					context 'когда пользователь уже активирован,' do
 						before { 
 							user.activate 
-							visit 'http://localhost:3000/activation_response/12345'
+							visit activation_response_path(bad_code)
 						}
 						it_should_behave_like 'flash-сообщение', 'warning', 'Пользователь уже активирован'
 						it_should_behave_like 'страница_входа'
-
-						specify{
-							puts "===== #{url_for(controller:'users',action:'activation_response')} ====="
-						}
 					end
 
 					context 'когда пользователь ещё не активирован,' do
