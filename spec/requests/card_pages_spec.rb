@@ -25,7 +25,7 @@ describe 'Карточки,' do
 	shared_examples_for 'список_карточек' do
 		# arguments: the_card1, the_card2
 		
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) {'Карточки'}
 			let(:heading) { title }
 		end
@@ -169,7 +169,7 @@ describe 'Карточки,' do
 	end
 
 	shared_examples_for 'страница_создания_карточки' do
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { 'Создание карточки' }
 			let(:heading) { title }
 		end
@@ -184,7 +184,7 @@ describe 'Карточки,' do
 	end
 
 	shared_examples_for 'страница_изменения_карточки' do
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { 'Редактирование карточки' }
 			let(:heading) { title }
 		end

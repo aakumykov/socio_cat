@@ -49,7 +49,7 @@ describe 'Категории,' do
 
 
 	shared_examples_for 'список_категорий' do
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { 'Категории' }
 			let(:heading) { title }
 		end
@@ -103,7 +103,7 @@ describe 'Категории,' do
 	end
 
 	shared_examples_for 'просмотр_раздела' do
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { "Категория «#{the_cat.name}»" }
 			let(:heading) { title }
 		end
@@ -152,7 +152,7 @@ describe 'Категории,' do
 	end
 
 	shared_examples_for 'редактирование_раздела' do
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { 'Изменение раздела' }
 			let(:heading) { title }
 		end
@@ -162,7 +162,7 @@ describe 'Категории,' do
 	end
 
 	shared_examples_for 'создание_раздела' do
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { 'Новая раздел' }
 			let(:heading) { title }
 		end
