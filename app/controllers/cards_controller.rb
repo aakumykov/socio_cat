@@ -88,7 +88,7 @@ class CardsController < ApplicationController
 			@obj = Card.find_by(id: params[:id])
 
 			if (current_user != @obj.user) && (not current_user.admin?)
-				flash[:error] = 'Редактирование запрещено'
+				flash[:danger] = 'Редактирование запрещено'
 				redirect_to card_path(@obj)
 			end
 		end

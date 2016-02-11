@@ -12,17 +12,17 @@ class CcRelationsController < ApplicationController
 
 		# if @card.nil? && !@category.nil?
 			
-		# 	flash[:error] = "Такой карточки не существует"
+		# 	flash[:danger] = "Такой карточки не существует"
 		# 	redirect_to cards_path
 
 		# elsif !@card.nil? && @category.nil?
 			
-		# 	flash[:error] = "Такой категории не существует"
+		# 	flash[:danger] = "Такой категории не существует"
 		# 	redirect_to card_path(@card)
 
 		# elsif @card.nil? && @category.nil?
 			
-		# 	flash[:error] = "Несуществующие карточка и категория"
+		# 	flash[:danger] = "Несуществующие карточка и категория"
 		# 	redirect_to root_path
 
 		# else
@@ -33,7 +33,7 @@ class CcRelationsController < ApplicationController
 		# 		if @category.cards << @card
 		# 			flash[:success] = "Назначена категория «#{@category.name}»"
 		# 		else
-		# 			flash[:error] = "Ошибка"
+		# 			flash[:danger] = "Ошибка"
 		# 		end
 		# 		redirect_to card_path(@card)
 		# 	end
@@ -42,7 +42,7 @@ class CcRelationsController < ApplicationController
 		if @category.cc_relations.create(@card)
 			flash[:success] = "Назначена категория «#{@category.name}»"
 		else
-			flash[:error] = "Ошибка назначения категории «#{@category.name}»"
+			flash[:danger] = "Ошибка назначения категории «#{@category.name}»"
 		end
 		redirect_to card_path(@card)
 	end
@@ -50,7 +50,7 @@ class CcRelationsController < ApplicationController
 	def unbind
 		@cc_relation = CcRelation.find_by(category_id: params[:category_id], card_id: params[:card_id])
 		if @cc_relation.nil?
-			flash[:error] = "Такой связи не существует"
+			flash[:danger] = "Такой связи не существует"
 			redirect_to cards_path
 		else
 			@cc_relation.destroy

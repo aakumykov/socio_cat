@@ -178,7 +178,8 @@ describe 'Карточки,' do
 		it { should have_link(cancel_button, cards_path) }
 		it { should have_xpath("//input[@type='submit' and @value='#{create_button}']") }
 
-		it { should have_field('Категория')}
+		#it { should have_field('Категория')}
+		it { should have_content('Категория')}
 
 		it { should_not have_selector(:xpath,"//div[text()='Категория:']")}
 	end
@@ -201,7 +202,7 @@ describe 'Карточки,' do
 
 	describe 'предфильтры,' do
 		
-		describe 'reject_nil_target()' do
+		describe 'reject_nil_target(),' do
 			describe 'http,' do
 				before { get card_path(wrong_id) }
 				specify{ expect(response).to redirect_to(cards_path) }
@@ -217,7 +218,7 @@ describe 'Карточки,' do
 			end
 		end
 
-		describe 'signed_in_users()' do
+		describe 'signed_in_users(),' do
 			context 'гость,' do
 				before { visit new_card_path }
 				it_should_behave_like 'требование_входа'
@@ -232,7 +233,7 @@ describe 'Карточки,' do
 			end
 		end
 
-		describe 'editor_users()' do
+		describe 'editor_users(),' do
 			context 'не автор,' do
 				before {
 					sign_in other_user, no_capybara: true
@@ -266,7 +267,7 @@ describe 'Карточки,' do
 			end
 		end
 
-		describe 'admin_users()' do
+		describe 'admin_users(),' do
 			context 'не админ' do
 				let!(:cards_count) { Card.all.count }
 				before {
