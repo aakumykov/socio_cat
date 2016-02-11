@@ -2,7 +2,7 @@
 
 <h1 class='page_title'><%= yield(:title) %></h1>
 
-<div class='edit span8 offset2'>
+<div class='edit col-md-8 offset2'>
     <%= form_for(@obj) do |f| %>
     	<%= render 'shared/error_messages.html.erb', object:f.object %>
     	<%= render 'form', f:f, mode: 'edit', button_text: 'Сохранить' %>

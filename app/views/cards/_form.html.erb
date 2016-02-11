@@ -13,7 +13,7 @@ end
 %>
 
 <div class='row'>
-	<div class='span4 pull-left'>
+	<div class='col-md-4 pull-left'>
 		<div id='title_area'>
 			<%= f.label :title, 'Название' %>
 			<%= f.text_field :title, placeholder:'...', class: 'edit_field' %>
@@ -23,7 +23,7 @@ end
 			<%= f.text_area :content, placeholder:'...', class: 'edit_area' %>
 		</div>
 	</div>
-	<div class='span4 pull-right'>
+	<div class='col-md-4 pull-right'>
 		<div id='categories_area'>
 			<fieldset>
 				<legend><%= ctg_label %></legend>
@@ -42,7 +42,7 @@ end
 			<%= text_area_tag(:attachments, nil, {disabled:true,style:'width:100%'}) %>
 		</div>
 	</div>
-	<div class='span10'>
+	<div class='col-md-10'>
 		<%= link_to 'Отмена', cancel_path, class: 'btn pull-left' %>
 		<%= f.submit button_text, class: 'btn btn-primary pull-right' %>
 	</div>

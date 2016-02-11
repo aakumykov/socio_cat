@@ -17,7 +17,7 @@
 		<div class="row main_content">
 			<%= yield %>
 		</div>
-		<div class='row span10 offset1'>
+		<div class='row col-md-10 offset1'>
 			<% if Rails.env.development? %>
 				<p><%= link_to 'Предпросмотр писем', '/rails/mailers', class:'btn btn-default' %></p>
 				<p><%= link_to 'Восстановление пароля', '/reset_password', class:'btn btn-default' %></p>
