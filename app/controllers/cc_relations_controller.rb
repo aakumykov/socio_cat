@@ -2,42 +2,13 @@ class CcRelationsController < ApplicationController
 	
 	#before_action :reject_nil_target, only: [:show, :edit, :update, :destroy]
 	#before_action :not_signed_in_users, only: [:new, :create]
-	#before_action :signed_in_users, only: [:show, :edit, :update]
+	#before_action :signed_in_users, only: [:bind, :unbind]
 	#before_action :editor_users, only: [:bind]
 	before_action :admin_users, only: [:bind, :unbind]
 
 	def bind
 		@card = Card.find_by(id: params[:card_id])
 		@category = Category.find_by(id: params[:category_id])
-
-		# if @card.nil? && !@category.nil?
-			
-		# 	flash[:danger] = "Такой карточки не существует"
-		# 	redirect_to cards_path
-
-		# elsif !@card.nil? && @category.nil?
-			
-		# 	flash[:danger] = "Такой категории не существует"
-		# 	redirect_to card_path(@card)
-
-		# elsif @card.nil? && @category.nil?
-			
-		# 	flash[:danger] = "Несуществующие карточка и категория"
-		# 	redirect_to root_path
-
-		# else
-		# 	if @category.cards.include(@card)
-		# 		flah[:warning] = "Категория уже назначена"
-		# 		redirect_to card_path(@card)
-		# 	else
-		# 		if @category.cards << @card
-		# 			flash[:success] = "Назначена категория «#{@category.name}»"
-		# 		else
-		# 			flash[:danger] = "Ошибка"
-		# 		end
-		# 		redirect_to card_path(@card)
-		# 	end
-		# end
 
 		if @category.cc_relations.create(@card)
 			flash[:success] = "Назначена категория «#{@category.name}»"
@@ -63,4 +34,16 @@ class CcRelationsController < ApplicationController
 			redirect_to card_path(@card)
 		end
 	end
+
+	private
+		def admin_users
+			if !current_user || !current_user.admin?
+				flash[:danger] = 'Доступно только администратору'
+				redirect_to url_for(
+					controller: 'cards',
+					action: 'show',
+					id: params[:card_id]
+				)
+			end
+		end
 end

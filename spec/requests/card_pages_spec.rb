@@ -393,4 +393,25 @@ describe 'Карточки,' do
 			specify{ expect(response).to redirect_to(cards_path) }
 		end
 	end
+
+	describe 'удаление категории из карточки,' do
+		before {
+			card.categories = [category]
+		}
+
+		context 'не админом,' do
+			specify {
+				expect{post cc_unbind_path(category.id,card.id)}.not_to change(CcRelation,:count)
+			}
+		end
+
+		context 'админом,' do
+			before {
+				console_admin
+			}
+			specify {
+				expect{post cc_unbind_path(category.id,card.id)}.to change(CcRelation,:count).by(-1)
+			}
+		end
+	end
 end
