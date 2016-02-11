@@ -7,6 +7,6 @@
 </div>
 <div class='bottom_buttons_holder'>
 	<% cancel_path = ('edit'==mode) ? url_for(controller: controller_name, action:'show', id:@obj.id) : url_for(controller: controller_name, action: 'index') %>
-	<%= link_to 'Отмена', cancel_path, class: 'btn' %>
+	<%= link_to 'Отмена', cancel_path, class: 'btn btn-default' %>
 	<%= f.submit button_text, class: 'btn btn-primary pull-right' %>
 </div>

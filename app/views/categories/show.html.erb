@@ -12,7 +12,7 @@
 			link_to(
 				'Изменить', 
 				edit_category_path(@obj.id), 
-				class:'btn',
+				class:'btn btn-default',
 			) if (signed_in? && current_user.admin?)
 		%>
 		<%= 

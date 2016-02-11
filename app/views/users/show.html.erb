@@ -17,7 +17,7 @@
 					<td colspan=2 class='profile_edit_button'>
 						<div class='row'>
 							<% if current_user==@user or current_user.admin? %>
-								<%= link_to 'Изменить', edit_user_path(@user), class:'btn pull-left' %>
+								<%= link_to 'Изменить', edit_user_path(@user), class:'btn btn-default pull-left' %>
 								
 								<% if current_user.admin? and current_user != @user %>
 									<%= link_to 'Удалить', @user,
