@@ -3,7 +3,7 @@
 <h1 class='page_title'><%= yield(:title) %></h1>
 
 
-<div class='col-md-8 offset2'>
+<div class='col-md-8 col-md-offset-2'>
 	<%= render 'comfort_buttons' %>
 	<% @list.each do |card| %>
 		<%= render 'card_in_index', card: card %>
