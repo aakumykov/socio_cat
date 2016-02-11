@@ -96,7 +96,7 @@ describe 'Страницы пользователя,' do
 			let(:heading) { title }
 		end
 		it { should have_field 'Электронная почта' }
-		it { should have_button 'Отправить' }
+		it { should have_button 'submit', 'Отправить' }
 	end
 
 
