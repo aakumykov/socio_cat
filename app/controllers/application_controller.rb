@@ -80,7 +80,8 @@ class ApplicationController < ActionController::Base
 
 		def signed_in_users
 			if not signed_in?
-				redirect_to login_path, notice: 'Сначала войдите на сайт'
+				flash[:warning] = 'Сначала войдите на сайт'
+				redirect_to login_path
 			end
 		end
 

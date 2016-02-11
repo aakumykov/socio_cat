@@ -77,7 +77,7 @@ end
 
 shared_examples_for 'требование_входа' do
 	it_should_behave_like 'страница_входа'
-	it_should_behave_like 'flash-сообщение', 'notice', 'Сначала войдите на сайт'
+	it_should_behave_like 'flash-сообщение', 'warning', 'Сначала войдите на сайт'
 end
 
 

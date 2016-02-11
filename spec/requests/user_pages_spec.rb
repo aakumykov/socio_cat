@@ -338,7 +338,7 @@ describe 'Страницы пользователя,' do
 	describe 'список пользователей,' do
 		context 'для гостя,' do
 			before { visit users_path }
-			it_should_behave_like 'flash-сообщение', 'notice', 'Сначала войдите на сайт'
+			it_should_behave_like 'flash-сообщение', 'warning', 'Сначала войдите на сайт'
 			it_should_behave_like 'страница_входа'
 		end
 
