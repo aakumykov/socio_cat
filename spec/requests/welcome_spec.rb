@@ -11,7 +11,7 @@ describe 'Статические welcome-страницы,' do
 
 	describe 'О проекте,' do
 		before { visit about_path }
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { 'О проекте' }
 			let(:heading) { title }
 		end
@@ -20,7 +20,7 @@ describe 'Статические welcome-страницы,' do
 
 	describe 'Помощь,' do
 		before { visit help_path }
-		it_should_behave_like 'страница с названием' do
+		it_should_behave_like 'страница_с_названием' do
 			let(:title) { 'Помощь' }
 			let(:heading) { title }
 		end

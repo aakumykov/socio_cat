@@ -35,6 +35,48 @@ class User < ActiveRecord::Base
 		Digest::SHA1.hexdigest(token.to_s)
 	end
 
+	# def welcome_message(activation_code)
+	# 	UserMailer.welcome_message(self,activation_code).deliver_now!
+	# end
+
+	def new_activation
+		code = User.new_remember_token
+		self.update_attribute(:activated,false)
+		self.update_attribute(:activation_code, User.encrypt(code))
+		return { activation_code: code }
+	end
+
+	def activate(status=true)
+		#puts "===== модель: User#activate (before) =====> #{self.activated}"
+		self.update_attribute(:activated,status)
+		#puts "===== модель: User#activate (after) =====> #{self.activated}"
+	end
+
+	def reset_password
+		date = Time.now
+		reset_code = User.new_remember_token
+
+		self.update_attribute(:reset_date, date)
+		self.update_attribute(:reset_code, User.encrypt(reset_code))
+		self.update_attribute(:in_reset, true)
+		self.update_attribute(:in_pass_reset, true)
+
+		return { date: date, reset_code: reset_code }
+	end
+
+	def drop_reset_flags(mode=:full)
+		#self.toggle!(:in_reset)
+		#self.toggle!(:in_pass_reset)
+
+		case mode
+		when :link
+			self.update_attribute(:in_reset, false)
+		when :full
+			self.update_attribute(:in_reset, false)
+			self.update_attribute(:in_pass_reset, false)
+		end
+	end
+
 	private
 		def create_remember_token
 			self.remember_token = User.encrypt( User.new_remember_token )

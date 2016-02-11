@@ -21,16 +21,28 @@ describe 'Пользователь,' do
 	it { should respond_to(:authenticate) }
 	it { should respond_to(:remember_token) }
 	it { should respond_to(:admin) }
+
+	it { should respond_to(:activated) }
+	it { should respond_to(:activation_code) }
 	
 	#it { should respond_to(:cards) } # теперь в разделе 'связь с карточками'
+	# ПЕРЕНЕСТИ СЮДА!
 
+
+	# значения по умолчанию
 	it { should_not be_admin }
+	its(:admin) { should be_false }
+	
+	it { should_not be_activated } # является (по умолчанию)
+	its(:activated) { should be_false }
 
-	it 'с корректными данными' do
+
+	# проверки
+	it 'модель с корректными данными' do
 		should be_valid
 	end
 
-	describe 'с некорректными данными,' do
+	describe 'модель с некорректными данными,' do
 		describe 'отсутствует имя,' do
 			before { @user.name = ' ' }
 			it { should_not be_valid }
@@ -157,7 +169,8 @@ describe 'Пользователь,' do
 		before { @user.save }
 		its(:remember_token) { should_not be_blank }
 	end
-	describe 'флаг администратора,' do
+	
+	describe 'переключение флага администратора,' do
 		before { 
 			@user.save!
 			@user.toggle!(:admin)
@@ -165,6 +178,44 @@ describe 'Пользователь,' do
 		it { should be_admin }
 	end
 
+	describe 'метод activate()' do
+		describe 'false' do
+			before {
+				@user.activate(false)
+			}
+			specify {
+				expect(@user).not_to be_activated
+
+			}
+		end
+
+		describe 'true' do
+			before {
+				@user.activate
+			}
+			specify {
+				expect(@user).to be_activated
+				
+			}
+		end
+
+		specify{
+			expect(@user.activation_code).to be_nil
+		}
+	end
+
+	describe 'метод new_activation()' do
+		let!(:old_activation_code) { @user.activation_code }
+		
+		before {
+			@user.new_activation
+		}
+		
+		specify{
+			expect(@user.activated?).to be_false
+			expect(@user.activation_code).not_to eq(old_activation_code)
+		}
+	end
 
 	describe 'связь с карточками,' do
 		let(:user) { FactoryGirl.create(:user) }
@@ -190,6 +241,57 @@ describe 'Пользователь,' do
 			
 			specify{ expect(Card.first.user).to be_nil }
 			specify{ expect(Card.last.user).to be_nil }
+		end
+	end
+
+	describe 'сброс пароля,' do
+		describe 'атрибуты сброса,' do
+			it { should respond_to(:in_reset) }
+			it { should respond_to(:in_pass_reset) }
+			it { should respond_to(:reset_code) }
+			it { should respond_to(:reset_date) }
+			it { should respond_to(:new_pass_expire_time) }
+		end
+
+		describe 'методы сброса,' do
+			describe 'reset_password()' do
+				let!(:old_reset_flag) { @user.in_reset }
+				let!(:old_pass_reset_flag) { @user.in_pass_reset }
+				before {
+					@user.reset_password
+				}
+				specify{
+					expect(old_reset_flag).to eq false
+					expect(old_pass_reset_flag).to eq false
+
+					expect(@user.reload.in_reset).to eq true
+					expect(@user.reload.in_pass_reset).to eq true
+				}
+			end
+
+			describe 'drop_reset_flags(mode)' do
+				describe 'link mode,' do
+					before {
+						@user.reset_password
+						@user.drop_reset_flags(:link)
+					}
+					specify {
+						expect(@user.reload.in_reset).to eq false
+						expect(@user.reload.in_pass_reset).to eq true
+					}
+				end
+
+				describe 'full mode,' do
+					before {
+						@user.reset_password
+						@user.drop_reset_flags(:full)
+					}
+					specify {
+						expect(@user.reload.in_reset).to eq false
+						expect(@user.reload.in_pass_reset).to eq false
+					}
+				end
+			end
 		end
 	end
 end

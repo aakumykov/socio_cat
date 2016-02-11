@@ -1,0 +1,11 @@
+<% provide(:title,'Активация пользователя') %>
+
+<h1 class='page_title'><%= yield(:title) %></h1>
+
+<div class='edit span4 offset4'>
+	<%= form_tag(url_for(controller:'users',action:'activation_request')) do %>
+		<%= label_tag :email, 'Электронная почта' %>
+		<%= text_field_tag(:email) %>
+		<%= submit_tag 'Отправить' %>
+	<% end %>
+</div>

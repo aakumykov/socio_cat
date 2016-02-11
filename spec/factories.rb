@@ -2,25 +2,26 @@ FactoryGirl.define do
 	#ActionView::Helpers::TextHelper
 
 	factory :card do
-		title Faker::Lorem.word.capitalize
+		title { Faker::Lorem.word.capitalize + '_' + rand(1..100).to_s }
 		content Faker::Lorem.paragraph
 		user
 	end
 
 	factory :user do
-		name                  { Faker::Name.first_name }
+		name                  { Faker::Name.first_name + '_' + rand(1..100).to_s }
 		email                 { Faker::Internet.email }
-		password              'Password123$%^'
-		password_confirmation 'Password123$%^'
+		password              'FactoryPass123$%^'
+		password_confirmation 'FactoryPass123$%^'
 
 		factory :admin do
 			admin true
+			activated true
 		end
 	end
 
 	factory :category do
-		name { Faker::Lorem.word.capitalize * 2 } # иначе бывает слишком коротким
+		# имя с защитой от повторов / недостаточной длины
+		name { Faker::Lorem.word.capitalize*2 + rand(1..10).to_s }
 		description { Faker::Lorem.paragraph }
-		#user
 	end
 end

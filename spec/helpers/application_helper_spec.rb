@@ -21,4 +21,23 @@ describe ApplicationHelper do
 			expect(card_id(id)).to match(/\Acard#{id}\z/)
 		end
 	end
+
+	describe 'url_for_password_reset(),' do
+		let(:code) { User.new_remember_token }
+		let(:query) { "?reset_code=#{code}" }
+		let(:valid_path) { url_for(controller: 'users', action: 'reset_response', only_path:true) + query }
+		let(:valid_url) { url_for(controller: 'users', action: 'reset_response') + query }
+
+		context 'режим "url"' do
+			specify{
+				expect(url_for_password_reset(reset_code: code, mode: 'url')).to eq valid_url
+			}
+		end
+
+		context 'режим по умолчанию' do
+			specify{
+				expect(url_for_password_reset(reset_code: code)).to eq valid_path
+			}
+		end
+	end
 end

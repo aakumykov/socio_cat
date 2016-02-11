@@ -1,4 +1,4 @@
-SocioCat::Application.routes.draw do
+Rails.application.routes.draw do
   # The priority is based upon order of creation: first created -> highest priority.
   # See how all your routes lay out with "rake routes".
 
@@ -19,7 +19,18 @@ SocioCat::Application.routes.draw do
   get 'login' => 'sessions#new', as: :login
   delete 'logout' => 'sessions#destroy', as: :logout
 
+  get 'reset_password' => 'users#reset_password'
+  post 'reset_request' => 'users#reset_request'
+  get 'reset_response' => 'users#reset_response'
+  get 'new_password' => redirect('/')
+  post 'new_password' => 'users#new_password'
+
+  get 'activation' => 'users#activation'
+  post 'activation_request' => 'users#activation_request'
+  get 'activation_response/:code' => 'users#activation_response', as: :activation_response
+
   # Example resource route (maps HTTP verbs to controller actions automatically):
+  #   resources :products
   resources :users
   resources :sessions, only: [:new, :create, :destroy]
   resources :categories

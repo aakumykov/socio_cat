@@ -63,4 +63,18 @@ module ApplicationHelper
 		#puts "===== hash_for_checkboxes =====> all_cats: #{all_cats}"
 		return all_cats
 	end
+
+	def url_for_password_reset(opt = {mode:'url'})
+		case opt[:mode]
+		when 'url'
+			url = url_for(controller: 'users', action: 'reset_response')
+		else
+			url = url_for(controller: 'users', action: 'reset_response', only_path:true)
+		end
+			
+		"#{url}?reset_code=#{opt[:reset_code]}"
+	end
 end
+
+
+

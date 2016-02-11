@@ -14,13 +14,22 @@ def create_users
 		email: 'debian@linux.com',
 		password: 'Qwerty123!@#',
 		password_confirmation: 'Qwerty123!@#',
+		activated: true,
 	)
 	User.create!(
 		name: 'Убунту',
 		email: 'ubuntu@linux.com',
 		password: 'Qwerty123!@#',
 		password_confirmation: 'Qwerty123!@#',
+		activated: true,
 	)
+	# User.create!(
+	# 	name: 'Андрей',
+	# 	email: 'aakumykov@yandex.ru',
+	# 	password: 'Qwerty123!@#',
+	# 	password_confirmation: 'Qwerty123!@#',
+	# 	activated: true
+	# )
 end
 
 def create_admin_user
@@ -29,7 +38,8 @@ def create_admin_user
 		email: 'admin@example.com',
 		password: 'Qwerty123!@#',
 		password_confirmation: 'Qwerty123!@#',
-		admin: true
+		admin: true,
+		activated: true,
 	)
 end
 
