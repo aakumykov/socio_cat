@@ -346,6 +346,8 @@ describe 'Карточки,' do
 				end
 				it_should_behave_like 'flash-сообщение', 'success', 'Карточка создана'
 			end
+
+			pending 'создание карточки с категорией'
 		end
 
 		describe 'http,' do
