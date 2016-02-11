@@ -3,8 +3,8 @@
 <span class='btn-group'>
 	<%= link_to 'Карточки', cards_path, class: 'btn btn-danger' %>
 	<% if signed_in? %>
-		<%= link_to(new_card_path, class: 'btn btn-danger btn-mini') do %>
-				<i class='icon icon-plus'></i>
+		<%= link_to(new_card_path, class: 'btn btn-danger btn-xs') do %>
+				<i class='glyphicon glyphicon-plus'></i>
 		<% end %>
 	<% end %>
 </span>
@@ -12,8 +12,8 @@
 <span class='btn-group'>
 	<%= link_to 'Категории', categories_path, class: 'btn btn-success' %>
 	<% if signed_in? && current_user.admin? %>
-		<%= link_to(new_category_path, class: 'btn btn-success btn-mini') do %>
-			<i class='icon icon-plus'></i>
+		<%= link_to(new_category_path, class: 'btn btn-success btn-xs') do %>
+			<i class='glyphicon glyphicon-plus'></i>
 		<% end %>
 	<% end %>
 </span>

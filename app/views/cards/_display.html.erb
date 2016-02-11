@@ -8,10 +8,10 @@
 		<% if true==editable %>
 			<% if signed_in? %>
 				<% if (current_user==card.user) || current_user.admin? %>
-					<%= link_to 'Изменить', edit_card_path(card), class:'btn btn-info btn-small pull-right' %>
+					<%= link_to 'Изменить', edit_card_path(card), class:'btn btn-info btn-sm pull-right' %>
 				<% end %>
 				<% if current_user.admin? %>
-					<%= link_to 'Удалить', card, method: :delete, data: { confirm: "Удалить карточку?\n\n«#{card.title}»" }, class:'btn btn-danger btn-small pull-right' %>
+					<%= link_to 'Удалить', card, method: :delete, data: { confirm: "Удалить карточку?\n\n«#{card.title}»" }, class:'btn btn-danger btn-sm pull-right' %>
 				<% end %>
 			<% end %>
 		<% end %>
