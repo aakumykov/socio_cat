@@ -13,9 +13,9 @@ class CardsController < ApplicationController
 	def create
 		@obj = current_user.cards.new(card_params)
 
-		@obj.fill_categories(category_params)
-
 		if @obj.save
+			@obj.fill_categories(category_params)
+			
 			flash[:success] = "Карточка создана"
 			redirect_to card_path(@obj)
 		else
