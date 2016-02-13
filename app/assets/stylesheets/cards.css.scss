@@ -36,6 +36,17 @@ $card_title: #ececec;
 	.controls {}
 }
 
+.cards_index {
+	LI {
+		list-style-type: none;
+	}
+
+	.badge {
+		font-weight: normal;
+		font-size: 80%;
+		background-color: rgba(160,160,160,1);
+	}
+}
 
 
 .card_categories {
