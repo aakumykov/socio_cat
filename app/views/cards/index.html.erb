@@ -2,9 +2,9 @@
 
 <h1 class='page_title'><%= yield(:title) %></h1>
 
+<%= render 'comfort_buttons', mode:'create' %>
 
 <div class='col-md-8 col-md-offset-2'>
-	<%= render 'comfort_buttons', mode:'create' %>
 	<ul class='cards_index'>
 		<% @list.each do |card| %>
 			<% user = card.user %>
