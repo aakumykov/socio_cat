@@ -4,6 +4,8 @@
 
 <div class='card_edit col-md-8 col-md-offset-2'>
 	<%= form_for @obj do |f| %>
+		<%= render 'shared/error_messages.html.erb', object:f.object %>
+		
 		<fieldset class='title'>
 			<legend><%= f.label :title, 'Название' %></legend>
 			<%= f.text_field :title %>
