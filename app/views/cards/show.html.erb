@@ -8,12 +8,21 @@
 
 <div class='card col-md-8 col-md-offset-2'>
 	<div class='controls btn-group-vertical pull-right'>
-		<a href='#' class='btn btn-default btn-sm'>кнопки</a>
-		<a href='#' class='btn btn-default btn-sm'>управления</a>
-		<a href='#' class='btn btn-default btn-sm'>карточкой</a>
+		<%=
+			link_to 'И', edit_card_path(@obj.id), class: 'btn btn-default btn-sm', title: 'правка'
+		%>
+		<%=
+			link_to 'У', card_path(@obj.id), method: 'delete', data: { confirm: 'Удалить карточку?'}, class: 'btn btn-danger btn-sm', title: 'удаление'
+		%>
 	</div>
-	<div class='title'>заголовокъ карточки</div>
-	<div class='content'>содержимое карточки</div>
+	<div class='title'><%= @obj.title %></div>
+	<div class='content'><%= my_sanitize(@obj.content) %></div>
 	<div class='description'>описание</div>
-	<div class='categories'>категории</div>
+	<div class='categories'>
+		<ul>
+			<% @obj.categories.each do |ctg| %>
+				<li><%= ctg.name %></li>
+			<% end %>
+		</ul>
+	</div>
 </div>
