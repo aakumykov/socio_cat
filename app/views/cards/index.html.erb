@@ -4,7 +4,7 @@
 
 
 <div class='col-md-8 col-md-offset-2'>
-	<%= render 'comfort_buttons' %>
+	<%= render 'comfort_buttons', mode:'create' %>
 	<ul class='cards_index'>
 		<% @list.each do |card| %>
 			<% user = card.user %>
