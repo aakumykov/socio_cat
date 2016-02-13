@@ -15,12 +15,7 @@ describe 'Карточка,' do
 	# тестовая модель
 	let(:user) { FactoryGirl.create(:user) }
 
-	let(:card) {
-		user.cards.build(
-			title: Faker::Lorem.word.capitalize,
-			content: Faker::Lorem.paragraph,
-		)
-	}
+	let(:card) { FactoryGirl.create(:card, user:user) }
 	
 	subject { card }
 
@@ -29,6 +24,7 @@ describe 'Карточка,' do
 	## наличие
 	it { should respond_to(:title) }
 	it { should respond_to(:content) }
+	it { should respond_to(:description) }
 
 	## правильность
 	# общая
@@ -59,6 +55,23 @@ describe 'Карточка,' do
 	describe 'когда нет user_id,' do
 		before{ card.user_id = nil }
 		it { should_not be_valid }
+	end
+
+	describe 'описание,' do
+		describe 'отсутствует' do
+			before { card.description = ' ' }
+			it { should_not be_valid }
+		end
+
+		describe 'слишком короткое' do
+			before { card.description = '1' }
+			it { should_not be_valid }
+		end
+
+		describe 'слишком длинное' do
+			before { card.description = 'A'*5000 }
+			it { should_not be_valid }
+		end
 	end
 
 

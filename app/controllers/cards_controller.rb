@@ -38,7 +38,7 @@ class CardsController < ApplicationController
 			flash[:success] = "Изменения сохранены"
 			redirect_to @obj
 		else
-			flash.now[:danger] = "Изменения отклонены"
+			#flash.now[:danger] = "Изменения отклонены"
 			@checkboxes = hash_for_checkboxes(category_params)
 			render :edit
 		end
@@ -50,6 +50,7 @@ class CardsController < ApplicationController
 			params.require(:card).permit(
 				:title,
 				:content,
+				:description,
 			)
 		end
 
