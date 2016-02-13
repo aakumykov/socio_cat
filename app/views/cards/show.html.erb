@@ -17,10 +17,8 @@
 	<div class='content'><%= my_sanitize(@obj.content) %></div>
 	<div class='description'>описание</div>
 	<div class='categories'>
-		<ul>
-			<% @obj.categories.each do |ctg| %>
-				<li><%= ctg.name %></li>
-			<% end %>
-		</ul>
+		<% @obj.categories.each do |ctg| %>
+			<%= link_to ctg.name, category_path(ctg), title:"категория «#{ctg.name}»", class:'item badge' %>
+		<% end %>
 	</div>
 </div>
