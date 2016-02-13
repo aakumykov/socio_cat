@@ -1,5 +1,7 @@
 class Card < ActiveRecord::Base
 
+	attr_reader :description # временно
+
 	belongs_to :user, inverse_of: :cards
 
 	has_many :cc_relations

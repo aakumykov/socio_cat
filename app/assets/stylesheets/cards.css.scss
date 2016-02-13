@@ -36,42 +36,68 @@ $card_title: #ececec;
 	.controls {}
 }
 
+.card_edit {
+
+	.content, .description {
+		TEXTAREA {
+			width: 100%;	
+			min-height: 100px;
+			height: 140px;
+			padding: 4px;
+		}
+	}
+
+	.categories {
+		.item {
+			background-color: lightcoral;
+			color: white;
+
+			font-style: italic;
+			font-family: serif;
+
+			margin-right: 10px;
+			padding: 0px 8px 0px 6px;
+			border-radius: 3px;
+
+			INPUT {
+				margin-right: 2px;
+			}
+		}
+	}
+
+	.content {
+		margin-top: 16px;
+	}
+	.controls{
+		margin-top: 16px;
+	}
+
+	FIELDSET {
+		margin-top: 12px;
+	}
+
+	LEGEND {
+		margin-bottom: 0px;
+		border-bottom-style: none;
+	}
+
+	LABEL {
+		margin-bottom: 0px;
+		font-weight: normal;
+	}
+}
+
 .cards_index {
 	LI {
 		list-style-type: none;
+		border-bottom: 1px dotted lightgrey;
+		margin-bottom: 1%;
 	}
 
 	.badge {
 		font-weight: normal;
 		font-size: 80%;
-		background-color: rgba(160,160,160,1);
+		background-color: rgba(160,160,160,0.8);
 	}
 }
 
-
-.card_categories {
-	width: 80%;
-	margin: 20px auto;
-	padding: 6px 16px;
-
-	.title {
-		float: left;
-		background-color: palegreen;
-		padding-right: 8px;
-		margin-right: 4px;
-		color: darkgreen;
-	}
-
-	.badge {
-		padding-right: 4px;
-	}
-
-	A {
-		margin: auto 2px;
-		color: white;
-	}
-
-	.delete_link {
-		font-size: 17px;
-	}
-}

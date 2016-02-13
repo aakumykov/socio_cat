@@ -19,7 +19,7 @@ class CardsController < ApplicationController
 			flash[:success] = "Карточка создана"
 			redirect_to card_path(@obj)
 		else
-			flash.now[:error] = 'ОШИБКА, карточка не создана'
+			flash.now[:danger] = 'ОШИБКА, карточка не создана'
 			@checkboxes = hash_for_checkboxes(category_params)
 			render 'new'
 		end
@@ -38,7 +38,7 @@ class CardsController < ApplicationController
 			flash[:success] = "Изменения сохранены"
 			redirect_to @obj
 		else
-			flash.now[:error] = "Изменения отклонены"
+			flash.now[:danger] = "Изменения отклонены"
 			@checkboxes = hash_for_checkboxes(category_params)
 			render :edit
 		end
