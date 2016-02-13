@@ -4,41 +4,32 @@
 $card_title: #ececec;
 
 .card {
-	margin-bottom: 10px;
-	border: 1px outset gray;
-	border-radius: 9px;
-	padding: 6px 14px 12px;
-	
-	LEGEND {
-		margin-bottom: 5px;
-		margin-left: 5px;
-		
-		border-radius: 4px;
-		border: 1px solid $card_title;
-		
-		width: auto;
-		
-		line-height: 1em;
-		padding: 4px 10px;
+	border: 2px outset grey;
+	border-radius: 8px;
+	padding: 4px;
 
-		background-color: $card_title;
-
-		font-size: 18px;
+	.title {
+		background-color: skyblue;
+		text-align: center;
 	}
 
-	.buttons_container {
-		margin-left: 9px;
-		A { margin-bottom: 3px; }
+	.content, .description {
+		padding: 10px;
 	}
+	.content {
+		background-color: palegreen;
+	}
+	.description {
+		background-color: gainsboro;
+	}
+	.categories {
+		padding: 0px 10px;
+		text-align: right;
+	}
+	.controls {}
 }
 
-#categories_area UL {
-	list-style-type: none;
-}
 
-.card_content {
-	color:#333;
-}
 
 .card_categories {
 	width: 80%;
