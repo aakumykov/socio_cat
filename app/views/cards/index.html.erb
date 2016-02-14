@@ -2,10 +2,17 @@
 
 <h1 class='page_title'><%= yield(:title) %></h1>
 
+<%= render 'comfort_buttons', mode:'create' %>
 
 <div class='col-md-8 col-md-offset-2'>
-	<%= render 'comfort_buttons' %>
-	<% @list.each do |card| %>
-		<%= render 'card_in_index', card: card %>
-	<% end %>
+	<ul class='cards_index'>
+		<% @list.each do |card| %>
+			<% user = card.user %>
+			<li>
+				<%= link_to card.title, card_path(card.id), title: "карточка «#{card.title}»" %>,
+				от
+				<%= link_to user.name, user_path(user), title: "пользователь «#{user.name}»", class:'badge' %>
+			</li>
+		<% end %>
+	</ul>
 </div>

@@ -19,24 +19,28 @@
 		</div>
 		<div class='row col-md-10 col-md-offset-1'>
 			<% if Rails.env.development? %>
-				<p><%= link_to 'Предпросмотр писем', '/rails/mailers', class:'btn btn-default' %></p>
-				<p><%= link_to 'Восстановление пароля', '/reset_password', class:'btn btn-default' %></p>
-				<p><%= link_to 'Выслать письмо активации', activation_path, class:'btn  btn-default' %></p>
+				<div class='btn-group'>
+					<%= link_to 'Предпросмотр писем', '/rails/mailers', class:'btn btn-default btn-xs' %>
+					<%= link_to 'Восстановление пароля', '/reset_password', class:'btn btn-default btn-xs' %>
+					<%= link_to 'Выслать письмо активации', activation_path, class:'btn  btn-default btn-xs' %>
+				</div>
+				<p></p>
+				<p class='clearfix'>
+					http-параметры:<br>
+					<%= debug(params) %>
+					
+					REQUEST_URI:<br>
+					<%= debug(request.env['REQUEST_URI']) %>
 
-				http-параметры:<br>
-				<%= debug(params) %>
-				
-				REQUEST_URI:<br>
-				<%= debug(request.env['REQUEST_URI']) %>
+					request.referer:<br>
+					<%= debug(request.referer) %>
+					
+					cookies[:referer]:<br>
+					<%= debug(cookies[:referer]) %>
 
-				request.referer:<br>
-				<%= debug(request.referer) %>
-				
-				cookies[:referer]:<br>
-				<%= debug(cookies[:referer]) %>
-
-				Cookies:<br>
-				<%= debug(cookies[:referer]) %>
+					Cookies:<br>
+					<%= debug(cookies[:referer]) %>
+				</p>
 			<% end %>
 		</div>
 	</div>

@@ -1,7 +1,26 @@
-<% provide(:title,'O_o карточки') %>
+<% provide(:title,'Карточка') %>
 
 <h1 class='page_title'><%= yield(:title) %></h1>
 
 <%= render 'comfort_buttons' %>
-<%= render 'display', card: @obj, editable: true %>
-<%= render 'bottom_categories', card: @obj %>
+
+<div class='card col-md-8 col-md-offset-2'>
+	<% if signed_in? %>
+		<div class='controls btn-group-vertical pull-right'>
+			<% if @obj.user == current_user || current_user.admin? %>
+				<%= link_to 'И', edit_card_path(@obj.id), class: 'btn btn-default btn-sm', title: 'правка' %>
+			<% end %>
+			<% if current_user.admin? %>
+				<%= link_to 'У', card_path(@obj.id), method: 'delete', data: { confirm: 'Удалить карточку?'}, class: 'btn btn-danger btn-sm', title: 'удаление' %>
+			<% end %>
+		</div>
+	<% end %>
+	<div class='title'><%= @obj.title %></div>
+	<div class='content'><%= my_sanitize(@obj.content) %></div>
+	<div class='description'><%= my_sanitize(@obj.description) %></div>
+	<div class='categories'>
+		<% @obj.categories.each do |ctg| %>
+			<%= link_to ctg.name, category_path(ctg), title:"категория «#{ctg.name}»", class:'item badge' %>
+		<% end %>
+	</div>
+</div>

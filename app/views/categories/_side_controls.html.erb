@@ -2,11 +2,11 @@
 	<% if current_user.admin? %>
 		<div class='btn-group pull-right'>
 			<%= link_to edit_category_path(obj.id), title:'Изменить', class:'btn btn-xs btn-info' do %>
-				<i class='glyphicon glyphicon-edit'></i>
+				И
 			<% end %>
 
 			<%= link_to category_path(obj.id), title:'Удалить', method:'delete', class:'btn btn-xs btn-danger' do %>
-				<i class='glyphicon glyphicon-remove'></i>
+				У
 			<% end %>
 		</div>
 	<% end %>

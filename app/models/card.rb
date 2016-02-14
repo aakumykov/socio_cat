@@ -5,9 +5,7 @@ class Card < ActiveRecord::Base
 	has_many :cc_relations
 	has_many :categories, through: :cc_relations
 
-
 	before_validation { |m| m.remove_trailing_spaces(:title,:content) }
-
 
 	validates :title, {
 		presence: true,
@@ -16,7 +14,18 @@ class Card < ActiveRecord::Base
 	
 	validates :content, {
 		presence: true,
-		length: { maximum: 1000 }
+		length: { 
+			minimum: 50,
+			maximum: 1000,
+		}
+	}
+
+	validates :description, {
+		presence: true,
+		length: { 
+			minimum: 10,
+			maximum: 1024,
+		}
 	}
 
 	validates :user_id, {

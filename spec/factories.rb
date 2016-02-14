@@ -4,6 +4,7 @@ FactoryGirl.define do
 	factory :card do
 		title { Faker::Lorem.word.capitalize + '_' + rand(1..100).to_s }
 		content Faker::Lorem.paragraph
+		description Faker::Lorem.paragraph
 		user
 	end
 
