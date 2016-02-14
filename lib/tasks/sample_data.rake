@@ -1,5 +1,5 @@
 require 'factory_girl'
-#require 'spec/factories/user_factory'
+require Rails.root.join('spec/factories')
 
 namespace :db do
 	desc "Fill database with sample data"
@@ -48,29 +48,16 @@ end
 
 def create_cards
 	2.times do
-		Card.create!(
-			title: Faker::Lorem.word.capitalize,
-			content: Faker::Lorem.paragraph,
-			description: Faker::Lorem.paragraph,
-			user: User.where(admin:false).first,
-		)
+		FactoryGirl.create(:card, user: User.where(admin:false).first)
 	end
 
 	2.times do
-		Card.create!(
-			title: Faker::Lorem.word.capitalize,
-			content: Faker::Lorem.paragraph,
-			description: Faker::Lorem.paragraph,
-			user: User.where(admin:false).last,
-		)
+		FactoryGirl.create(:card, user: User.where(admin:false).last)
 	end
 end
 
 def create_categoties
 	4.times do
-		Category.create!(
-			name: Faker::Lorem.word.capitalize,
-			description: Faker::Lorem.paragraph,
-		)
+		FactoryGirl.create(:category)
 	end
 end
