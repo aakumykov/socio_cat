@@ -1,3 +1,6 @@
+require 'factory_girl'
+#require 'spec/factories/user_factory'
+
 namespace :db do
 	desc "Fill database with sample data"
 	task populate: :environment do
@@ -48,6 +51,7 @@ def create_cards
 		Card.create!(
 			title: Faker::Lorem.word.capitalize,
 			content: Faker::Lorem.paragraph,
+			description: Faker::Lorem.paragraph,
 			user: User.where(admin:false).first,
 		)
 	end
@@ -56,6 +60,7 @@ def create_cards
 		Card.create!(
 			title: Faker::Lorem.word.capitalize,
 			content: Faker::Lorem.paragraph,
+			description: Faker::Lorem.paragraph,
 			user: User.where(admin:false).last,
 		)
 	end
@@ -66,7 +71,6 @@ def create_categoties
 		Category.create!(
 			name: Faker::Lorem.word.capitalize,
 			description: Faker::Lorem.paragraph,
-			#user: User.where(admin:true).first,
 		)
 	end
 end
