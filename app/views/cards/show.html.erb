@@ -5,14 +5,16 @@
 <%= render 'comfort_buttons' %>
 
 <div class='card col-md-8 col-md-offset-2'>
-	<div class='controls btn-group-vertical pull-right'>
-		<%=
-			link_to 'И', edit_card_path(@obj.id), class: 'btn btn-default btn-sm', title: 'правка'
-		%>
-		<%=
-			link_to 'У', card_path(@obj.id), method: 'delete', data: { confirm: 'Удалить карточку?'}, class: 'btn btn-danger btn-sm', title: 'удаление'
-		%>
-	</div>
+	<% if signed_in? %>
+		<div class='controls btn-group-vertical pull-right'>
+			<% if @obj.user == current_user || current_user.admin? %>
+				<%= link_to 'И', edit_card_path(@obj.id), class: 'btn btn-default btn-sm', title: 'правка' %>
+			<% end %>
+			<% if current_user.admin? %>
+				<%= link_to 'У', card_path(@obj.id), method: 'delete', data: { confirm: 'Удалить карточку?'}, class: 'btn btn-danger btn-sm', title: 'удаление' %>
+			<% end %>
+		</div>
+	<% end %>
 	<div class='title'><%= @obj.title %></div>
 	<div class='content'><%= my_sanitize(@obj.content) %></div>
 	<div class='description'><%= my_sanitize(@obj.description) %></div>
