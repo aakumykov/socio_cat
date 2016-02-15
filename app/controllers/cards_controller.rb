@@ -51,6 +51,7 @@ class CardsController < ApplicationController
 				:title,
 				:content,
 				:description,
+				:kind,
 			)
 		end
 

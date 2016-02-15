@@ -416,4 +416,7 @@ describe 'Карточки,' do
 			}
 		end
 	end
+
+	pending 'тип,' do
+	end
 end

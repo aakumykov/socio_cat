@@ -5,7 +5,7 @@ class Card < ActiveRecord::Base
 	has_many :categories, through: :cc_relations
 
 	enum kind: {
-		'чурновик' => 'draft',
+		'черновик' => 'draft',
 		'текст' => 'text',
 		'картинка' => 'picture',
 		'аудио' => 'audio',

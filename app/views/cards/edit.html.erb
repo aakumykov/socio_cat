@@ -6,6 +6,11 @@
 	<%= form_for @obj do |f| %>
 		<%= render 'shared/error_messages.html.erb', object:f.object %>
 		
+		<fieldset class='kind'>
+			<legend><%= f.label :kind, 'Тип' %></legend>
+			<%= select_tag 'card[kind]', options_for_select(Card.kinds,Card.kinds[@obj.kind]) %>
+		</fieldset>
+
 		<fieldset class='title'>
 			<legend><%= f.label :title, 'Название' %></legend>
 			<%= f.text_field :title %>
