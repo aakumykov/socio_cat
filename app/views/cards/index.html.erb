@@ -10,6 +10,7 @@
 			<% user = card.user %>
 			<li>
 				<%= link_to card.title, card_path(card.id), title: "карточка «#{card.title}»" %>,
+				<span class='badge'><%= card.kind %></span>
 				от
 				<%= link_to user.name, user_path(user), title: "пользователь «#{user.name}»", class:'badge' %>
 			</li>

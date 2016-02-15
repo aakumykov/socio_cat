@@ -5,17 +5,23 @@
 <%= render 'comfort_buttons' %>
 
 <div class='card col-md-8 col-md-offset-2'>
+	<div class='kind badge pull-left'><%= @obj.kind %></div>
+
 	<% if signed_in? %>
-		<div class='controls btn-group-vertical pull-right'>
+		<div class='controls btn-group pull-right'>
 			<% if @obj.user == current_user || current_user.admin? %>
-				<%= link_to 'И', edit_card_path(@obj.id), class: 'btn btn-default btn-sm', title: 'правка' %>
+				<%= link_to 'И', edit_card_path(@obj.id), class: 'btn btn-default btn-xs', title: 'изменить' %>
 			<% end %>
 			<% if current_user.admin? %>
-				<%= link_to 'У', card_path(@obj.id), method: 'delete', data: { confirm: 'Удалить карточку?'}, class: 'btn btn-danger btn-sm', title: 'удаление' %>
+				<%= link_to 'У', card_path(@obj.id), method: 'delete', data: { confirm: 'Удалить карточку?'}, class: 'btn btn-danger btn-xs', title: 'удалить' %>
 			<% end %>
 		</div>
 	<% end %>
-	<div class='title'><%= @obj.title %></div>
+	
+	<div class='title'>
+		<%= @obj.title %>
+	</div>
+	
 	<div class='content'><%= my_sanitize(@obj.content) %></div>
 	<div class='description'><%= my_sanitize(@obj.description) %></div>
 	<div class='categories'>

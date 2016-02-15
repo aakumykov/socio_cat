@@ -25,6 +25,7 @@ describe 'Карточка,' do
 	it { should respond_to(:title) }
 	it { should respond_to(:content) }
 	it { should respond_to(:description) }
+	it { should respond_to(:kind) }
 
 	## правильность
 	# общая
@@ -72,6 +73,12 @@ describe 'Карточка,' do
 			before { card.description = 'A'*5000 }
 			it { should_not be_valid }
 		end
+	end
+
+	describe 'тип карточки,' do
+		pending 'отсутствует,'
+		pending 'неверный,'
+		pending 'верный,'
 	end
 
 
