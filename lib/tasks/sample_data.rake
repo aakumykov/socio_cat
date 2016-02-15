@@ -1,9 +1,9 @@
-require 'factory_girl'
-require Rails.root.join('spec/factories')
-
 namespace :db do
 	desc "Fill database with sample data"
 	task populate: :environment do
+		require 'factory_girl'
+		require Rails.root.join('spec/factories')
+		
 		create_admin_user
 		create_users
 		create_cards

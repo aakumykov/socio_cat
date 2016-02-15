@@ -75,6 +75,12 @@ describe 'Карточка,' do
 		end
 	end
 
+	describe 'тип карточки,' do
+		pending 'отсутствует,'
+		pending 'неверный,'
+		pending 'верный,'
+	end
+
 
 	describe 'удаление концевых пробелов,' do
 		let(:card_title) { card.title }
