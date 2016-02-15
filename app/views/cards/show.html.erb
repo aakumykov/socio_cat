@@ -10,10 +10,10 @@
 	<% if signed_in? %>
 		<div class='controls btn-group pull-right'>
 			<% if @obj.user == current_user || current_user.admin? %>
-				<%= link_to 'И', edit_card_path(@obj.id), class: 'btn btn-default btn-xs', title: 'правка' %>
+				<%= link_to 'И', edit_card_path(@obj.id), class: 'btn btn-default btn-xs', title: 'изменить' %>
 			<% end %>
 			<% if current_user.admin? %>
-				<%= link_to 'У', card_path(@obj.id), method: 'delete', data: { confirm: 'Удалить карточку?'}, class: 'btn btn-danger btn-xs', title: 'удаление' %>
+				<%= link_to 'У', card_path(@obj.id), method: 'delete', data: { confirm: 'Удалить карточку?'}, class: 'btn btn-danger btn-xs', title: 'удалить' %>
 			<% end %>
 		</div>
 	<% end %>
