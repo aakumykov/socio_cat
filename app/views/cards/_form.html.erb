@@ -29,7 +29,30 @@ end
 		
 		<fieldset class='content'>
 			<legend><%= f.label :content, 'Содержимое' %></legend>
-			<%= f.text_area :content %>
+			<table class='kind_selector' align='center' border='1' width='100%'>
+				<tr>
+					<td>
+						<a href='<%=  %>'  title=''>
+							<img alt='текст'>
+						</a>
+					</td>
+					<td>
+						<a href='<%=  %>'  title=''>
+							<img alt='картинка' href='<%=  %>' title=''>
+						</a>
+					</td>
+					<td>
+						<a href='<%=  %>'  title=''>
+							<img alt='аудио' href='<%=  %>' title=''>
+						</a>
+					</td>
+					<td>
+						<a href='<%=  %>'  title=''>
+							<img alt='видео' href='<%=  %>' title=''>
+						</a>
+					</td>
+				</tr>
+			</table>
 		</fieldset>
 		
 		<fieldset class='description'>
