@@ -28,8 +28,18 @@ end
 		</fieldset>
 		
 		<fieldset class='content'>
-			<legend><%= f.label :content, 'Содержимое' %></legend>
-			<%= f.text_area :content %>
+			<% case type %>
+			<% when 'text' %>
+				<%= render 'content_text' %>
+			<% when 'image' %>
+				<% render 'content_image' %>
+			<% when 'audio' %>
+				<%= render 'content_audio' %>
+			<% when 'video' %>
+				<%= render 'content_video' %>
+			<% else %>
+				<div class='alert alert-danger'>Неизвестный тип карточки «<%= type %>»</div>
+			<% end %>
 		</fieldset>
 		
 		<fieldset class='description'>
