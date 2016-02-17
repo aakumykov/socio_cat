@@ -1,0 +1,4 @@
+<% if form.object.file? %>
+	<%= link_to form.object.file.name %>
+<% end %>
+<%= form.file_field :file, accept:'audio/*' %>
