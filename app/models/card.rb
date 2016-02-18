@@ -12,7 +12,7 @@ class Card < ActiveRecord::Base
 		'видео' => 'video',
 	}
 
-	before_validation { |m| m.remove_trailing_spaces(:title,:content) }
+	before_validation { |m| m.remove_trailing_spaces(:title,:description) }
 
 	validates :user_id, {
 		presence: true,
@@ -24,13 +24,13 @@ class Card < ActiveRecord::Base
 		length: { maximum: 80 }
 	}
 	
-	validates :content, {
-		presence: true,
-		length: { 
-			minimum: 50,
-			maximum: 1000,
-		}
-	}
+	# validates :content, {
+	# 	presence: true,
+	# 	length: { 
+	# 		minimum: 50,
+	# 		maximum: 1000,
+	# 	}
+	# }
 
 	validates :description, {
 		presence: true,
