@@ -27,21 +27,14 @@ end
 			<%= f.text_field :title %>
 		</fieldset>
 		
-		<!--<fieldset class='content'>
+		<fieldset class='content'>
 			<legend><%= f.label :content, 'Содержимое' %></legend>
-			<% case type %>
-			<% when 'text' %>
-				<%= render 'content_text', form:f %>
-			<% when 'image' %>
-				<% render 'content_image', form:f %>
-			<% when 'audio' %>
-				<%= render 'content_audio', form:f %>
-			<% when 'video' %>
-				<%= render 'content_video', form:f %>
+			<% unless @obj.kind.nil? %>
+				<%= render 'content', type:@obj.kind, form:f %>
 			<% else %>
-				<div class='alert alert-danger'>Неизвестный тип карточки «<%= type %>»</div>
+				<%= render 'type_chooser' %>
 			<% end %>
-		</fieldset>-->
+		</fieldset>
 		
 		<fieldset class='description'>
 			<legend><%= f.label :description, 'Описание' %></legend>

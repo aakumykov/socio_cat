@@ -1,0 +1,15 @@
+<% case type %>
+<% when 'text' %>
+	<%= render 'content_text', form:form %>
+<% when 'image' %>
+	<% render 'content_image', form:form %>
+<% when 'audio' %>
+	<%= render 'content_audio', form:form %>
+<% when 'video' %>
+	<%= render 'content_video', form:form %>
+<% else %>
+	<div class='alert alert-danger'>
+		<h4>Неизвестный тип карточки «<%= type %>»</h4>
+		<%= render 'type_chooser' %>
+	</div>
+<% end %>
