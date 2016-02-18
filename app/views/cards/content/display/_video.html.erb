@@ -1,0 +1,8 @@
+<div class='area video_content'>
+	<div class='caption'>Видео</div>
+	<% if value.nil? %>
+		<%= render 'cards/content/display/none' %>
+	<% else %>
+		<%= video_tag value.url %>
+	<% end %>
+</div>

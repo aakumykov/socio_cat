@@ -1,0 +1,8 @@
+<div class='area text_content'>
+	<div class='caption'>Текст</div>
+	<% if value.nil? %>
+		<%= render 'cards/content/display/none' %>
+	<% else %>
+		<%= value %>
+	<% end %>
+</div>

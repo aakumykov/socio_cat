@@ -22,13 +22,46 @@ $card_title: #ececec;
 		text-align: center;
 	}
 
-	.content, .description {
-		padding: 10px;
-	}
 	.content {
+		padding: 2px;
 		background-color: palegreen;
+
+		.area {
+			clear: both;
+			border-radius: 6px;
+			margin: 10px;
+			padding: 4px 10px;
+
+			.caption {
+				font-style: italic;
+			}
+		}
+
+		.text_content {
+			background-color: white;
+		}
+
+		.image_content {
+			background-color: dimgrey;
+			color: white;
+		}
+
+		.audio_content {
+			background-color: pink;
+		}
+
+		.video_content {
+			background-color: plum;
+		}
+
+		.unknown_content {
+			background-color: khaki;
+			color: peru;
+		}
 	}
+
 	.description {
+		padding: 4px 10px;
 		background-color: gainsboro;
 	}
 	

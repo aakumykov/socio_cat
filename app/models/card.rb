@@ -81,24 +81,28 @@ class Card < ActiveRecord::Base
 		end
 	end
 
-
-	def get_content(type)
+	def content(type=:any)
 		case type
 		when :text
 			self.text
 		when :image
 			self.image
 		when :audio
-			self.audio
-		when :video
-			self.video
-		else
-			raise "Неизвестный тип '#{type}'"
 			nil
+		when :video
+			' '
+		else
+			{
+				text: self.text,
+				image: self.image,
+				audio: nil,
+				video: nil,
+			}
 		end
 	end
 
 	def set_content(type,value)
+		# type.to_sym
 		#if self.kind.
 	end
 end
