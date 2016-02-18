@@ -6,7 +6,9 @@ module ActiveRecordTrimSpaces
 			attr_list.map!{|i| i.to_s}
 			
 			self.attributes.each_pair {|k,v|
-				self.assign_attributes(k => v.strip) if attr_list.include?(k)
+				if not v.nil?
+					self.assign_attributes(k => v.strip) if attr_list.include?(k)
+				end
 			}
 		end
 end
