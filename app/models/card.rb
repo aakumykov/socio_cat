@@ -52,25 +52,25 @@ class Card < ActiveRecord::Base
 	has_attached_file :image
 
 	validates_attachment(:image,
-		content_type: /\Aimage\/.*\Z/,
-		size: { in 0..1024.kilibytes }
+		content_type: { content_type: /\Aimage\/.*\Z/ },
+		size: { in: 0..1.megabytes }
 	)
 
 
-	has_attached_file :audio
+	# has_attached_file :audio
 
-	validates_attachment(:audio,
-		content_type: /\Aaudio\/.*\Z/,
-		size: { in 0..1024.kilibytes }
-	)
+	# validates_attachment(:audio,
+	# 	content_type: { content_type: /\audio\/.*\Z/ },
+	# 	size: { in: 0..16.megabytes }
+	# )
 
 
-	has_attached_file :video
+	# has_attached_file :video
 
-	validates_attachment(:video,
-		content_type: /\Aimage\/.*\Z/,
-		size: { in 0..1024.kilibytes }
-	)
+	# validates_attachment(:video,
+	# 	content_type: { content_type: /\video\/.*\Z/ },
+	# 	size: { in: 0..50.megabytes }
+	# )
 
 
 	# к этому публичному методу не ведёт (и не должен вести) никакой маршрут
@@ -79,5 +79,26 @@ class Card < ActiveRecord::Base
 		list.each do |id|
 			self.cc_relations.create(category_id: id)
 		end
+	end
+
+
+	def get_content(type)
+		case type
+		when :text
+			self.text
+		when :image
+			self.image
+		when :audio
+			self.audio
+		when :video
+			self.video
+		else
+			raise "Неизвестный тип '#{type}'"
+			nil
+		end
+	end
+
+	def set_content(type,value)
+		#if self.kind.
 	end
 end
