@@ -1,4 +1,4 @@
-<legend><%= label_tag 'card[:media]', 'Картинка', name:'card[media]' %></legend>
+<legend><%= form.label :media, 'Картинка' %></legend>
 <div class='area image_content'>
-	<%= file_field_tag 'card[:media]', accept:'image/*', name:'card[media]' %>
+	<%= form.file_field :media, accept:'image/*' %>
 </div>

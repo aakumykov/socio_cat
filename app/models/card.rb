@@ -107,7 +107,9 @@ class Card < ActiveRecord::Base
 		puts "===== Card.content= =====> kind: #{kind}, data: #{data}"
 		case self.kind
 		when 'текст'
-			self.text = data
+			self.text = text
+		when 'картинка'
+			self.image = data[:image]
 		else
 			true
 		end
