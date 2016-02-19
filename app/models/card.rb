@@ -4,20 +4,23 @@ class Card < ActiveRecord::Base
 	has_many :cc_relations
 	has_many :categories, through: :cc_relations
 	
-	before_validation { |m| m.remove_trailing_spaces(:title,:description,:text) }
+	before_validation { |m|
+		m.remove_trailing_spaces(:title,:description,:text) 
+		#puts "===== before_validation =====> #{self.kind}"
+	}
 
 
 	enum kind: {
 		'черновик' => 'draft',
 		'текст' => 'text',
 		'картинка' => 'image',
-		'аудио' => 'audio',
+		'звук' => 'audio',
 		'видео' => 'video',
 	}
 
 	validates :kind, {
 		presence: true,
-		# принадлежность к типу enum, чтобы не бросало исключение
+		# принадлежность к перечисляемому типу!
 	}
 
 
@@ -46,12 +49,22 @@ class Card < ActiveRecord::Base
 		length: { 
 			minimum: 10,
 			maximum: 1024,
-		}
+		},
+		allow_nil: true,
 	}
 
 
 	has_attached_file :media
-	do_not_validate_attachment_file_type :media
+	#do_not_validate_attachment_file_type :media
+	# validates_attachment(:media,
+	# 	presence: true,
+	# ), if: Card.kinds.include?(self.kind)
+	# validates_attachment(:media, 
+	# 	content_type: { content_type: /\Aimage\/.*\Z/ },
+	# )
+	validates :media, attachment_content_type: { content_type: /\Aimage\/.*\Z/ }, if: "'картинка'==self.kind"
+	validates :media, attachment_content_type: { content_type: /\Aaudio\/.*\Z/ }, if: "'звук'==self.kind"
+	validates :media, attachment_content_type: { content_type: /\Avideo\/.*\Z/ }, if: "'видео'==self.kind"
 
 	
 	has_attached_file :image
@@ -81,6 +94,10 @@ class Card < ActiveRecord::Base
 		list.each do |id|
 			self.cc_relations.create(category_id: id)
 		end
+	end
+
+	def kind?(value)
+		Card.kinds.include?(value)
 	end
 
 	def content(type=:any)
