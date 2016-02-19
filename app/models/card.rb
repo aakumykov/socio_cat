@@ -42,7 +42,7 @@ class Card < ActiveRecord::Base
 	}
 
 
-	validates :text_content, {
+	validates :text, {
 		length: { 
 			minimum: 10,
 			maximum: 1024,
@@ -50,12 +50,11 @@ class Card < ActiveRecord::Base
 	}
 
 
-	has_attached_file :content
-	do_not_validate_attachment_file_type :content
+	has_attached_file :media
+	do_not_validate_attachment_file_type :media
 
 	
 	has_attached_file :image
-
 	validates_attachment(:image,
 		content_type: { content_type: /\Aimage\/.*\Z/ },
 		size: { in: 0..1.megabytes }
@@ -63,7 +62,6 @@ class Card < ActiveRecord::Base
 
 
 	# has_attached_file :audio
-
 	# validates_attachment(:audio,
 	# 	content_type: { content_type: /\audio\/.*\Z/ },
 	# 	size: { in: 0..16.megabytes }
@@ -71,7 +69,6 @@ class Card < ActiveRecord::Base
 
 
 	# has_attached_file :video
-
 	# validates_attachment(:video,
 	# 	content_type: { content_type: /\video\/.*\Z/ },
 	# 	size: { in: 0..50.megabytes }
