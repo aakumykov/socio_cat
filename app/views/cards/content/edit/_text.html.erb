@@ -1,4 +1,4 @@
-<legend><%= label_tag 'card[:content]', 'Фрагмент текста' %></legend>
+<legend><%= label_tag 'card_content', 'Фрагмент текста', name:'card[content]' %></legend>
 <div class='area text_content'>
-	<%= text_area_tag 'card[:content]', form.object.content(:text) %>
+	<%= text_area_tag 'card_content', form.object.content(:text), name:'card[content]' %>
 </div>

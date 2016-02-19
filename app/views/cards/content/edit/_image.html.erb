@@ -1,4 +1,4 @@
-<legend><%= label_tag 'card[:content]', 'Картинка' %></legend>
+<legend><%= label_tag 'card[:content]', 'Картинка', name:'card[content]' %></legend>
 <div class='area image_content'>
-	<%= file_field_tag 'card[:content]', accept:'image/*' %>
+	<%= file_field_tag 'card[:content]', accept:'image/*', name:'card[content]' %>
 </div>

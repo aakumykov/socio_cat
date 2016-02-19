@@ -1,4 +1,4 @@
-<legend><%= label_tag 'card[:content]', 'Образец звука' %></legend>
+<legend><%= label_tag 'card[:content]', 'Образец звука', name:'card[content]' %></legend>
 <div class='area audio_content'>
-	<%= file_field_tag 'card[:content]', accept:'audio/*' %>
+	<%= file_field_tag 'card[:content]', accept:'audio/*', name:'card[content]' %>
 </div>
