@@ -4,7 +4,7 @@ class Card < ActiveRecord::Base
 	has_many :cc_relations
 	has_many :categories, through: :cc_relations
 	
-	before_validation { |m| m.remove_trailing_spaces(:title,:description) }
+	before_validation { |m| m.remove_trailing_spaces(:title,:description,:text) }
 
 
 	enum kind: {
@@ -16,7 +16,8 @@ class Card < ActiveRecord::Base
 	}
 
 	validates :kind, {
-		presence: true
+		presence: true,
+		# принадлежность к типу enum, чтобы не бросало исключение
 	}
 
 
@@ -39,6 +40,18 @@ class Card < ActiveRecord::Base
 			maximum: 1024,
 		}
 	}
+
+
+	validates :text_content, {
+		length: { 
+			minimum: 10,
+			maximum: 1024,
+		}
+	}
+
+
+	has_attached_file :content
+	do_not_validate_attachment_file_type :content
 
 	
 	has_attached_file :image
