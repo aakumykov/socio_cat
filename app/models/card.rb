@@ -93,8 +93,13 @@ class Card < ActiveRecord::Base
 		end
 	end
 
-	def content=
-		# type.to_sym
-		#if self.kind.
+	def content=(data)
+		puts "===== Card.content= =====> kind: #{kind}, data: #{data}"
+		case self.kind
+		when 'текст'
+			self.text = data
+		else
+			true
+		end
 	end
 end
