@@ -6,7 +6,7 @@ class CardsController < ApplicationController
 	before_action :admin_users, only: [:destroy, :block]
 	
 	def new
-		super
+		@obj = Card.new(kind:params.fetch(:kind,'draft'))
 		@checkboxes = hash_for_checkboxes
 	end
 
@@ -62,6 +62,7 @@ class CardsController < ApplicationController
 				:title,
 				:description,
 				:kind,
+				:content,
 			)
 		end
 

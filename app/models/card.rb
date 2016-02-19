@@ -4,13 +4,13 @@ class Card < ActiveRecord::Base
 	has_many :cc_relations
 	has_many :categories, through: :cc_relations
 	
-	before_validation { |m| m.remove_trailing_spaces(:title,:description,:text) }
+	before_validation { |m| m.remove_trailing_spaces(:title,:description) }
 
 
 	enum kind: {
 		'черновик' => 'draft',
 		'текст' => 'text',
-		'картинка' => 'picture',
+		'картинка' => 'image',
 		'аудио' => 'audio',
 		'видео' => 'video',
 	}
@@ -29,14 +29,6 @@ class Card < ActiveRecord::Base
 	validates :title, {
 		presence: true,
 		length: { maximum: 80 }
-	}
-
-	
-	validates :text, {
-		length: { 
-			minimum: 50,
-			maximum: 1000,
-		}
 	}
 
 
@@ -101,7 +93,7 @@ class Card < ActiveRecord::Base
 		end
 	end
 
-	def set_content(type,value)
+	def content=
 		# type.to_sym
 		#if self.kind.
 	end
