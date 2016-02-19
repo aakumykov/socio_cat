@@ -11,13 +11,7 @@ class CardsController < ApplicationController
 	end
 
 	def create
-		puts "===== CardsController#create =====> #{card_params}"
-		#data = card_params
-		
 		@obj = current_user.cards.new(card_params)
-		
-		#@obj = current_user.cards.new(data)
-		#@obj.content = data[:content]
 
 		if @obj.save
 			@obj.fill_categories(category_params)

@@ -96,24 +96,16 @@ class Card < ActiveRecord::Base
 		end
 	end
 
-	def kind?(value)
-		Card.kinds.include?(value)
-	end
-
 	def content(type=:any)
 		case type
 		when :text
 			self.text
-		when :image
-			self.image
-		when :audio
-			nil
-		when :video
-			' '
+		when [:image,:audio,:video].include?(type)
+			self.media
 		else
 			{
 				text: self.text,
-				image: self.image,
+				image: self.media,
 				audio: nil,
 				video: nil,
 			}
