@@ -1,13 +1,15 @@
 module CardsHelper
-	def show_content(type,value)
-		case type
-		when :text
+	def show_content(card)
+		value = card.content(card.kind)
+
+		case card.kind
+		when 'текст'
 			render 'cards/content/display/text', value:value
-		when :image
+		when 'картинка'
 			render 'cards/content/display/image', value:value
-		when :audio
+		when 'музыка'
 			render 'cards/content/display/audio', value:value
-		when :video
+		when 'видео'
 			render 'cards/content/display/video', value:value
 		else
 			render 'cards/content/display/unknown'

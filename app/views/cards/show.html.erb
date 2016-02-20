@@ -24,10 +24,7 @@
 	</div>
 	
 	<div class='content'>
-		<% @obj.content.each do |type,value| %>
-			<% puts "===== #{type} => #{value} =====" %>
-			<%= show_content(type,value) %>
-		<% end %>
+		<%= show_content(@obj) %>
 	</div>
 
 	<div class='description'><%= my_sanitize(@obj.description) %></div>
