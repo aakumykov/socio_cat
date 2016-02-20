@@ -46,7 +46,8 @@ class Card < ActiveRecord::Base
 		if: "'текст'==self.kind"
 
 	
-	has_attached_file :image
+	has_attached_file :image,
+		default_url: "/image/missing.png"
 	validates_attachment(:image,
 		presence: true,
 		content_type: { content_type: /\Aimage\/.*\Z/ },
@@ -55,7 +56,8 @@ class Card < ActiveRecord::Base
 	)
 
 
-	has_attached_file :audio
+	has_attached_file :audio,
+		default_url: "/audio/missing.ogg"
 	validates_attachment(:audio,
 		presence: true,
 		content_type: { content_type: /\audio\/.*\Z/ },
@@ -64,7 +66,8 @@ class Card < ActiveRecord::Base
 	)
 
 
-	has_attached_file :video
+	has_attached_file :video,
+		default_url: "/video/missing.ogv"
 	validates_attachment(:video,
 		presence: true,
 		content_type: { content_type: /\video\/.*\Z/ },
@@ -95,8 +98,8 @@ class Card < ActiveRecord::Base
 			{
 				text: self.text,
 				image: self.image,
-				audio: nil,
-				video: nil,
+				audio: self.audio,
+				video: self.video,
 			}
 		end
 	end

@@ -25,6 +25,7 @@
 	
 	<div class='content'>
 		<% @obj.content.each do |type,value| %>
+			<% puts "===== #{type} => #{value} =====" %>
 			<%= show_content(type,value) %>
 		<% end %>
 	</div>
