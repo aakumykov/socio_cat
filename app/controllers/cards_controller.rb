@@ -63,7 +63,9 @@ class CardsController < ApplicationController
 				:title,
 				:description,
 				:text,
-				:media,
+				:image,
+				:audio,
+				:video,
 			)
 		end
 

@@ -14,7 +14,7 @@ class Card < ActiveRecord::Base
 		'черновик' => 'draft',
 		'текст' => 'text',
 		'картинка' => 'image',
-		'звук' => 'audio',
+		'музыка' => 'audio',
 		'видео' => 'video',
 	}
 
@@ -30,62 +30,47 @@ class Card < ActiveRecord::Base
 	}
 
 
-	validates :title, {
+	validates :title,
 		presence: true,
 		length: { maximum: 80 }
-	}
 
 
-	validates :description, {
+	validates :description,
 		presence: true,
-		length: { 
-			minimum: 10,
-			maximum: 1024,
-		}
-	}
+		length: {minimum: 10,maximum: 1024}
 
 
-	validates :text, {
-		length: { 
-			minimum: 10,
-			maximum: 1024,
-		},
-		allow_nil: true,
-	}
-
-
-	has_attached_file :media
-	#do_not_validate_attachment_file_type :media
-	# validates_attachment(:media,
-	# 	presence: true,
-	# ), if: Card.kinds.include?(self.kind)
-	# validates_attachment(:media, 
-	# 	content_type: { content_type: /\Aimage\/.*\Z/ },
-	# )
-	validates :media, attachment_content_type: { content_type: /\Aimage\/.*\Z/ }, if: "'картинка'==self.kind"
-	validates :media, attachment_content_type: { content_type: /\Aaudio\/.*\Z/ }, if: "'звук'==self.kind"
-	validates :media, attachment_content_type: { content_type: /\Avideo\/.*\Z/ }, if: "'видео'==self.kind"
+	validates :text,
+		presence: true,
+		length: {minimum: 10,maximum: 1024}, 
+		if: "'текст'==self.kind"
 
 	
 	has_attached_file :image
 	validates_attachment(:image,
+		presence: true,
 		content_type: { content_type: /\Aimage\/.*\Z/ },
-		size: { in: 0..1.megabytes }
+		size: { in: 0..1.megabytes },
+		if: "'картинка'==self.kind"
 	)
 
 
-	# has_attached_file :audio
-	# validates_attachment(:audio,
-	# 	content_type: { content_type: /\audio\/.*\Z/ },
-	# 	size: { in: 0..16.megabytes }
-	# )
+	has_attached_file :audio
+	validates_attachment(:audio,
+		presence: true,
+		content_type: { content_type: /\audio\/.*\Z/ },
+		size: { in: 0..16.megabytes },
+		if: "'музыка'==self.kind"
+	)
 
 
-	# has_attached_file :video
-	# validates_attachment(:video,
-	# 	content_type: { content_type: /\video\/.*\Z/ },
-	# 	size: { in: 0..50.megabytes }
-	# )
+	has_attached_file :video
+	validates_attachment(:video,
+		presence: true,
+		content_type: { content_type: /\video\/.*\Z/ },
+		size: { in: 0..50.megabytes },
+		if: "'видео'==self.kind"
+	)
 
 
 	# к этому публичному методу не ведёт (и не должен вести) никакой маршрут
@@ -100,12 +85,16 @@ class Card < ActiveRecord::Base
 		case type
 		when :text
 			self.text
-		when [:image,:audio,:video].include?(type)
-			self.media
+		when :text
+			self.text
+		when :audio
+			self.audio
+		when :video
+			self.video
 		else
 			{
 				text: self.text,
-				image: self.media,
+				image: self.image,
 				audio: nil,
 				video: nil,
 			}

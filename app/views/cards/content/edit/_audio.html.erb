@@ -1,4 +1,4 @@
-<legend><%= label_tag 'card_media', 'Образец звука', name:'card[media]' %></legend>
-<div class='area audio_content'>
-	<%= file_field_tag 'card_media', accept:'audio/*', name:'card[media]' %>
+<legend><%= form.label :audio, 'Музыка' %></legend>
+<div class='area video_content'>
+	<%= form.file_field :audio, accept:'audio/*' %>
 </div>
