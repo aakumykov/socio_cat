@@ -15,5 +15,9 @@
 /log/*.log
 /tmp
 
+# SMTP password
 config/smtp*password*
+
+# Uploaded file
+public/system
 

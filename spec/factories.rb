@@ -3,9 +3,9 @@ FactoryGirl.define do
 
 	factory :card do
 		title { Faker::Lorem.word.capitalize + '_' + rand(1..100).to_s }
-		content Faker::Lorem.paragraph
 		description Faker::Lorem.paragraph
-		user
+		text Faker::Lorem.paragraph
+		image Rack::Test::UploadedFile.new("#{Rails.root}/spec/fixtures/images/stub.png", "image/jpg")
 	end
 
 	factory :user do

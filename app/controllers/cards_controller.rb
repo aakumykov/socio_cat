@@ -6,7 +6,7 @@ class CardsController < ApplicationController
 	before_action :admin_users, only: [:destroy, :block]
 	
 	def new
-		super
+		@obj = Card.new(kind:params.fetch(:kind,'draft'))
 		@checkboxes = hash_for_checkboxes
 	end
 
@@ -44,14 +44,28 @@ class CardsController < ApplicationController
 		end
 	end
 
+	def chtype(new_type)
+		@card = Card.new(card_params)
+
+		if @card
+			redirect_to new_card_path
+		else
+			flash.now[:danger] = 'Ошибка смены типа карточки'
+			render :edit
+		end
+	end
+
 	private	
 
 		def card_params
 			params.require(:card).permit(
-				:title,
-				:content,
-				:description,
 				:kind,
+				:title,
+				:description,
+				:text,
+				:image,
+				:audio,
+				:video,
 			)
 		end
 

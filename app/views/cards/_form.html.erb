@@ -17,10 +17,12 @@ end
 	<%= form_for @obj do |f| %>
 		<%= render 'shared/error_messages.html.erb', object:f.object %>
 		
-		<fieldset class='kind'>
-			<legend><%= f.label :kind, 'Тип' %></legend>
-			<%= select_tag 'card[kind]', options_for_select(Card.kinds,Card.kinds[@obj.kind]) %>
-		</fieldset>
+		<% if 'draft' != @obj.kind %>
+			<fieldset class='kind'>
+				<legend><%= f.label :kind, 'Тип' %></legend>
+				<%= select_tag 'card[kind]', options_for_select(Card.kinds,Card.kinds[@obj.kind]) %>
+			</fieldset>
+		<% end %>
 
 		<fieldset class='title'>
 			<legend><%= f.label :title, 'Название' %></legend>
@@ -28,8 +30,20 @@ end
 		</fieldset>
 		
 		<fieldset class='content'>
-			<legend><%= f.label :content, 'Содержимое' %></legend>
-			<%= f.text_area :content %>
+			<% case @obj.kind %>
+			<% when 'текст' %>
+				<%= render 'cards/content/edit/text', form:f %>
+			<% when 'картинка' %>
+				<%= render 'cards/content/edit/image', form:f %>
+			<% when 'музыка' %>
+				<%= render 'cards/content/edit/audio', form:f %>
+			<% when 'видео' %>
+				<%= render 'cards/content/edit/video', form:f %>
+			<% else %>
+				<div class='alert alert-danger'>
+					<%= render 'kind_chooser' %>
+				</div>
+			<% end %>
 		</fieldset>
 		
 		<fieldset class='description'>

@@ -22,13 +22,46 @@ $card_title: #ececec;
 		text-align: center;
 	}
 
-	.content, .description {
-		padding: 10px;
-	}
 	.content {
+		padding: 2px;
 		background-color: palegreen;
+
+		.area {
+			clear: both;
+			border-radius: 6px;
+			margin: 10px;
+			padding: 4px 10px;
+
+			.caption {
+				font-style: italic;
+			}
+		}
+
+		.text_content {
+			background-color: white;
+		}
+
+		.image_content {
+			background-color: dimgrey;
+			color: white;
+		}
+
+		.audio_content {
+			background-color: pink;
+		}
+
+		.video_content {
+			background-color: plum;
+		}
+
+		.unknown_content {
+			background-color: khaki;
+			color: peru;
+		}
 	}
+
 	.description {
+		padding: 4px 10px;
 		background-color: gainsboro;
 	}
 	
@@ -106,12 +139,51 @@ $card_title: #ececec;
 		list-style-type: none;
 		border-bottom: 1px dotted lightgrey;
 		margin-bottom: 1%;
+
+		.title {
+			padding: 2px 7px 2px 0px;
+			/*text-shadow: 1px 1px 2px rgba(128,128,128,0.4);*/
+		}
+		.title:hover {
+			background-color: lightcoral;
+			color: white;
+			padding-left: 7px;
+		}
+		.author {
+			background-color: gainsboro;
+			color: dimgrey;
+		}
 	}
 
 	.badge {
 		font-weight: normal;
 		font-size: 80%;
-		background-color: rgba(160,160,160,0.8);
+		color: white;
 	}
+	.badge:hover {
+		text-decoration: underline;
+	}
+
+	.card_kind {
+		color: white;
+		text-shadow: 1px 1px 1px rgba(128,128,128,0.6);
+	}
+
+	.badge_text {
+		background-color: lightskyblue;
+	}
+	.badge_image {
+		background-color: palegreen;
+	}
+	.badge_audio {
+		background-color: lightpink;
+	}
+	.badge_video {
+		background-color: mediumorchid;
+	}
+	.bagde_unknown {
+		background-color: gainsboro;
+	}
+
 }
 

@@ -17,6 +17,8 @@ gem 'turbolinks'
 gem 'jbuilder'
 gem 'delayed_job_active_record'
 gem 'daemons'
+gem 'paperclip'
+gem 'mime-types'
 
 group :development, :test do
   gem 'sqlite3'
