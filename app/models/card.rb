@@ -4,6 +4,7 @@ class Card < ActiveRecord::Base
 	has_many :cc_relations
 	has_many :categories, through: :cc_relations
 	
+
 	before_validation { |m|
 		m.remove_trailing_spaces(:title,:description,:text) 
 		#puts "===== before_validation =====> #{self.kind}"
@@ -32,12 +33,15 @@ class Card < ActiveRecord::Base
 
 	validates :title,
 		presence: true,
-		length: { maximum: 80 }
+		length: {minimun:3, maximum: 80}
 
 
 	validates :description,
 		presence: true,
 		length: {minimum: 10,maximum: 1024}
+
+
+	attr_accessor :new_category
 
 
 	validates :text,
