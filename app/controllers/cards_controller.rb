@@ -13,10 +13,32 @@ class CardsController < ApplicationController
 	def create
 		@obj = current_user.cards.new(card_params)
 
+		# if !card_params[:new_category].blank?
+		# 	@new_category = Category.create(name: card_params[:new_category])
+
+		# 	if @new_category.reload
+		# 		flash[:success] = "Создана категория «{card_params[:new_category]}»"
+		# 		params[:categories] << @new_category.reload.id
+		# 	else
+		# 		flash[:danger] = "Ошибка создания категории «{card_params[:new_category]}» #{@new_category.errors.full_messages}"
+		# 	end
+		# end
+
 		if @obj.save
 			@obj.fill_categories(category_params)
-			
-			flash[:success] = "Карточка создана"
+			flash[:success] = "Создана карточка «#{@obj.title}»"
+
+			if !card_params[:new_category].blank?
+				@new_category = @obj.categories.create(name: card_params[:new_category])
+				
+				if @new_category.save
+					@new_category = @obj.categories.last
+					flash[:success] = "Создана категория «#{@new_category.name}». #{flash[:success]}"
+				else
+					flash[:danger] = "Ошибка создания категории «#{card_params[:new_category]}»: #{@new_category.errors.full_messages}"
+				end
+			end
+
 			redirect_to card_path(@obj)
 		else
 			#flash.now[:danger] = 'ОШИБКА, карточка не создана'
@@ -62,6 +84,7 @@ class CardsController < ApplicationController
 				:kind,
 				:title,
 				:description,
+				:new_category,
 				:text,
 				:image,
 				:audio,
@@ -70,7 +93,7 @@ class CardsController < ApplicationController
 		end
 
 		def category_params
-			#puts "====== category_params ======> params[:categories]: #{params[:categories]}(#{params[:categories].class})"
+			puts "====== category_params ======> params[:categories]: #{params[:categories]}(#{params[:categories].class})"
 
 			if !params[:categories].nil? && params[:categories].is_a?(Array)
 				the_params = params.require(:categories)

@@ -26,7 +26,7 @@ end
 
 		<fieldset class='title'>
 			<legend><%= f.label :title, 'Название' %></legend>
-			<%= f.text_field :title %>
+			<%= f.text_field :title, class:'field' %>
 		</fieldset>
 		
 		<fieldset class='content'>
@@ -48,7 +48,7 @@ end
 		
 		<fieldset class='description'>
 			<legend><%= f.label :description, 'Описание' %></legend>
-			<%= f.text_area :description %>
+			<%= f.text_area :description, class:'field' %>
 		</fieldset>
 		
 		<fieldset class='categories'>
@@ -59,6 +59,11 @@ end
 						<%= data[:name] %>
 					</label>
 				<% end %>
+		</fieldset>
+
+		<fieldset class='new_category'>
+			<legend><%= f.label :new_category, 'Новая категория' %></legend>
+			<%= f.text_field :new_category, class:'field' %>
 		</fieldset>
 
 		<fieldset class='controls clearfix'>

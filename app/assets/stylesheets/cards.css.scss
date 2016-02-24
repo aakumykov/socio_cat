@@ -79,15 +79,12 @@ $card_title: #ececec;
 
 .card_edit {
 
-	.title {
-		INPUT {
-			width: 100%;
-		}
+	.field {
+		width: 100%;
 	}
 
 	.content, .description {
 		TEXTAREA {
-			width: 100%;	
 			min-height: 100px;
 			height: 140px;
 			padding: 4px;
