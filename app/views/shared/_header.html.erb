@@ -8,10 +8,22 @@
 	 		<span class='glyphicon glyphicon-plus'></span>
 		</button>
 		<ul class="dropdown-menu" role="menu">
-			<li><a href='<%= new_card_path %>?kind=text'>Текст</a></li>
-			<li><a href='<%= new_card_path %>?kind=image'>Картинка</a></li>
-			<li><a href='<%= new_card_path %>?kind=audio'>Музыка</a></li>
-			<li><a href='<%= new_card_path %>?kind=video'>Видео</a></li>
+			<li><a href='<%= new_card_path %>?kind=text'>
+				Текст
+				<span class='text_icon glyphicon glyphicon-text-width'></span>
+			</a></li>
+			<li><a href='<%= new_card_path %>?kind=image'>
+				Картинка
+				<span class='picture_icon glyphicon glyphicon-picture'></span>
+			</a></li>
+			<li><a href='<%= new_card_path %>?kind=audio'>
+				Музыка
+				<span class='audio_icon glyphicon glyphicon-music'></span>
+			</a></li>
+			<li><a href='<%= new_card_path %>?kind=video'>
+				Видео
+				<span class='audio_icon glyphicon glyphicon-film'></span>
+			</a></li>
 		</ul>
 	<% end %>
 </span>
