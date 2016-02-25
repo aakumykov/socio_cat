@@ -36,9 +36,10 @@ class Card < ActiveRecord::Base
 		length: {minimun:3, maximum: 80}
 
 
-	validates :description,
-		presence: true,
-		length: {minimum: 10,maximum: 1024}
+	validates(:description,
+		presence: {message: 'не может быть пустым'},
+		length: {minimum: 10,maximum: 1024,message: 'от 10 до 1024 знаков'},
+	)
 
 
 	attr_accessor :new_category
@@ -52,7 +53,7 @@ class Card < ActiveRecord::Base
 	
 	has_attached_file :image, default_url: 'no_image'
 	validates_attachment(:image,
-		presence: true,
+		presence: {message:'не может быть пустым'},
 		content_type: { content_type: /\Aimage\/.*\Z/ },
 		size: { in: 0..1.megabytes },
 		if: "'картинка'==self.kind"
