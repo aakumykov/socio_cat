@@ -31,7 +31,8 @@ def create_users
 		email: 'aakumykov@yandex.ru',
 		password: 'Qwerty123!@#',
 		password_confirmation: 'Qwerty123!@#',
-		activated: true
+		activated: true,
+		admin: true,
 	)
 end
 
