@@ -1,20 +1,37 @@
 <%= link_to 'Главная страница', home_path, class: 'btn btn-primary' %>
 
-<span class='btn-group'>
+<!--<span class='btn-group'>
 	<%= link_to 'Карточки', cards_path, class: 'btn btn-danger' %>
 	<% if signed_in? %>
 		<%= link_to(new_card_path, class: 'btn btn-danger btn-xs') do %>
 				<i class='glyphicon glyphicon-plus'></i>
 		<% end %>
 	<% end %>
+</span>-->
+
+<span class="btn-group">
+	<a href='<%= cards_path %>' class="btn btn-danger">Карточки</a>
+	
+	<% if signed_in? %>
+		<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
+	 		<span class='glyphicon glyphicon-plus'></span>
+		</button>
+		<ul class="dropdown-menu" role="menu">
+			<li><a href='<%= new_card_path %>?kind=text'>Текст</a></li>
+			<li><a href='<%= new_card_path %>?kind=image'>Картинка</a></li>
+			<li><a href='<%= new_card_path %>?kind=audio'>Музыка</a></li>
+			<li><a href='<%= new_card_path %>?kind=video'>Видео</a></li>
+		</ul>
+	<% end %>
 </span>
 
-<span class='btn-group'>
-	<%= link_to 'Категории', categories_path, class: 'btn btn-success' %>
+<span class="btn-group">
+	<a href='<%= categories_path %>' class="btn btn-success">Категории</a>
+	
 	<% if signed_in? && current_user.admin? %>
-		<%= link_to(new_category_path, class: 'btn btn-success btn-xs') do %>
-			<i class='glyphicon glyphicon-plus'></i>
-		<% end %>
+ 		<a href='<%= new_category_path %>' class="btn btn-success dropdown-toggle">
+ 			<span  class='glyphicon glyphicon-plus'></span>
+ 		</a>
 	<% end %>
 </span>
 
