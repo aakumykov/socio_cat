@@ -15,6 +15,7 @@ end
 
 <div class='card_edit col-md-8 col-md-offset-2'>
 	<%= form_for @obj do |f| %>
+		<%= render 'shared/error_messages.html.erb', object:f.object %>
 
 		<div class='row'><!-- поля карточки -->
 			
@@ -67,12 +68,19 @@ end
 				<div class='row'>
 					<div class='col-md-12'>
 						<legend><label>Категория</label></legend>
-						<% @checkboxes.each do |id,data| %>
+						
+						<!--<% @checkboxes.each do |id,data| %>
 							<label class='item'>
-								<%= check_box_tag 'categories[]', id, data[:checked] %>
-								<%= data[:name] %>
+								<% check_box_tag 'categories[]', id, data[:checked] %>
+								<% data[:name] %>
 							</label>
-						<% end %>
+						<% end %>-->
+
+						<select size='5' name='categories[]'>
+							<% @checkboxes.each do |id,data| %>
+								<option value='<%= id %>'><%= data[:name] %></option>
+							<% end %>
+						</select>
 					</div>
 				</div>
 				<div class='row'>
