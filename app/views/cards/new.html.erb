@@ -1,3 +1,21 @@
-<% provide(:title,'Создание карточки') %>
-
-<%= render 'form', mode:'new' %>
+<%=
+begin
+	if @obj.kind?(:text)
+		raise 'Создание текстовой карточки'
+	elsif @obj.kind?(:image)
+		raise 'Создание карточки с картинкой'
+	elsif @obj.kind?(:audio)
+		raise 'Создание карточки со звуком'
+	elsif @obj.kind?(:video)
+		raise 'Создание карточки с видео'
+	end
+rescue => e
+	title = e.message
+	provide :title, title
+	render 'form', mode:'new'
+else
+	title = 'Выберите тип карточки'
+	provide :title, title
+	render 'kind_chooser'
+end
+%>

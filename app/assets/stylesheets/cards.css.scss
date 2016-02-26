@@ -73,11 +73,11 @@
 			background-color: darkturquoise;
 		}
 	}
-	
-	.controls {}
 }
 
 .card_edit {
+
+	margin-top: 16px;
 
 	.kind_selector {
 		.title {
@@ -89,55 +89,8 @@
 		}
 	}
 
-	.field {
-		width: 100%;
-	}
-
-	.content, .description {
-		TEXTAREA {
-			min-height: 100px;
-			height: 140px;
-			padding: 4px;
-		}
-	}
-
-	.categories {
-		.item {
-			background-color: lightcoral;
-			color: white;
-
-			font-style: italic;
-			font-family: serif;
-
-			margin-right: 10px;
-			padding: 0px 8px 0px 6px;
-			border-radius: 3px;
-
-			INPUT {
-				margin-right: 2px;
-			}
-		}
-	}
-
-	.content {
-		margin-top: 16px;
-	}
-	.controls{
-		margin-top: 16px;
-	}
-
-	FIELDSET {
-		margin-top: 12px;
-	}
-
-	LEGEND {
-		margin-bottom: 0px;
-		border-bottom-style: none;
-	}
-
-	LABEL {
-		margin-bottom: 0px;
-		font-weight: normal;
+	.controls {
+		margin-top: 8px;
 	}
 }
 

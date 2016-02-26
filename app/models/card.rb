@@ -20,19 +20,19 @@ class Card < ActiveRecord::Base
 	}
 
 	validates :kind, {
-		presence: true,
+		presence: {message:'не может быть пустым'},
 		# принадлежность к перечисляемому типу!
 	}
 
 
 	validates :user_id, {
-		presence: true,
+		presence: {message:'не может быть пустым'},
 		format: /\A[0-9]+\z/,
 	}
 
 
 	validates :title,
-		presence: true,
+		presence: {message:'не может быть пустым'},
 		length: {minimun:3, maximum: 80}
 
 
@@ -46,7 +46,7 @@ class Card < ActiveRecord::Base
 
 
 	validates :text,
-		presence: true,
+		presence: {message:'не может быть пустым'},
 		length: {minimum: 10,maximum: 1024}, 
 		if: "'текст'==self.kind"
 
@@ -62,7 +62,7 @@ class Card < ActiveRecord::Base
 
 	has_attached_file :audio, default_url: 'no_audio'
 	validates_attachment(:audio,
-		presence: true,
+		presence: {message:'не может быть пустым'},
 		content_type: { content_type: /\audio\/.*\Z/ },
 		size: { in: 0..16.megabytes },
 		if: "'музыка'==self.kind"
@@ -71,7 +71,7 @@ class Card < ActiveRecord::Base
 
 	has_attached_file :video, default_url: 'no_video'
 	validates_attachment(:video,
-		presence: true,
+		presence: {message:'не может быть пустым'},
 		content_type: { content_type: /\video\/.*\Z/ },
 		size: { in: 0..50.megabytes },
 		if: "'видео'==self.kind"
@@ -111,5 +111,10 @@ class Card < ActiveRecord::Base
 		else
 			true
 		end
+	end
+
+	def kind?(name)
+		name = name.to_s
+		name==Card.kinds[self.kind] || name==self.kind
 	end
 end
