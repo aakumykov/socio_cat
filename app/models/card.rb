@@ -112,4 +112,9 @@ class Card < ActiveRecord::Base
 			true
 		end
 	end
+
+	def kind?(name)
+		name = name.to_s
+		name==Card.kinds[self.kind] || name==self.kind
+	end
 end

@@ -1,3 +1,7 @@
-<% provide(:title,'Создание карточки') %>
-
-<%= render 'form', mode:'new' %>
+<% if @obj.kind?('черновик') %>
+	<% provide(:title,'Выберите тип карточки') %>
+	<%= render 'kind_chooser' %>
+<% else %>
+	<% provide(:title,'Создание карточки') %>
+	<%= render 'form', mode:'new' %>
+<% end %>
