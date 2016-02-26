@@ -51,7 +51,7 @@ class Card < ActiveRecord::Base
 		if: "'текст'==self.kind"
 
 	
-	has_attached_file :image, default_url: 'no_image'
+	has_attached_file :image, styles: {medium:'300x300>', thumb:'100x100>'}, default_url: 'no_image'
 	validates_attachment(:image,
 		presence: {message:'не может быть пустым'},
 		content_type: { content_type: /\Aimage\/.*\Z/ },

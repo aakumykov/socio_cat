@@ -1,8 +1,9 @@
 <div class='area image_content'>
-	<div class='caption'>Картинка</div>
 	<% if value.nil? %>
 		<%= render 'cards/content/display/none' %>
 	<% else %>
-		<%= image_tag value.url %>
+		<%= link_to value.url do %>
+			<%= image_tag value.url(:medium), class:'img-thumbnail' %>
+		<% end %>
 	<% end %>
 </div>

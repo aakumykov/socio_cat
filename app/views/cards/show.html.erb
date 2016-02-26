@@ -1,20 +1,23 @@
 <% provide(:title,'Карточка') %>
 
-<h1 class='page_title'><%= yield(:title) %></h1>
+<!--<h1 class='page_title'><%= yield(:title) %></h1>-->
 
 <%= render 'comfort_buttons' %>
 
 <div class='card col-md-8 col-md-offset-2'>
-	<div class='kind badge pull-left'><%= @obj.kind %></div>
 
 	<!-- кнопки управления (начало) -->
 	<% if signed_in? %>
 		<div class='controls btn-group pull-right'>
 			<% if @obj.user == current_user || current_user.admin? %>
-				<%= link_to 'И', edit_card_path(@obj.id), class: 'btn btn-default btn-xs', title: 'изменить' %>
+				<%= link_to edit_card_path(@obj.id), class: 'btn btn-default btn-xs', title: 'изменить' do %>
+					<span class='glyphicon glyphicon-edit'></span>
+				<% end %>
 			<% end %>
 			<% if current_user.admin? %>
-				<%= link_to 'У', card_path(@obj.id), method: 'delete', data: { confirm: 'Удалить карточку?'}, class: 'btn btn-danger btn-xs', title: 'удалить' %>
+				<%= link_to card_path(@obj.id), method: 'delete', data: { confirm: 'Удалить карточку?'}, class: 'btn btn-danger btn-xs', title: 'удалить' do %>
+						<span class='glyphicon glyphicon-remove'></span>
+				<% end %>
 			<% end %>
 		</div>
 	<% end %><!-- кнопки управления (конец) -->

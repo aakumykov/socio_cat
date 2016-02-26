@@ -12,6 +12,12 @@
 		margin: 4px;
 	}
 
+	.controls {
+		SPAN {
+			padding: 0px 4px;
+		}
+	}
+
 	.title {
 		padding: 4px 20px;
 		font-family: serif;
@@ -23,8 +29,8 @@
 	}
 
 	.content {
-		padding: 2px;
-		background-color: palegreen;
+		/*padding: 2px;*/
+		/*background-color: palegreen;*/
 
 		.area {
 			clear: both;
