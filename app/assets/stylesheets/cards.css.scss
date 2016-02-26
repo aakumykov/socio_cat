@@ -73,17 +73,11 @@
 			background-color: darkturquoise;
 		}
 	}
-	
-	.controls {}
 }
 
 .card_edit {
 
-	/*background-color: lightsalmon;
-	.row {
-		margin-bottom: 10px;
-		background-color: lightseagreen;
-	}*/
+	margin-top: 16px;
 
 	.kind_selector {
 		.title {
@@ -95,31 +89,9 @@
 		}
 	}
 
-	/*.field {
-		width: 100%;
-	}*/
-
-	/*.content, .description {
-		TEXTAREA {
-			min-height: 100px;
-			height: 140px;
-			padding: 4px;
-		}
-	}*/
-
-	/*.categories {
-		.item {
-			background-color: lightcoral;
-			color: white;
-
-			font-style: italic;
-			font-family: serif;
-
-			margin-right: 10px;
-			padding: 0px 8px 0px 6px;
-			border-radius: 3px;
-		}
-	}*/
+	.controls {
+		margin-top: 8px;
+	}
 }
 
 .cards_index {

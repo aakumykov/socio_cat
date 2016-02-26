@@ -4,19 +4,19 @@ if 'new'==mode then
 	cancel_path = cards_path
 	cancel_title = 'вернуться к списку карточек'
 else
-	
 	submit_button = 'Сохранить'
 	cancel_path = card_path(@obj.id)
 	cancel_title = 'вернуться к просмотру карточки'
 end
 %>
 
+
 <h1 class='page_title'><%= yield(:title) %></h1>
 
 <div class='card_edit col-md-8 col-md-offset-2'>
 	<%= form_for(@obj, html:{role:'form'}) do |f| %>
 		<%= render 'shared/error_messages.html.erb', object:f.object %>
-
+		
 		<div class='row'><!-- поля карточки -->
 			
 			<div class='col-md-9'><!-- большая колонка -->
@@ -101,10 +101,10 @@ end
 				</div>
 			</div>
 		</div>
-		<div class='row'><!-- кнопки управления -->
+		
+		<div class='row controls'><!-- кнопки управления -->
 			<%= link_to 'Отмена', cancel_path, title:cancel_title, class:'btn btn-default pull-left' %>
 			<%= f.submit submit_button, class:'btn btn-success pull-right' %>
 		</div>
-
 	<% end %>
 </div>
