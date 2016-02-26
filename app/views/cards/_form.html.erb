@@ -14,7 +14,7 @@ end
 <h1 class='page_title'><%= yield(:title) %></h1>
 
 <div class='card_edit col-md-8 col-md-offset-2'>
-	<%= form_for @obj do |f| %>
+	<%= form_for(@obj, html:{role:'form'}) do |f| %>
 		<%= render 'shared/error_messages.html.erb', object:f.object %>
 
 		<div class='row'><!-- поля карточки -->
@@ -23,43 +23,49 @@ end
 				<div class='row'><!-- тип, название -->
 					
 					<div class='col-md-3'><!-- тип -->
-						<% if 'draft' != @obj.kind %>
-							<fieldset class='kind'>
-								<legend><%= f.label :kind, 'Тип' %></legend>
-								<%= select_tag 'card[kind]', options_for_select(Card.kinds,Card.kinds[@obj.kind]) %>
-							</fieldset>
-						<% end %>
+						<div class='form-group'>
+							<% if 'draft' != @obj.kind %>
+									<%= f.label :kind, 'Тип карточки' %></legend>
+									<%= select_tag 'card[kind]', options_for_select(Card.kinds,Card.kinds[@obj.kind]), class:'form-control' %>
+							<% end %>
+						</div>
 					</div>
 					
 					<div class='col-md-9'><!-- название -->
-						<legend><%= f.label :title, 'Название' %></legend>
-						<%= f.text_field :title, class:'field', placeholder:'название' %>
+						<div class='form-group'>
+							<%= f.label :title, 'Название' %>
+							<%= f.text_field :title, class:'field form-control', placeholder:'назвите объект' %>
+						</div>
 					</div>
 				</div>
 
 				<div class='row'><!-- содержимое -->
 					<div class='col-md-12'>
-						<% case @obj.kind %>
-						<% when 'текст' %>
-							<%= render 'cards/content/edit/text', form:f %>
-						<% when 'картинка' %>
-							<%= render 'cards/content/edit/image', form:f %>
-						<% when 'музыка' %>
-							<%= render 'cards/content/edit/audio', form:f %>
-						<% when 'видео' %>
-							<%= render 'cards/content/edit/video', form:f %>
-						<% else %>
-							<div class='alert alert-warning'>
-								<%= render 'kind_chooser' %>
-							</div>
-						<% end %>
+						<div class='form-group'>
+							<% case @obj.kind %>
+							<% when 'текст' %>
+								<%= render 'cards/content/edit/text', form:f %>
+							<% when 'картинка' %>
+								<%= render 'cards/content/edit/image', form:f %>
+							<% when 'музыка' %>
+								<%= render 'cards/content/edit/audio', form:f %>
+							<% when 'видео' %>
+								<%= render 'cards/content/edit/video', form:f %>
+							<% else %>
+								<div class='alert alert-warning'>
+									<%= render 'kind_chooser' %>
+								</div>
+							<% end %>
+						</div>
 					</div>
 				</div>
 				
 				<div class='row'><!-- описание -->
 					<div class='col-md-12'>
-						<legend><%= f.label :description, 'Описание' %></legend>
-						<%= f.text_area :description, class:'field' %>
+						<div class='form-group'>
+							<%= f.label :description, 'Описание' %>
+							<%= f.text_area :description, placeholder:'опишите объект', class:'field form-control' %>
+						</div>
 					</div>
 				</div>
 			</div>
@@ -67,26 +73,30 @@ end
 			<div class='col-md-3'><!-- малая колонка -->
 				<div class='row'>
 					<div class='col-md-12'>
-						<legend><label>Категория</label></legend>
+						<div class='form-group'>
+							<%= f.label :description, 'Категория' %>
 						
-						<!--<% @checkboxes.each do |id,data| %>
-							<label class='item'>
-								<% check_box_tag 'categories[]', id, data[:checked] %>
-								<% data[:name] %>
-							</label>
-						<% end %>-->
+							<!--<% @checkboxes.each do |id,data| %>
+								<label class='item'>
+									<% check_box_tag 'categories[]', id, data[:checked] %>
+									<% data[:name] %>
+								</label>
+							<% end %>-->
 
-						<select size='5' name='categories[]'>
-							<% @checkboxes.each do |id,data| %>
-								<option value='<%= id %>'><%= data[:name] %></option>
-							<% end %>
-						</select>
+							<select size='5' name='categories[]' class='form-control'>
+								<% @checkboxes.each do |id,data| %>
+									<option value='<%= id %>'><%= data[:name] %></option>
+								<% end %>
+							</select>
+						</div>
 					</div>
 				</div>
 				<div class='row'>
 					<div class='col-md-12'>
-						<legend><%= f.label :new_category, 'Новая категория' %></legend>
-						<%= f.text_field :new_category, class:'field' %>
+						<div class='form-group'>
+							<%= f.label :new_category, 'Новая категория' %>
+							<%= f.text_field :new_category, class:'field form-control' %>
+						</div>
 					</div>
 				</div>
 			</div>

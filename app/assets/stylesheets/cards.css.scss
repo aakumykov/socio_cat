@@ -79,11 +79,11 @@
 
 .card_edit {
 
-	background-color: lightsalmon;
+	/*background-color: lightsalmon;
 	.row {
 		margin-bottom: 10px;
 		background-color: lightseagreen;
-	}
+	}*/
 
 	.kind_selector {
 		.title {
@@ -95,19 +95,19 @@
 		}
 	}
 
-	.field {
+	/*.field {
 		width: 100%;
-	}
+	}*/
 
-	.content, .description {
+	/*.content, .description {
 		TEXTAREA {
 			min-height: 100px;
 			height: 140px;
 			padding: 4px;
 		}
-	}
+	}*/
 
-	.categories {
+	/*.categories {
 		.item {
 			background-color: lightcoral;
 			color: white;
@@ -118,33 +118,8 @@
 			margin-right: 10px;
 			padding: 0px 8px 0px 6px;
 			border-radius: 3px;
-
-			INPUT {
-				margin-right: 2px;
-			}
 		}
-	}
-
-	.content {
-		margin-top: 16px;
-	}
-	.controls{
-		margin-top: 16px;
-	}
-
-	FIELDSET {
-		margin-top: 12px;
-	}
-
-	LEGEND {
-		margin-bottom: 0px;
-		border-bottom-style: none;
-	}
-
-	LABEL {
-		margin-bottom: 0px;
-		font-weight: normal;
-	}
+	}*/
 }
 
 .cards_index {
