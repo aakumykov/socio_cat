@@ -85,7 +85,10 @@
 
 	margin-top: 16px;
 
-	.kind_selector {
+	.kind_chooser {
+		TD {
+			text-align: center;
+		}
 		.title {
 			text-align: center;
 			padding-bottom: 15px;
@@ -132,14 +135,14 @@
 
 	.card_kind {
 		color: white;
-		text-shadow: 1px 1px 1px rgba(128,128,128,0.6);
+		text-shadow: 1px 1px 1px rgba(100,100,100,0.6);
 	}
 
 	.badge_text {
 		background-color: lightskyblue;
 	}
 	.badge_image {
-		background-color: palegreen;
+		background-color: Moccasin;
 	}
 	.badge_audio {
 		background-color: lightpink;
