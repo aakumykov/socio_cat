@@ -12,7 +12,7 @@ module CardsHelper
 		when 'видео'
 			render 'cards/content/display/video', value:value
 		else
-			render 'cards/content/display/unknown'
+			render 'cards/content/display/unknown', value:value
 		end
 	end
 
