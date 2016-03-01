@@ -13,17 +13,6 @@ class CardsController < ApplicationController
 	def create
 		@obj = current_user.cards.new(card_params)
 
-		# if !card_params[:new_category].blank?
-		# 	@new_category = Category.create(name: card_params[:new_category])
-
-		# 	if @new_category.reload
-		# 		flash[:success] = "Создана категория «{card_params[:new_category]}»"
-		# 		params[:categories] << @new_category.reload.id
-		# 	else
-		# 		flash[:danger] = "Ошибка создания категории «{card_params[:new_category]}» #{@new_category.errors.full_messages}"
-		# 	end
-		# end
-
 		if @obj.save
 			@obj.fill_categories(category_params)
 			flash[:success] = "Создана карточка «#{@obj.title}»"
@@ -62,17 +51,6 @@ class CardsController < ApplicationController
 		else
 			#flash.now[:danger] = "Изменения отклонены"
 			@checkboxes = hash_for_checkboxes(category_params)
-			render :edit
-		end
-	end
-
-	def chtype(new_type)
-		@card = Card.new(card_params)
-
-		if @card
-			redirect_to new_card_path
-		else
-			flash.now[:danger] = 'Ошибка смены типа карточки'
 			render :edit
 		end
 	end
