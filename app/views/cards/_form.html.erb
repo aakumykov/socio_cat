@@ -22,16 +22,9 @@ end
 			<div class='col-md-9'><!-- большая колонка -->
 				<div class='row'><!-- тип, название -->
 					
-					<div class='col-md-3'><!-- тип -->
-						<div class='form-group'>
-							<% if 'draft' != @obj.kind %>
-									<%= f.label :kind, 'Тип карточки' %></legend>
-									<%= select_tag 'card[kind]', options_for_select(Card.kinds,Card.kinds[@obj.kind]), class:'form-control' %>
-							<% end %>
-						</div>
-					</div>
+					<%= f.hidden_field :kind %>
 					
-					<div class='col-md-9'><!-- название -->
+					<div class='col-md-12'><!-- название -->
 						<div class='form-group'>
 							<%= f.label :title, 'Название' %>
 							<%= f.text_field :title, class:'field form-control', placeholder:'назвите объект' %>
@@ -85,7 +78,7 @@ end
 
 							<select size='5' name='categories[]' class='form-control'>
 								<% @checkboxes.each do |id,data| %>
-									<option value='<%= id %>'><%= data[:name] %></option>
+									<option value='<%= id %>' <%= 'selected' if data[:checked] %>><%= data[:name] %></option>
 								<% end %>
 							</select>
 						</div>
