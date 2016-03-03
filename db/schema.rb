@@ -11,7 +11,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160219064810) do
+ActiveRecord::Schema.define(version: 20160303094353) do
 
 # Could not dump table "cards" because of following NoMethodError
 #   undefined method `[]' for nil:NilClass
@@ -52,6 +52,14 @@ ActiveRecord::Schema.define(version: 20160219064810) do
   end
 
   add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+
+  create_table "matters", force: :cascade do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+  end
+
+  add_index "matters", ["name"], name: "index_matters_on_name", unique: true
 
   create_table "users", force: :cascade do |t|
     t.text     "name"

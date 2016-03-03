@@ -1,5 +1,6 @@
 class Card < ActiveRecord::Base
 
+	belongs_to :matter, inverse_of: :cards
 	belongs_to :user, inverse_of: :cards
 	has_many :cc_relations
 	has_many :categories, through: :cc_relations
