@@ -33,7 +33,7 @@ class Card < ActiveRecord::Base
 
 	validates :title,
 		presence: {message:'не может быть пустым'},
-		length: {minimun:3, maximum: 80}
+		length: {minimum:3, maximum: 80}
 
 
 	validates(:description,
