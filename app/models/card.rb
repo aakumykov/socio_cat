@@ -1,16 +1,13 @@
 class Card < ActiveRecord::Base
 
 	belongs_to :matter, inverse_of: :cards
+	 validates_associated :matter
 	belongs_to :user, inverse_of: :cards
 	has_many :cc_relations
 	has_many :categories, through: :cc_relations
 	
 
-	before_validation { |m|
-		m.remove_trailing_spaces(:title,:description,:text) 
-		#puts "===== before_validation =====> #{self.kind}"
-	}
-
+	attr_accessor :new_matter_name
 
 	enum kind: {
 		'черновик' => 'draft',
@@ -20,22 +17,36 @@ class Card < ActiveRecord::Base
 		'видео' => 'video',
 	}
 
+
+	before_validation { |m|
+		m.remove_trailing_spaces(:title,:description,:text) 
+		#puts "===== before_validation =====> #{self.kind}"
+	}
+
+	validates(:matter_id,
+		numericality: true,
+	)
+
+	validates(:new_matter_name,
+		#presence: true,
+		#length: {minimum:2, maximum:18}
+		presence: {message:'не может быть пустым'},
+		length: {minimum:2, maximum:18, message:'длина от 2 до 16 знаков'}
+	)
+
 	validates :kind, {
 		presence: {message:'не может быть пустым'},
 		# принадлежность к перечисляемому типу!
 	}
-
 
 	validates :user_id, {
 		presence: {message:'не может быть пустым'},
 		format: /\A[0-9]+\z/,
 	}
 
-
 	validates :title,
 		presence: {message:'не может быть пустым'},
 		length: {minimun:3, maximum: 80}
-
 
 	validates(:description,
 		presence: {message: 'не может быть пустым'},
@@ -46,11 +57,11 @@ class Card < ActiveRecord::Base
 	attr_accessor :new_category
 
 
-	validates :text,
+	validates(:text,
 		presence: {message:'не может быть пустым'},
 		length: {minimum: 10,maximum: 1024}, 
 		if: "'текст'==self.kind"
-
+	)
 	
 	has_attached_file :image, styles: {medium:'300x300>', thumb:'100x100>'}, default_url: 'no_image'
 	validates_attachment(:image,
