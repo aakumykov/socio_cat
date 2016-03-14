@@ -23,13 +23,12 @@ class Card < ActiveRecord::Base
 		#puts "===== before_validation =====> #{self.kind}"
 	}
 
-	validates(:matter_id,
-		numericality: true,
-	)
+	#validate(:matter_id,
+		#numericality: true,
+	#	:must_have_a_matter,
+	#)
 
 	validates(:new_matter_name,
-		#presence: true,
-		#length: {minimum:2, maximum:18}
 		presence: {message:'не может быть пустым'},
 		length: {minimum:2, maximum:18, message:'длина от 2 до 16 знаков'}
 	)
@@ -128,5 +127,17 @@ class Card < ActiveRecord::Base
 	def kind?(name)
 		name = name.to_s
 		name==Card.kinds[self.kind] || name==self.kind
+	end
+
+	# собственные валидаторы
+	def must_have_a_matter
+		if true
+			puts "===== Card.matter =====> #{matter}"
+			puts "===== Card.matter.class =====> #{matter.class}"
+			puts "===== Card.matter.id =====> #{matter.id}"
+			puts "===== Card.matter.name =====> #{matter.name}"
+			puts "===== Card.matter_id =====> #{matter_id}"
+			errors.add(:new_matter_name, 'неправильно, и всё тут!')
+		end
 	end
 end

@@ -23,6 +23,7 @@
 	<% end %><!-- кнопки управления (конец) -->
 	
 	<div class='title'>
+		<%= link_to @obj.matter.name, matter_path(@obj.matter), class:'matter badge' %>
 		<%= @obj.title %>
 	</div>
 	

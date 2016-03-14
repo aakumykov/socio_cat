@@ -35,6 +35,7 @@ Rails.application.routes.draw do
   resources :sessions, only: [:new, :create, :destroy]
   resources :categories
   resources :cards
+  resources :matters
   
   post '/cc_bind/:category_id/:card_id', to: 'cc_relations#bind', as: :cc_bind
   post '/cc_unbind/:category_id/:card_id', to: 'cc_relations#unbind', as: :cc_unbind
