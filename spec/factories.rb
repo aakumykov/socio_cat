@@ -2,6 +2,7 @@ FactoryGirl.define do
 	#ActionView::Helpers::TextHelper
 
 	factory :card do
+		kind 'текст'
 		title { Faker::Lorem.word.capitalize + '_' + rand(1..100).to_s }
 		description Faker::Lorem.paragraph
 		text Faker::Lorem.paragraph
