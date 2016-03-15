@@ -6,13 +6,15 @@
 
 <div class='col-md-8 col-md-offset-2'>
 	<ul class='cards_index'>
-		<% @list.each do |card| %>
-			<% user = card.user %>
+		<% @list.each do |crd| %>
+			<% user = crd.user %>
 			<li>
-				<%= link_to card.title, card_path(card.id), title: "карточка «#{card.title}»", class:'title' %>,
-				<span class='badge card_kind <%= card_badge(card.kind) %>'><%= card.kind %></span>
+				<%= link_to crd.title, card_path(crd.id), title: "карточка «#{crd.title}»", class:'title' %>,
+				<span class='badge card_kind <%= card_badge(crd.kind) %>'><%= crd.kind %></span>
 				от
 				<%= link_to user.name, user_path(user), title: "пользователь «#{user.name}»", class:'badge author' %>
+
+				<%= render 'side_controls', obj:crd %>
 			</li>
 		<% end %>
 	</ul>
