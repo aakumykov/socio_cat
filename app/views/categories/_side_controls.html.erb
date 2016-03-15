@@ -5,7 +5,7 @@
 				И
 			<% end %>
 
-			<%= link_to category_path(obj.id), title:'Удалить', method:'delete', class:'btn btn-xs btn-danger' do %>
+			<%= link_to category_path(obj.id), title:'Удалить', method:'delete', class:'btn btn-xs btn-danger', data: { confirm: "Удалить категорию «#{obj.name}»?" } do %>
 				У
 			<% end %>
 		</div>

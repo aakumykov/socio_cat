@@ -1,0 +1,15 @@
+<% mode ||= 'full' %>
+
+<div class='row comfort_buttons'>
+	<div class='btn-group pull-right'>
+
+		<% if signed_in? then %>
+			<%= link_to('Новый объект', new_matter_path, class: 'btn btn-success btn-xs', title: 'Создать новый объект') %>
+		<% end %>
+
+		<% if 'full'==mode then %>
+			<%= link_to 'Список', matters_path, class: 'btn btn-primary btn-xs', title: 'Список объектов' %>
+		<% end %>
+
+	</div>
+</div>

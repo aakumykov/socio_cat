@@ -7,7 +7,7 @@
 	<%= render 'comfort_buttons' %>
 	
 	<% @list.each do |ctg| %>
-		<div class='category_list_item category<%= ctg.id %>'>
+		<div class='list_item category<%= ctg.id %>'>
 			<%= link_to ctg.name, category_path(ctg.id), class:'cat_link' %>
 			<%= render 'side_controls', obj:ctg %>
 		</div>

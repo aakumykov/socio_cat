@@ -1,2 +1,7 @@
-<h1>Matters#new</h1>
-<p>Find me in app/views/matters/new.html.erb</p>
+<% provide(:title,'Новый объект') %>
+
+<h1 class='page_title'><%= yield(:title) %></h1>
+
+<div class='col-md-6 col-md-offset-3'>
+	<%= render 'form', cancel_path:matters_path, button_text:'Создать', matter:@obj %>
+</div>

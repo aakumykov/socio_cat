@@ -1,2 +1,7 @@
-<h1>Matters#edit</h1>
-<p>Find me in app/views/matters/edit.html.erb</p>
+<% provide(:title,"Изменение объекта «#{@obj.name}»") %>
+
+<h1 class='page_title'><%= yield(:title) %></h1>
+
+<div class='col-md-6 col-md-offset-3'>
+	<%= render 'form', cancel_path:matter_path(@obj), button_text:'Сохранить', matter:@obj %>
+</div>

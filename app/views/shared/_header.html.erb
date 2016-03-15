@@ -1,4 +1,14 @@
-<%= link_to 'Главная страница', home_path, class: 'btn btn-primary' %>
+<%= link_to 'Главная', home_path, class: 'btn btn-primary' %>
+
+<span class="btn-group">
+	<a href='<%= matters_path %>' class="btn btn-info">Объекты</a>
+	
+	<% if signed_in? && current_user.admin? %>
+ 		<a href='<%= new_matter_path %>' class="btn btn-info dropdown-toggle">
+ 			<span  class='glyphicon glyphicon-plus'></span>
+ 		</a>
+	<% end %>
+</span>
 
 <span class="btn-group">
 	<a href='<%= cards_path %>' class="btn btn-danger">Карточки</a>
