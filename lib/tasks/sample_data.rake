@@ -61,7 +61,7 @@ def create_cards
 		FactoryGirl.create(
 			:card, 
 			user: User.where(admin:false).first,
-			new_matter_name: Matter.first.name,
+			matter: Matter.first,
 		)
 	end
 
@@ -69,7 +69,7 @@ def create_cards
 		FactoryGirl.create(
 			:card, 
 			user: User.where(admin:false).last,
-			new_matter_name: Matter.last.name,
+			matter: Matter.last,
 		)
 	end
 end

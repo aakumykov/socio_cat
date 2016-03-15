@@ -1,13 +1,30 @@
 class Card < ActiveRecord::Base
 
+	before_validation { |m|
+		m.remove_trailing_spaces(:title,:description,:text) 
+		#puts "===== before_validation =====> #{self.kind}"
+	}
+
 	belongs_to :matter, inverse_of: :cards
-	 validates_associated :matter
+	validates :matter, presence: true
+	validates_associated :matter
+	
 	belongs_to :user, inverse_of: :cards
+	validates :user, presence: true
+	
 	has_many :cc_relations
+	
 	has_many :categories, through: :cc_relations
 	
 
 	attr_accessor :new_matter_name
+	
+	validates(:new_matter_name,
+		presence: {message:'не может быть пустым'},
+		length: {minimum:2, maximum:18, message:'длина от 2 до 16 знаков'},
+		if: "matter.nil?"
+	)
+
 
 	enum kind: {
 		'черновик' => 'draft',
@@ -17,26 +34,11 @@ class Card < ActiveRecord::Base
 		'видео' => 'video',
 	}
 
-
-	before_validation { |m|
-		m.remove_trailing_spaces(:title,:description,:text) 
-		#puts "===== before_validation =====> #{self.kind}"
-	}
-
-	#validate(:matter_id,
-		#numericality: true,
-	#	:must_have_a_matter,
-	#)
-
-	validates(:new_matter_name,
-		presence: {message:'не может быть пустым'},
-		length: {minimum:2, maximum:18, message:'длина от 2 до 16 знаков'}
-	)
-
 	validates :kind, {
 		presence: {message:'не может быть пустым'},
 		# принадлежность к перечисляемому типу!
 	}
+
 
 	validates :user_id, {
 		presence: {message:'не может быть пустым'},
