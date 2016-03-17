@@ -20,6 +20,9 @@ gem 'daemons'
 gem 'paperclip'
 gem 'mime-types'
 
+gem 'pg', '0.15.1'
+gem 'rails_12factor', '0.0.2'
+
 group :development, :test do
   gem 'sqlite3'
   gem 'rspec-rails', '2.14.2'
@@ -37,6 +40,6 @@ group :doc do
 end
 
 group :production do
-  gem 'pg', '0.15.1'
-  gem 'rails_12factor', '0.0.2'
+#  gem 'pg', '0.15.1'
+#  gem 'rails_12factor', '0.0.2'
 end
