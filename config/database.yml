@@ -1,40 +1,40 @@
 ## SQLite3
-default: &default
-  adapter: sqlite3
-  pool: 5
-  timeout: 5000
+# default: &default
+#   adapter: sqlite3
+#   pool: 5
+#   timeout: 5000
 
-development:
-  <<: *default
-  database: db/development.sqlite3
+# development:
+#   <<: *default
+#   database: db/development.sqlite3
 
-test:
-  <<: *default
-  database: db/test.sqlite3
-production:
-  <<: *default
-  database: db/production.sqlite3
+# test:
+#   <<: *default
+#   database: db/test.sqlite3
+# production:
+#   <<: *default
+#   database: db/production.sqlite3
 
 
 
 ## PostgresQL
-# default: &default
-#   adapter: postgresql
-#   pool: 5
-#   encoding: unicode
-#   username: rails_dev
-#   password: rails_dev
+default: &default
+  adapter: postgresql
+  pool: 5
+  encoding: unicode
+  username: rails_dev
+  password: rails_dev
 
-# development:
-#   <<: *default
-#   database: pgtest_development
+development:
+  <<: *default
+  database: pgtest_development
 
-# test:
-#   <<: *default
-#   database: pgtest_test
+test:
+  <<: *default
+  database: pgtest_test
 
-# production:
-#   <<: *default
-#   database: pgtest_production
-#   username: pgtest
-#   password: <%= ENV['PGTEST_DATABASE_PASSWORD'] %>
+production:
+  <<: *default
+  database: pgtest_production
+  username: pgtest
+  password: <%= ENV['PGTEST_DATABASE_PASSWORD'] %>

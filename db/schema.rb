@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20160209093421) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "cards", force: :cascade do |t|
     t.integer  "user_id"
     t.string   "kind",               default: "draft"
@@ -39,7 +42,7 @@ ActiveRecord::Schema.define(version: 20160209093421) do
     t.datetime "updated_at"
   end
 
-  add_index "cards", ["user_id"], name: "index_cards_on_user_id"
+  add_index "cards", ["user_id"], name: "index_cards_on_user_id", using: :btree
 
   create_table "categories", force: :cascade do |t|
     t.string   "name"
@@ -49,7 +52,7 @@ ActiveRecord::Schema.define(version: 20160209093421) do
     t.datetime "updated_at"
   end
 
-  add_index "categories", ["name"], name: "index_categories_on_name", unique: true
+  add_index "categories", ["name"], name: "index_categories_on_name", unique: true, using: :btree
 
   create_table "cc_relations", force: :cascade do |t|
     t.integer  "category_id"
@@ -58,9 +61,9 @@ ActiveRecord::Schema.define(version: 20160209093421) do
     t.datetime "updated_at"
   end
 
-  add_index "cc_relations", ["card_id"], name: "index_cc_relations_on_card_id"
-  add_index "cc_relations", ["category_id", "card_id"], name: "index_cc_relations_on_category_id_and_card_id", unique: true
-  add_index "cc_relations", ["category_id"], name: "index_cc_relations_on_category_id"
+  add_index "cc_relations", ["card_id"], name: "index_cc_relations_on_card_id", using: :btree
+  add_index "cc_relations", ["category_id", "card_id"], name: "index_cc_relations_on_category_id_and_card_id", unique: true, using: :btree
+  add_index "cc_relations", ["category_id"], name: "index_cc_relations_on_category_id", using: :btree
 
   create_table "delayed_jobs", force: :cascade do |t|
     t.integer  "priority",   default: 0, null: false
@@ -76,7 +79,7 @@ ActiveRecord::Schema.define(version: 20160209093421) do
     t.datetime "updated_at"
   end
 
-  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority"
+  add_index "delayed_jobs", ["priority", "run_at"], name: "delayed_jobs_priority", using: :btree
 
   create_table "users", force: :cascade do |t|
     t.text     "name"
@@ -95,8 +98,8 @@ ActiveRecord::Schema.define(version: 20160209093421) do
     t.string   "activation_code"
   end
 
-  add_index "users", ["email"], name: "index_users_on_email", unique: true
-  add_index "users", ["name"], name: "index_users_on_name", unique: true
-  add_index "users", ["remember_token"], name: "index_users_on_remember_token"
+  add_index "users", ["email"], name: "index_users_on_email", unique: true, using: :btree
+  add_index "users", ["name"], name: "index_users_on_name", unique: true, using: :btree
+  add_index "users", ["remember_token"], name: "index_users_on_remember_token", using: :btree
 
 end
