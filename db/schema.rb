@@ -11,16 +11,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20160219064810) do
+ActiveRecord::Schema.define(version: 20160209093421) do
 
   create_table "cards", force: :cascade do |t|
-    t.string   "title"
-    t.datetime "created_at"
-    t.datetime "updated_at"
     t.integer  "user_id"
-    t.text     "description"
     t.string   "kind",               default: "draft"
+    t.string   "title"
     t.text     "text"
+    t.text     "description"
     t.string   "image_file_name"
     t.string   "image_content_type"
     t.integer  "image_file_size"
@@ -37,6 +35,8 @@ ActiveRecord::Schema.define(version: 20160219064810) do
     t.string   "media_content_type"
     t.integer  "media_file_size"
     t.datetime "media_updated_at"
+    t.datetime "created_at"
+    t.datetime "updated_at"
   end
 
   add_index "cards", ["user_id"], name: "index_cards_on_user_id"
