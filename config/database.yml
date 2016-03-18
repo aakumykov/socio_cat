@@ -27,14 +27,14 @@ default: &default
 
 development:
   <<: *default
-  database: pgtest_development
+  database: socio_cat_development
 
 test:
   <<: *default
-  database: pgtest_test
+  database: socio_cat_test
 
 production:
   <<: *default
-  database: pgtest_production
+  database: socio_cat_production
   username: pgtest
   password: <%= ENV['PGTEST_DATABASE_PASSWORD'] %>
