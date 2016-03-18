@@ -218,7 +218,7 @@ DEPENDENCIES
   mime-types
   paperclip
   pg (= 0.15.1)
-  rails (~> 4.2.0)
+  rails (~> 4.2.5)
   rails_12factor (= 0.0.2)
   rspec-rails (= 2.14.2)
   sass-rails (~> 5.0)
