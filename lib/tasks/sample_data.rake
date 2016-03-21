@@ -6,6 +6,7 @@ namespace :db do
 		
 		create_admin_user
 		create_users
+		create_matters
 		create_cards
 		create_categoties
 	end
@@ -47,13 +48,29 @@ def create_admin_user
 	)
 end
 
+def create_matters
+	2.times do
+		Matter.create!(
+			name: Faker::Lorem.word
+		)
+	end
+end
+
 def create_cards
 	2.times do
-		FactoryGirl.create(:card, user: User.where(admin:false).first)
+		FactoryGirl.create(
+			:card, 
+			user: User.where(admin:false).first,
+			matter: Matter.first,
+		)
 	end
 
 	2.times do
-		FactoryGirl.create(:card, user: User.where(admin:false).last)
+		FactoryGirl.create(
+			:card, 
+			user: User.where(admin:false).last,
+			matter: Matter.last,
+		)
 	end
 end
 

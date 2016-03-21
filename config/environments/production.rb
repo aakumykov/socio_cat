@@ -81,5 +81,5 @@ Rails.application.configure do
   config.x.reset_password_link.lifetime = 24.hours.to_i
   config.x.reset_password_form.lifetime = 3.minutes.to_i
 
-  config.serve_static_files = true
+  #config.serve_static_files = true
 end

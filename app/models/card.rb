@@ -1,14 +1,29 @@
 class Card < ActiveRecord::Base
 
-	belongs_to :user, inverse_of: :cards
-	has_many :cc_relations
-	has_many :categories, through: :cc_relations
-	
-
 	before_validation { |m|
 		m.remove_trailing_spaces(:title,:description,:text) 
 		#puts "===== before_validation =====> #{self.kind}"
 	}
+
+	belongs_to :matter, inverse_of: :cards
+	validates :matter, presence: true
+	validates_associated :matter
+	
+	belongs_to :user, inverse_of: :cards
+	validates :user, presence: true
+	
+	has_many :cc_relations
+	
+	has_many :categories, through: :cc_relations
+	
+
+	attr_accessor :new_matter_name
+	
+	validates(:new_matter_name,
+		presence: {message:'не может быть пустым'},
+		length: {minimum:2, maximum:18, message:'длина от 2 до 16 знаков'},
+		if: "matter.nil?"
+	)
 
 
 	enum kind: {
@@ -30,11 +45,9 @@ class Card < ActiveRecord::Base
 		format: /\A[0-9]+\z/,
 	}
 
-
 	validates :title,
 		presence: {message:'не может быть пустым'},
 		length: {minimum:3, maximum: 80}
-
 
 	validates(:description,
 		presence: {message: 'не может быть пустым'},
@@ -45,11 +58,11 @@ class Card < ActiveRecord::Base
 	attr_accessor :new_category
 
 
-	validates :text,
+	validates(:text,
 		presence: {message:'не может быть пустым'},
 		length: {minimum: 10,maximum: 1024}, 
 		if: "'текст'==self.kind"
-
+	)
 	
 	has_attached_file :image, styles: {medium:'300x300>', thumb:'100x100>'}, default_url: 'no_image'
 	validates_attachment(:image,
@@ -116,5 +129,17 @@ class Card < ActiveRecord::Base
 	def kind?(name)
 		name = name.to_s
 		name==Card.kinds[self.kind] || name==self.kind
+	end
+
+	# собственные валидаторы
+	def must_have_a_matter
+		if true
+			puts "===== Card.matter =====> #{matter}"
+			puts "===== Card.matter.class =====> #{matter.class}"
+			puts "===== Card.matter.id =====> #{matter.id}"
+			puts "===== Card.matter.name =====> #{matter.name}"
+			puts "===== Card.matter_id =====> #{matter_id}"
+			errors.add(:new_matter_name, 'неправильно, и всё тут!')
+		end
 	end
 end

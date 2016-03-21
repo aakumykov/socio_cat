@@ -1,0 +1,13 @@
+<% if signed_in? %>
+	<% if current_user.admin? %>
+		<div class='btn-group pull-right'>
+			<%= link_to edit_card_path(obj.id), title:"Изменить карточку «#{obj.title}»", class:'btn btn-xs btn-info' do %>
+				И
+			<% end %>
+
+			<%= link_to card_path(obj.id), title:"Удалить карточку «#{obj.title}»", method:'delete', class:'btn btn-xs btn-danger', data: { confirm: "Удалить карточку «#{obj.title}»?" } do %>
+				У
+			<% end %>
+		</div>
+	<% end %>
+<% end %>

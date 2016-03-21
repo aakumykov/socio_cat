@@ -13,6 +13,14 @@ class CardsController < ApplicationController
 	def create
 		@obj = current_user.cards.new(card_params)
 
+		matter = Matter.find_by(name:card_params[:new_matter_name])
+		if matter
+			@obj.matter = matter
+		else
+			matter = @obj.build_matter(name:card_params[:new_matter_name])
+		end
+		puts "===== Cards#create, matter: =====> #{matter}, #{matter.name}"
+
 		if @obj.save
 			@obj.fill_categories(category_params)
 			flash[:success] = "Создана карточка «#{@obj.title}»"
@@ -38,6 +46,7 @@ class CardsController < ApplicationController
 
 	def edit
 		super
+		@obj.new_matter_name = @obj.matter.name
 		@checkboxes = hash_for_checkboxes(@obj.categories)
 	end
 
@@ -59,6 +68,7 @@ class CardsController < ApplicationController
 
 		def card_params
 			params.require(:card).permit(
+				:new_matter_name,
 				:kind,
 				:title,
 				:description,

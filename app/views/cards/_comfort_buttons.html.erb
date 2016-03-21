@@ -4,11 +4,11 @@
 	<div class='btn-group pull-right'>
 
 		<% if 'full'==mode then %>
-			<%= link_to 'Список', cards_path, class: 'btn btn-primary btn-primary pull-left', title: 'Список карточек' %>
+			<%= link_to 'Список', cards_path, class: 'btn btn-primary btn-primary btn-xs pull-left', title: 'Список карточек' %>
 		<% end %>
 
 		<% if signed_in? then %>
-			<%= link_to('Новая', new_card_path, class: 'btn btn-success pull-left', title: 'Создать новую карточку') %>
+			<%= link_to('Новая', new_card_path, class: 'btn btn-success btn-xs pull-left', title: 'Создать новую карточку') %>
 		<% end %>
 
 	</div>

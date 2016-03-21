@@ -1,0 +1,16 @@
+<% provide(:title,'Объекты') %>
+
+<h1 class='page_title'><%= yield(:title) %></h1>
+
+
+<div class='col-md-6 col-md-offset-3'>
+	<%= render 'comfort_buttons' %>
+	
+	<% @list.each do |m| %>
+		<div class='list_item category<%= m.id %>'>
+			<%= link_to m.name, m, class:'matter_link' %>
+			<%= render 'side_controls', obj:m %>
+		</div>
+	<% end %>
+
+</div>

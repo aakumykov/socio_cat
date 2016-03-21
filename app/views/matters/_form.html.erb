@@ -1,0 +1,10 @@
+<%= form_for @obj do |form| %>
+	<%= render 'shared/error_messages', object:@obj %>
+
+	<%= form.label :name, 'Название' %>
+	<%= form.text_field :name, class:'edit_field' %>
+	<div class='bottom_buttons_holder'>
+		<%= link_to 'Отмена', cancel_path, class:'btn btn-default pull-left' %>
+		<%= form.submit button_text, class:'btn btn-primary pull-right' %>
+	</div>
+<% end %>

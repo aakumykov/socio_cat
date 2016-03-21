@@ -1,0 +1,13 @@
+<% if signed_in? %>
+	<% if current_user.admin? %>
+		<div class='btn-group pull-right'>
+			<%= link_to edit_matter_path(obj.id), title:'Изменить', class:'btn btn-xs btn-info' do %>
+				И
+			<% end %>
+
+			<%= link_to matter_path(obj.id), title:'Удалить', method:'delete', class:'btn btn-xs btn-danger', data: { confirm: "Удалить объект «#{obj.name}»?" } do %>
+				У
+			<% end %>
+		</div>
+	<% end %>
+<% end %>
