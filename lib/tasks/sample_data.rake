@@ -1,15 +1,28 @@
 namespace :db do
 	desc "Fill database with sample data"
 	task populate: :environment do
-		require 'factory_girl'
-		require Rails.root.join('spec/factories')
+		require Rails.root.join('spec/factories') if not FactoryGirl.factories.registered?(:card)
 		
 		create_admin_user
-		create_users
-		create_matters
-		create_cards
-		create_categoties
+		
+		if Rails.env.development?
+			create_users
+			create_matters
+			create_cards
+			create_categoties
+		end
 	end
+end
+
+def create_admin_user
+	User.create!(
+		name: 'Админ',
+		email: 'admin@example.com',
+		password: 'Qwerty123!@#',
+		password_confirmation: 'Qwerty123!@#',
+		admin: true,
+		activated: true,
+	)
 end
 
 def create_users
@@ -34,17 +47,6 @@ def create_users
 		password_confirmation: 'Qwerty123!@#',
 		activated: true,
 		admin: true,
-	)
-end
-
-def create_admin_user
-	User.create!(
-		name: 'Админ',
-		email: 'admin@example.com',
-		password: 'Qwerty123!@#',
-		password_confirmation: 'Qwerty123!@#',
-		admin: true,
-		activated: true,
 	)
 end
 
