@@ -1,4 +1,3 @@
-worker: rake jobs:work
+#worker: rake jobs:work
 web: rails server
-
 
