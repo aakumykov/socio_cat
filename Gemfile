@@ -22,6 +22,7 @@ gem 'mime-types'
 
 gem 'pg', '0.15.1'
 gem 'rails_12factor', '0.0.2'
+gem 'factory_girl_rails'
 
 group :development, :test do
   gem 'sqlite3'
@@ -32,7 +33,7 @@ end
 group :test do
   gem 'selenium-webdriver'
   gem 'capybara'
-  gem 'factory_girl_rails'
+  #gem 'factory_girl_rails'
 end
 
 group :doc do
