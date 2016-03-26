@@ -27,9 +27,11 @@ module SocioCat
     config.action_mailer.smtp_settings = {
         address: 'smtp.yandex.ru',
         user_name: 'my.sender.personal',
-        password: File.read("#{Rails.root}/config/smtp-password.txt").strip,
+        password: ENV['SMTP_PASSWORD'],
+        #password: File.read("#{Rails.root}/config/smtp-password.txt").strip,
     }
     config.action_mailer.default_url_options = { host: 'localhost:3000' }
+    #puts "===== ENV['SMTP_PASSWORD'] =====> #{ENV['SMTP_PASSWORD']}"
 
     #config.action_dispatch.default_url_options = { host: 'localhost:3000' }
 
