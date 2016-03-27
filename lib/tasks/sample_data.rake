@@ -1,16 +1,14 @@
 namespace :db do
 	desc "Fill database with sample data"
 	task populate: :environment do
-		require Rails.root.join('spec/factories') if not FactoryGirl.factories.registered?(:card)
+		#require 'factory_girl'
+		#require Rails.root.join('spec/factories')
 		
 		create_admin_user
-		
-		if Rails.env.development?
-			create_users
-			create_matters
-			create_cards
-			create_categoties
-		end
+		#create_users
+		#create_matters
+		#create_cards
+		#create_categoties
 	end
 end
 
