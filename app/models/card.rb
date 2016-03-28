@@ -6,8 +6,8 @@ class Card < ActiveRecord::Base
 	}
 
 	belongs_to :matter, inverse_of: :cards
-	validates :matter, presence: true
-	validates_associated :matter
+	#validates :matter, presence: true
+	#validates_associated :matter
 	
 	belongs_to :user, inverse_of: :cards
 	validates :user, presence: true
@@ -19,11 +19,11 @@ class Card < ActiveRecord::Base
 
 	attr_accessor :new_matter_name
 	
-	validates(:new_matter_name,
-		presence: {message:'не может быть пустым'},
-		length: {minimum:2, maximum:18, message:'длина от 2 до 16 знаков'},
-		if: "matter.nil?"
-	)
+	# validates(:new_matter_name,
+	# 	presence: {message:'не может быть пустым'},
+	# 	length: {minimum:2, maximum:18, message:'длина от 2 до 16 знаков'},
+	# 	if: "matter.nil?"
+	# )
 
 
 	enum kind: {
