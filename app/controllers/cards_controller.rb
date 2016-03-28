@@ -46,7 +46,7 @@ class CardsController < ApplicationController
 
 	def edit
 		super
-		@obj.new_matter_name = @obj.matter.name
+		#@obj.new_matter_name = @obj.matter.name
 		@checkboxes = hash_for_checkboxes(@obj.categories)
 	end
 
