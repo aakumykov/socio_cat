@@ -1,9 +1,9 @@
 <div class='row comfort_buttons'>
 	<div class='btn-group pull-right'>
-		<%= link_to 'Список', categories_path, class:'btn btn-primary pull-left' %>
+		<%= link_to 'Список', categories_path, class:'btn btn-primary btn-xs pull-left' %>
 		<% if signed_in? %>
 			<% if current_user.admin? %>
-				<%= link_to 'Новая', new_category_path, class:'btn btn-warning pull-left' %>
+				<%= link_to 'Новая', new_category_path, class:'btn btn-warning btn-xs pull-left' %>
 			<% end %>
 		<% end %>
 	</div>
