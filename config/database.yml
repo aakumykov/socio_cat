@@ -36,5 +36,5 @@ test:
 production:
   <<: *default
   database: socio_cat_production
-  #username: rails_dev
-  #password: <%= ENV['SOCIO_CAT_DATABASE_PASSWORD'] %>
+  username: rails_dev
+  password: <%= ENV['SOCIO_CAT_DATABASE_PASSWORD'] %>
