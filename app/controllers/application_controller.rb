@@ -100,7 +100,7 @@ class ApplicationController < ActionController::Base
 		end
 
 		def admin_users
-			if not current_user.admin?
+			if current_user.nil? || !current_user.admin?
 				flash[:danger] = 'Доступно только администратору'
 				redirect_to url_for(
 								controller: controller_name, 
