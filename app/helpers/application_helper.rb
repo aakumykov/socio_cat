@@ -74,6 +74,10 @@ module ApplicationHelper
 			
 		"#{url}?reset_code=#{opt[:reset_code]}"
 	end
+
+	def admin?
+		signed_in? && current_user.admin?
+	end
 end
 
 

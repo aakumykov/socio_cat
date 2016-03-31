@@ -1,22 +1,16 @@
-<%= link_to 'Главная', home_path, class: 'btn btn-primary' %>
-
-<span class="btn-group">
-	<a href='<%= matters_path %>' class="btn btn-info">Объекты</a>
+<ul class="nav nav-pills nav-justified">
+	<li class='active'><%= link_to 'Главная', home_path, class: '' %></li>
 	
-	<% if signed_in? && current_user.admin? %>
- 		<a href='<%= new_matter_path %>' class="btn btn-info dropdown-toggle">
- 			<span  class='glyphicon glyphicon-plus'></span>
- 		</a>
-	<% end %>
-</span>
-
-<span class="btn-group">
-	<a href='<%= cards_path %>' class="btn btn-danger">Карточки</a>
+	<li><a href='<%= matters_path %>' class='red'>Объекты</a></li>
 	
-	<% if signed_in? %>
-		<button type="button" class="btn btn-danger dropdown-toggle" data-toggle="dropdown">
-	 		<span class='glyphicon glyphicon-plus'></span>
-		</button>
+	<li class='dropdown'>
+		<a href='<%= cards_path %>' 
+			class='dropdown-toggle yellow' 
+			data-toggle='dropdown' 
+		>
+		Карточки
+		<span class='caret'></span>
+		</a>
 		<ul class="dropdown-menu" role="menu">
 			<li><a href='<%= new_card_path %>?kind=text'>
 				Текст
@@ -35,34 +29,35 @@
 				<span class='audio_icon glyphicon glyphicon-film'></span>
 			</a></li>
 		</ul>
-	<% end %>
-</span>
-
-<span class="btn-group">
-	<a href='<%= categories_path %>' class="btn btn-success">Категории</a>
+	</li>
 	
-	<% if signed_in? && current_user.admin? %>
- 		<a href='<%= new_category_path %>' class="btn btn-success dropdown-toggle">
- 			<span  class='glyphicon glyphicon-plus'></span>
- 		</a>
+	<li class='dropdown'>
+		<a 	href='<%= categories_path %>' 
+			class='dropdown-toggle green' 
+			data-toggle='dropdown' 
+		>
+			Категории
+			<span class='caret'></span>
+		</a>
+		<ul class='dropdown-menu'>
+			<li><%= link_to 'Новая категория', new_category_path %></li>
+		</ul>
+	</li>
+
+	<% if signed_in? %>
+		<li><%= link_to 'Пользователи', users_path, class: '' %></li>
+	<% end %>	
+
+	<li><%= link_to 'О проекте', about_path, class: '' %></li>
+	<li><%= link_to 'Помощь', help_path, class: '' %></li>
+	
+	<li class='disabled'>&nbsp;</li>
+
+	<% if signed_in? %>
+		<li><%= link_to "Профиль [#{current_user.name}]", current_user, class: '' %></li>
+		<li><%= link_to 'Выход', logout_path, method: :delete, class: '' %></li>
+	<% else %>
+		<li><%= link_to 'Регистрация', new_user_path, class: '' %></li>
+		<li><%= link_to 'Вход', login_path, class: '' %></li>
 	<% end %>
-</span>
-
-<% if signed_in? %>
-	<%= link_to 'Пользователи', users_path, class: 'btn btn-warning' %>
-<% end %>
-
-<%= link_to 'О проекте', about_path, class: 'btn btn-info' %>
-<%= link_to 'Помощь', help_path, class: 'btn btn-default' %>
-
-<% if signed_in? %>
-	<%= link_to 'Выход', logout_path, method: :delete, class: 'btn pull-right btn-success' %>
-	<%= link_to "Профиль [#{current_user.name}]", current_user, class: 'btn btn-info pull-right' %>
-<% else %>
-	<%= link_to 'Вход', login_path, class: 'btn pull-right btn-success' %>
-	<%= link_to 'Регистрация', new_user_path, class: 'btn btn-default pull-right' %>
-<% end %>
-
-<div class='row'>
-	<%= @debug_info && debug(@debug_info) %>
-</div>
+</ul>

@@ -22,16 +22,18 @@
 
 .main_menu {
 	margin-bottom: 20px;
-
-	.glyphicon {
-		font-size: 10px;
-		color: inherit;
+	.nav {
+		LI {
+			margin-left: 2px;
+			margin-right: 2px;
+			A {
+				padding: 4px 8px;
+			}
+		}
 	}
 }
 
 .main_content {
-	/*background-color: lightgreen;*/
-	/*margin-top: 30px;*/
 	margin-bottom: 30px;
 }
 

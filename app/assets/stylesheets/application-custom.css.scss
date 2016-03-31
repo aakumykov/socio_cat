@@ -1,0 +1,46 @@
+.nav {
+	LI {
+		A {
+			color: white;
+			text-shadow: 1px 1px 2px rgba(0, 0, 0, 0.5);
+		}
+
+		.yellow {
+			background-color:gold;
+			color: black;
+			text-shadow: 1px 1px 2px rgba(255, 255, 255, 0.5);
+		}
+		.yellow:hover {
+			background-color:goldenrod;
+			color: black;
+		}
+		.yellow:active {
+			background-color:darkgoldenrod;
+			color: white;
+		}
+
+		.red {
+			background-color:orangered;
+		}
+		.red:hover {
+			background-color:crimson;
+		}
+		.red:active {
+			background-color:darkred;
+		}
+
+		.green {
+			background-color:limegreen;
+		}
+		.green:hover {
+			background-color:limegreen;
+		}
+		.green:active {
+			background-color:olivedrab;
+		}
+
+		
+
+
+	}
+}
