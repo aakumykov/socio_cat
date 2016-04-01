@@ -1,5 +1,6 @@
 <%= link_to 'Главная', home_path, class: 'btn btn-primary' %>
 
+<!--Объекты-->
 <span class="btn-group">
 	<a href='<%= matters_path %>' class="btn btn-info">Объекты</a>
 	
@@ -9,7 +10,10 @@
  		</a>
 	<% end %>
 </span>
+<!--Объекты-->
+<div class='separator clearfix visible-xs'></div>
 
+<!--Карточки-->
 <span class="btn-group">
 	<a href='<%= cards_path %>' class="btn btn-danger">Карточки</a>
 	
@@ -37,7 +41,9 @@
 		</ul>
 	<% end %>
 </span>
+<!--Карточки-->
 
+<!--Категории-->
 <span class="btn-group">
 	<a href='<%= categories_path %>' class="btn btn-success">Категории</a>
 	
@@ -47,20 +53,26 @@
  		</a>
 	<% end %>
 </span>
+<!--Категории-->
 
 <% if signed_in? %>
 	<%= link_to 'Пользователи', users_path, class: 'btn btn-warning' %>
 <% end %>
+<div class='separator clearfix visible-sm'></div>
+<div class='separator clearfix visible-xs'></div>
 
 <%= link_to 'О проекте', about_path, class: 'btn btn-info' %>
 <%= link_to 'Помощь', help_path, class: 'btn btn-default' %>
+<a href='#' class='btn btn-disabled'> </a>
+
+<div class='separator clearfix visible-xs'></div>
 
 <% if signed_in? %>
-	<%= link_to 'Выход', logout_path, method: :delete, class: 'btn pull-right btn-success' %>
-	<%= link_to "Профиль [#{current_user.name}]", current_user, class: 'btn btn-info pull-right' %>
+	<%= link_to "Профиль [#{current_user.name}]", current_user, class: 'btn btn-info' %>
+	<%= link_to 'Выход', logout_path, method: :delete, class: 'btn btn-success' %>
 <% else %>
-	<%= link_to 'Вход', login_path, class: 'btn pull-right btn-success' %>
-	<%= link_to 'Регистрация', new_user_path, class: 'btn btn-default pull-right' %>
+	<%= link_to 'Регистрация', new_user_path, class: 'btn btn-default' %>
+	<%= link_to 'Вход', login_path, class: 'btn btn-success' %>
 <% end %>
 
 <div class='row'>
