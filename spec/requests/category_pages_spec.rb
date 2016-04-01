@@ -163,7 +163,7 @@ describe 'Категории,' do
 
 	shared_examples_for 'создание_раздела' do
 		it_should_behave_like 'страница_с_названием' do
-			let(:title) { 'Новая раздел' }
+			let(:title) { 'Новый раздел' }
 			let(:heading) { title }
 		end
 		it_should_behave_like 'форма_раздела'
