@@ -4,21 +4,21 @@
 
 <div class='edit col-md-4 col-md-offset-4'>
 	<%= form_for(:session, url: sessions_path) do |f| %>
-		<%= f.text_field :email, class: 'edit_area form-control', placeholder:'Электронная почта' %>
-		<%= f.password_field :password, class: 'edit_area form-control', placeholder:'Пароль' %>
+		<%= f.text_field :email, class: 'edit_area form-control', placeholder:'Электронная почта', tabindex:1 %>
+		<%= f.password_field :password, class: 'edit_area form-control', placeholder:'Пароль', tabindex:2 %>
+		<br>
 
-		<div class='bottom_buttons_holder'>
-			<div class='row'>
-				<%= link_to 'Отмена', root_path, class: 'btn btn-default pull-left' %>
-				<%= f.submit 'Войти', class: 'btn btn-primary pull-right' %>
+		<div class='btn-group btn-group-justified'>
+			<%= link_to 'Отмена', root_path, class: 'btn btn-default', tabindex:4 %>
+			<div class="btn-group">
+				<button type='submit' class='btn btn-primary' tabindex='3'>Войти</button>
 			</div>
-			<hr>
-			<div>
-				<%= link_to 'Забыли пароль?', reset_password_path %>
-			<div>
-			</div>
-				<%= link_to 'Повторная активация', activation_path %>
-			</div>
+		</div>
+		<hr>
+		
+		<div>
+			<%= link_to 'Забыли пароль?', reset_password_path %><br>
+			<%= link_to 'Повторная активация', activation_path %>
 		</div>
 	<% end %>
 </div>
