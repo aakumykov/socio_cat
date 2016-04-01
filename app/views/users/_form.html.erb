@@ -1,0 +1,41 @@
+<div class='form-group'>
+<%= f.label :name, 'Имя' %>
+<%= f.text_field :name, class: 'form-control', tabindex:1 %>
+</div>
+
+<div class='form-group'>
+<%= f.label :email, 'Электронная почта' %>
+<%= f.text_field :email, class: 'form-control', tabindex:2 %>
+</div>
+
+<div class='form-group'>
+<%= f.label :password, 'Пароль' %>
+<%= f.password_field :password, class: 'form-control', tabindex:3 %>
+</div>
+
+<div class='form-group'>
+<%= f.label :password_confirmation, 'Подтверждение пароля' %>
+<%= f.password_field :password_confirmation, class: 'form-control', tabindex:4 %>
+</div>
+
+<%
+	case mode
+	when 'edit'
+		cancel_path = user_path(@user)
+		button_text = 'Сохранить'
+	when 'create'
+		cancel_path = users_path
+		button_text = 'Зарегистрироваться'
+		button_text = 'Регистрация'
+	else
+		cancel_path = root_path
+		button_text = 'Отправить'
+	end
+%>
+
+<div class='btn-group btn-group-justified'>
+	<%= link_to('Отмена', cancel_path, class: 'btn', tabindex:6) %>
+	<div class='btn-group'>
+		<button type='submit' class='btn btn-primary' tabindex='5'><%= button_text %></button>
+	</div>
+</div>
