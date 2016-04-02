@@ -19,5 +19,5 @@
 config/smtp*password*
 
 # Uploaded file
-public/system
+#public/system
 
