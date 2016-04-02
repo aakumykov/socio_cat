@@ -21,3 +21,5 @@ config/smtp*password*
 # Uploaded file
 #public/system
 
+# Скомпилированные ресурсы
+public/assets/
