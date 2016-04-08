@@ -23,6 +23,7 @@ gem 'mime-types'
 gem 'pg', '0.15.1'
 gem 'rails_12factor', '0.0.2'
 gem 'factory_girl_rails'
+gem 'aws-sdk', '>= 2.0.34'
 
 group :development, :test do
   gem 'sqlite3'
