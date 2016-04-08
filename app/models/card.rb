@@ -64,7 +64,18 @@ class Card < ActiveRecord::Base
 		if: "'текст'==self.kind"
 	)
 	
-	has_attached_file :image, styles: {medium:'300x300>', thumb:'100x100>'}, default_url: 'no_image'
+	has_attached_file(:image, 
+		styles: {medium:'300x300>', thumb:'100x100>'}, 
+		default_url: 'no_image',
+		storage: :s3,
+		s3_region:ENV['AWS_REGION'],
+		s3_credentials: {
+			access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+			secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+		},
+		bucket: 'test-a3rf3g34',
+	)
+
 	validates_attachment(:image,
 		presence: {message:'не может быть пустым'},
 		content_type: { content_type: /\Aimage\/.*\Z/ },
