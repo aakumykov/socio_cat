@@ -67,13 +67,15 @@ class Card < ActiveRecord::Base
 	has_attached_file(:image, 
 		styles: {medium:'300x300>', thumb:'100x100>'}, 
 		default_url: 'no_image',
-		storage: :s3,
-		s3_region:ENV['AWS_REGION'],
-		s3_credentials: {
-			access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-			secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-		},
-		bucket: 'test-a3rf3g34',
+		# storage: :s3,
+		# s3_region:ENV['AWS_REGION'],
+		# s3_permissions: 'public-read',
+		# s3_hostname: 's3-us-west-2.amazonaws.com',
+		# s3_credentials: {
+		# 	access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+		# 	secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+		# },
+		# bucket: 'test-a3rf3g34',
 	)
 
 	validates_attachment(:image,

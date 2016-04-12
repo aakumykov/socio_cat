@@ -31,10 +31,22 @@ module SocioCat
         #password: File.read("#{Rails.root}/config/smtp-password.txt").strip,
     }
     config.action_mailer.default_url_options = { host: 'localhost:3000' }
-    #puts "===== ENV['SMTP_PASSWORD'] =====> #{ENV['SMTP_PASSWORD']}"
 
     #config.action_dispatch.default_url_options = { host: 'localhost:3000' }
 
     config.active_job.queue_adapter = :delayed_job
+
+    config.paperclip_defaults = {
+        storage: :s3,
+        s3_region: ENV['AWS_REGION'],
+        #s3_permissions: 'public-read',
+        s3_hostname: 's3-us-west-2.amazonaws.com',
+        url: ':s3_domain_url',
+        s3_credentials: {
+            access_key_id: ENV['AWS_ACCESS_KEY_ID'],
+            secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
+        },
+        bucket: 'test-a3rf3g34',
+    }
   end
 end
