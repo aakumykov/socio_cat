@@ -37,16 +37,7 @@ module SocioCat
     config.active_job.queue_adapter = :delayed_job
 
     config.paperclip_defaults = {
-        storage: :s3,
-        s3_region: ENV['AWS_REGION'],
-        #s3_permissions: 'public-read',
-        s3_hostname: 's3-us-west-2.amazonaws.com',
-        url: ':s3_domain_url',
-        s3_credentials: {
-            access_key_id: ENV['AWS_ACCESS_KEY_ID'],
-            secret_access_key: ENV['AWS_SECRET_ACCESS_KEY'],
-        },
-        bucket: 'test-a3rf3g34',
+        s3_host_name: "s3-#{ENV['AWS_REGION']}.amazonaws.com",
     }
   end
 end
