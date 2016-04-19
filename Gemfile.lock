@@ -238,3 +238,6 @@ DEPENDENCIES
   turbolinks
   uglifier
   will_paginate
+
+BUNDLED WITH
+   1.11.2
